@@ -41,7 +41,7 @@ class DistributedRace(DistributedObject.DistributedObject):
     def __init__(self, cr):
         self.qbox = loader.loadModel('phase_6/models/karting/qbox')
         self.boostArrowTexture = loader.loadTexture('phase_6/maps/boost_arrow.jpg', 'phase_6/maps/boost_arrow_a.rgb')
-        self.boostArrowTexture.setMinfilter(Texture.FTLinear)
+        self.boostArrowTexture.setMinfilter(Texture.FTNearest)
         DistributedObject.DistributedObject.__init__(self, cr)
         self.kartMap = {}
         self.fsm = ClassicFSM.ClassicFSM('Race', [State.State('join', self.enterJoin, self.exitJoin, ['prep', 'leave']),

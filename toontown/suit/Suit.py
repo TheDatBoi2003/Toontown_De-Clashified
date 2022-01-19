@@ -782,14 +782,14 @@ class Suit(Avatar.Avatar):
 
         def __doItTheOldWay__():
             torsoTex = loader.loadTexture('phase_%s/maps/%s_blazer.jpg' % (phase, dept))
-            torsoTex.setMinfilter(Texture.FTLinearMipmapLinear)
-            torsoTex.setMagfilter(Texture.FTLinear)
+            torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
+            torsoTex.setMagfilter(Texture.FTNearest)
             legTex = loader.loadTexture('phase_%s/maps/%s_leg.jpg' % (phase, dept))
-            legTex.setMinfilter(Texture.FTLinearMipmapLinear)
-            legTex.setMagfilter(Texture.FTLinear)
+            legTex.setMinfilter(Texture.FTNearestMipmapLinear)
+            legTex.setMagfilter(Texture.FTNearest)
             armTex = loader.loadTexture('phase_%s/maps/%s_sleeve.jpg' % (phase, dept))
-            armTex.setMinfilter(Texture.FTLinearMipmapLinear)
-            armTex.setMagfilter(Texture.FTLinear)
+            armTex.setMinfilter(Texture.FTNearestMipmapLinear)
+            armTex.setMagfilter(Texture.FTNearest)
             modelRoot.find('**/torso').setTexture(torsoTex, 1)
             modelRoot.find('**/arms').setTexture(armTex, 1)
             modelRoot.find('**/legs').setTexture(legTex, 1)
@@ -823,14 +823,14 @@ class Suit(Avatar.Avatar):
             modelRoot = self
         self.isExecutive = 1
         torsoTex = loader.loadTexture('phase_3.5/maps/e_blazer_' + self.style.dept + '.png')
-        torsoTex.setMinfilter(Texture.FTLinearMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTLinear)
+        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
+        torsoTex.setMagfilter(Texture.FTNearest)
         legTex = loader.loadTexture('phase_3.5/maps/e_leg_' + self.style.dept + '.png')
-        legTex.setMinfilter(Texture.FTLinearMipmapLinear)
-        legTex.setMagfilter(Texture.FTLinear)
+        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
+        legTex.setMagfilter(Texture.FTNearest)
         armTex = loader.loadTexture('phase_3.5/maps/e_sleeve_' + self.style.dept + '.png')
-        armTex.setMinfilter(Texture.FTLinearMipmapLinear)
-        armTex.setMagfilter(Texture.FTLinear)
+        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
+        armTex.setMagfilter(Texture.FTNearest)
         modelRoot.find('**/torso').setTexture(torsoTex, 1)
         modelRoot.find('**/arms').setTexture(armTex, 1)
         modelRoot.find('**/legs').setTexture(legTex, 1)
@@ -841,14 +841,14 @@ class Suit(Avatar.Avatar):
             modelRoot = self
         self.isWaiter = 1
         torsoTex = loader.loadTexture('phase_3.5/maps/waiter_m_blazer.jpg')
-        torsoTex.setMinfilter(Texture.FTLinearMipmapLinear)
-        torsoTex.setMagfilter(Texture.FTLinear)
+        torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
+        torsoTex.setMagfilter(Texture.FTNearest)
         legTex = loader.loadTexture('phase_3.5/maps/waiter_m_leg.jpg')
-        legTex.setMinfilter(Texture.FTLinearMipmapLinear)
-        legTex.setMagfilter(Texture.FTLinear)
+        legTex.setMinfilter(Texture.FTNearestMipmapLinear)
+        legTex.setMagfilter(Texture.FTNearest)
         armTex = loader.loadTexture('phase_3.5/maps/waiter_m_sleeve.jpg')
-        armTex.setMinfilter(Texture.FTLinearMipmapLinear)
-        armTex.setMagfilter(Texture.FTLinear)
+        armTex.setMinfilter(Texture.FTNearestMipmapLinear)
+        armTex.setMagfilter(Texture.FTNearest)
         modelRoot.find('**/torso').setTexture(torsoTex, 1)
         modelRoot.find('**/arms').setTexture(armTex, 1)
         modelRoot.find('**/legs').setTexture(legTex, 1)
@@ -889,8 +889,8 @@ class Suit(Avatar.Avatar):
                 headPart = self.instance(headReferences.getPath(i), 'modelRoot', 'joint_head')
             if self.headTexture:
                 headTex = loader.loadTexture('phase_' + str(phase) + '/maps/' + self.headTexture)
-                headTex.setMinfilter(Texture.FTLinearMipmapLinear)
-                headTex.setMagfilter(Texture.FTLinear)
+                headTex.setMinfilter(Texture.FTNearestMipmapLinear)
+                headTex.setMagfilter(Texture.FTNearest)
                 headPart.setTexture(headTex, 1)
             if self.headColor:
                 headPart.setColor(self.headColor)
@@ -906,8 +906,8 @@ class Suit(Avatar.Avatar):
             texName = accName
         filePrefix, phase = AccessoryDict[accType]['maps']
         accTex = loader.loadTexture('phase_' + str(phase) + filePrefix + texName + '.jpg')
-        accTex.setMinfilter(Texture.FTLinearMipmapLinear)
-        accTex.setMagfilter(Texture.FTLinear)
+        accTex.setMinfilter(Texture.FTNearestMipmapLinear)
+        accTex.setMagfilter(Texture.FTNearest)
         accPart.setTexture(accTex, 1)
         if transforms:
             accPart.setPos(transforms[0][0], transforms[0][1], transforms[0][2])
@@ -933,8 +933,8 @@ class Suit(Avatar.Avatar):
             tieTex = loader.loadTexture('phase_5/maps/cog_robot_tie_legal.jpg')
         elif dept == 'm':
             tieTex = loader.loadTexture('phase_5/maps/cog_robot_tie_money.jpg')
-        tieTex.setMinfilter(Texture.FTLinearMipmapLinear)
-        tieTex.setMagfilter(Texture.FTLinear)
+        tieTex.setMinfilter(Texture.FTNearestMipmapLinear)
+        tieTex.setMagfilter(Texture.FTNearest)
         tie.setTexture(tieTex, 1)
 
     def generateCorporateMedallion(self):

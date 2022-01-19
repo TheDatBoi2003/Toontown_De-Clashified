@@ -99,7 +99,7 @@ class HtmlView(DirectObject):
         self.quad.reparentTo(self.parent)
         self.guiTex = Texture('guiTex')
         self.guiTex.setupTexture(Texture.TT2dTexture, WEB_WIDTH, WEB_HEIGHT, 1, Texture.TUnsignedByte, Texture.FRgba)
-        self.guiTex.setMinfilter(Texture.FTLinear)
+        self.guiTex.setMinfilter(Texture.FTNearest)
         self.guiTex.setKeepRamImage(True)
         self.guiTex.makeRamImage()
         self.guiTex.setWrapU(Texture.WMRepeat)

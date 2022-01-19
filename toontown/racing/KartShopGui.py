@@ -705,7 +705,7 @@ class KartShopGuiMgr(object, DirectObject.DirectObject):
                 tex = loader.loadTexture('phase_6/maps/%s.jpg' % texNodePath % kartDecal, 'phase_6/maps/%s_a.rgb' % texNodePath % kartDecal)
             else:
                 tex = loader.loadTexture('phase_6/maps/NoAccessoryIcon3.jpg', 'phase_6/maps/NoAccessoryIcon3_a.rgb')
-            tex.setMinfilter(Texture.FTLinearMipmapLinear)
+            tex.setMinfilter(Texture.FTNearestMipmapLinear)
             self.kartView.component('geom0').setTexture(tex, 1)
             self.initialize = True
             return
@@ -765,7 +765,7 @@ class KartShopGuiMgr(object, DirectObject.DirectObject):
                 tex = loader.loadTexture('phase_6/maps/%s.jpg' % texNodePath % kartDecal, 'phase_6/maps/%s_a.rgb' % texNodePath % kartDecal)
             else:
                 tex = loader.loadTexture('phase_6/maps/NoAccessoryIcon3.jpg', 'phase_6/maps/NoAccessoryIcon3_a.rgb')
-            tex.setMinfilter(Texture.FTLinearMipmapLinear)
+            tex.setMinfilter(Texture.FTNearestMipmapLinear)
             self.kartView.component('geom0').setTexture(tex, 1)
             self.initialize = True
             return

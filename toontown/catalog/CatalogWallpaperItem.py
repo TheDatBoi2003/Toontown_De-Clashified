@@ -623,8 +623,8 @@ class CatalogWallpaperItem(CatalogSurfaceItem):
         from panda3d.core import Texture
         filename = WallpaperTypes[self.patternIndex][WTTextureName]
         texture = loader.loadTexture(filename)
-        texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        texture.setMagfilter(Texture.FTLinear)
+        texture.setMinfilter(Texture.FTNearestMipmapLinear)
+        texture.setMagfilter(Texture.FTNearest)
         return texture
 
     def getColor(self):
@@ -647,8 +647,8 @@ class CatalogWallpaperItem(CatalogSurfaceItem):
         borderInfo = BorderTypes[self.borderIndex]
         filename = borderInfo[BDTextureName]
         texture = loader.loadTexture(filename)
-        texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        texture.setMagfilter(Texture.FTLinear)
+        texture.setMinfilter(Texture.FTNearestMipmapLinear)
+        texture.setMagfilter(Texture.FTNearest)
         return texture
 
     def getBorderColor(self):

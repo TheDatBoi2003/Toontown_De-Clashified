@@ -336,8 +336,8 @@ class CatalogItem:
                 matches.hide()
             elif isinstance(color, types.StringType):
                 tex = loader.loadTexture(color)
-                tex.setMinfilter(Texture.FTLinearMipmapLinear)
-                tex.setMagfilter(Texture.FTLinear)
+                tex.setMinfilter(Texture.FTNearestMipmapLinear)
+                tex.setMagfilter(Texture.FTNearest)
                 for i in xrange(matches.getNumPaths()):
                     matches.getPath(i).setTexture(tex, 1)
 

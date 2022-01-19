@@ -155,16 +155,16 @@ class Pet(Avatar.Avatar):
         bodyType = self.style[4]
         body = self.find('**/body')
         tex = loader.loadTexture(BodyTextures[BodyTypes[bodyType]])
-        tex.setMinfilter(Texture.FTLinear)
-        tex.setMagfilter(Texture.FTLinear)
+        tex.setMinfilter(Texture.FTNearest)
+        tex.setMagfilter(Texture.FTNearest)
         body.setTexture(tex, 1)
         body.setColor(color)
         leftFoot = self.find('**/leftFoot')
         rightFoot = self.find('**/rightFoot')
         texName = getFootTexture(bodyType)
         tex = loader.loadTexture(texName)
-        tex.setMinfilter(Texture.FTLinear)
-        tex.setMagfilter(Texture.FTLinear)
+        tex.setMinfilter(Texture.FTNearest)
+        tex.setMagfilter(Texture.FTNearest)
         leftFoot.setTexture(tex, 1)
         rightFoot.setTexture(tex, 1)
         leftFoot.setColor(color)
@@ -186,8 +186,8 @@ class Pet(Avatar.Avatar):
             texName = getEarTexture(bodyType, EarParts[earsIndex])
             if texName:
                 tex = loader.loadTexture(texName)
-                tex.setMinfilter(Texture.FTLinear)
-                tex.setMagfilter(Texture.FTLinear)
+                tex.setMinfilter(Texture.FTNearest)
+                tex.setMagfilter(Texture.FTNearest)
                 ears.setTexture(tex, 1)
             ears.unstash()
         noseIndex = self.style[2]
@@ -206,8 +206,8 @@ class Pet(Avatar.Avatar):
                 elif BodyTypes[bodyType] == 'leopard':
                     texName = LeopardTail
                 tex = loader.loadTexture(texName)
-                tex.setMinfilter(Texture.FTLinear)
-                tex.setMagfilter(Texture.FTLinear)
+                tex.setMinfilter(Texture.FTNearest)
+                tex.setMagfilter(Texture.FTNearest)
                 tail.setTexture(tex, 1)
             tail.unstash()
         if not self.forGui:
@@ -254,10 +254,10 @@ class Pet(Avatar.Avatar):
         else:
             self.eyesOpenTexture = loader.loadTexture('phase_4/maps/BeanEyeGirlsNew.jpg', 'phase_4/maps/BeanEyeGirlsNew_a.rgb')
             self.eyesClosedTexture = loader.loadTexture('phase_4/maps/BeanEyeGirlsBlinkNew.jpg', 'phase_4/maps/BeanEyeGirlsBlinkNew_a.rgb')
-        self.eyesOpenTexture.setMinfilter(Texture.FTLinear)
-        self.eyesOpenTexture.setMagfilter(Texture.FTLinear)
-        self.eyesClosedTexture.setMinfilter(Texture.FTLinear)
-        self.eyesClosedTexture.setMagfilter(Texture.FTLinear)
+        self.eyesOpenTexture.setMinfilter(Texture.FTNearest)
+        self.eyesOpenTexture.setMagfilter(Texture.FTNearest)
+        self.eyesClosedTexture.setMinfilter(Texture.FTNearest)
+        self.eyesClosedTexture.setMagfilter(Texture.FTNearest)
         self.eyesOpen()
         self.setBlend(frameBlend=base.settings.getBool('game', 'interpolate-animations', False))
         return None

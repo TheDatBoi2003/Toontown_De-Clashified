@@ -233,8 +233,8 @@ class CatalogAccessoryItem(CatalogItem.CatalogItem):
             return
         if isinstance(color, types.StringType):
             tex = loader.loadTexture(color)
-            tex.setMinfilter(Texture.FTLinearMipmapLinear)
-            tex.setMagfilter(Texture.FTLinear)
+            tex.setMinfilter(Texture.FTNearestMipmapLinear)
+            tex.setMagfilter(Texture.FTNearest)
             model.setTexture(tex, 1)
         else:
             needsAlpha = color[3] != 1

@@ -352,18 +352,18 @@ class PropPool:
             lips.flattenMedium()
         elif name == '5dollar':
             tex = loader.loadTexture('phase_5/maps/dollar_5.jpg')
-            tex.setMinfilter(Texture.FTLinearMipmapLinear)
-            tex.setMagfilter(Texture.FTLinear)
+            tex.setMinfilter(Texture.FTNearestMipmapLinear)
+            tex.setMagfilter(Texture.FTNearest)
             self.props[name].setTexture(tex, 1)
         elif name == '10dollar':
             tex = loader.loadTexture('phase_5/maps/dollar_10.jpg')
-            tex.setMinfilter(Texture.FTLinearMipmapLinear)
-            tex.setMagfilter(Texture.FTLinear)
+            tex.setMinfilter(Texture.FTNearestMipmapLinear)
+            tex.setMagfilter(Texture.FTNearest)
             self.props[name].setTexture(tex, 1)
         elif name == '50dollar':
             tex = loader.loadTexture('phase_5/maps/dollar_50.jpg')
-            tex.setMinfilter(Texture.FTLinearMipmapLinear)
-            tex.setMagfilter(Texture.FTLinear)
+            tex.setMinfilter(Texture.FTNearestMipmapLinear)
+            tex.setMagfilter(Texture.FTNearest)
             self.props[name].setTexture(tex, 1)
         elif name == 'dust':
             bin = 110
@@ -386,8 +386,8 @@ class PropPool:
             self.props[name].find(joint).hide()
         elif name == 'cake-slice':
             tex = loader.loadTexture('/phase_5/maps/battle_props_cake_slice.jpg')
-            tex.setMinfilter(Texture.FTLinearMipmapLinear)
-            tex.setMagfilter(Texture.FTLinear)
+            tex.setMinfilter(Texture.FTNearestMipmapLinear)
+            tex.setMagfilter(Texture.FTNearest)
             prop = self.props[name]
             prop.setScale(LVecBase3(1, 1, 2.5))
             for i in xrange(1, len(prop.findAllTextures()) + 1):
@@ -396,8 +396,8 @@ class PropPool:
             self.props[name].setColor(VBase4(0.8, 0.1, 0.1, 1))
         elif name == 'creampie':
             tex = loader.loadTexture('/phase_5/maps/battle_props_creampie.jpg')
-            tex.setMinfilter(Texture.FTLinearMipmapLinear)
-            tex.setMagfilter(Texture.FTLinear)
+            tex.setMinfilter(Texture.FTNearestMipmapLinear)
+            tex.setMagfilter(Texture.FTNearest)
             prop = self.props[name]
             prop.setScale(LVecBase3(1, 1, 1.5))
             for i in xrange(1, len(prop.findAllTextures()) + 1):
@@ -410,8 +410,8 @@ class PropPool:
         elif name == 'wreckingball':
             tex = loader.loadTexture('/phase_5/maps/battle_props_wrecking_ball.jpg',
                                      alphaPath='/phase_5/maps/battle_props_wrecking_ball.rgb')
-            tex.setMinfilter(Texture.FTLinearMipmapLinear)
-            tex.setMagfilter(Texture.FTLinear)
+            tex.setMinfilter(Texture.FTNearestMipmapLinear)
+            tex.setMagfilter(Texture.FTNearest)
             p = self.props[name]
             p.setBin('shadow', -5)
             p.setDepthWrite(0)
@@ -421,8 +421,8 @@ class PropPool:
             self.props[name].setColor(VBase4(0.4, 0.8, 1, 1))
         elif name == 'boulder':
             tex = loader.loadTexture('/phase_5/maps/battle_props_boulder.jpg')
-            tex.setMinfilter(Texture.FTLinearMipmapLinear)
-            tex.setMagfilter(Texture.FTLinear)
+            tex.setMinfilter(Texture.FTNearestMipmapLinear)
+            tex.setMagfilter(Texture.FTNearest)
             prop = self.props[name]
             for i in xrange(1, len(prop.findAllTextures()) + 1):
                 prop.setTexture(tex, i)

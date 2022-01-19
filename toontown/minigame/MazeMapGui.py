@@ -57,7 +57,7 @@ class MazeMapGui(DirectFrame):
 
         mapTexture = Texture('mapTexture')
         mapTexture.setupTexture(Texture.TT2dTexture, self._maskResolution, self._maskResolution, 1, Texture.TUnsignedByte, Texture.FRgba)
-        mapTexture.setMinfilter(Texture.FTLinear)
+        mapTexture.setMinfilter(Texture.FTNearest)
         mapTexture.load(mapImage)
         mapTexture.setWrapU(Texture.WMClamp)
         mapTexture.setWrapV(Texture.WMClamp)
@@ -77,7 +77,7 @@ class MazeMapGui(DirectFrame):
 
         self.maskTexture = Texture('maskTexture')
         self.maskTexture.setupTexture(Texture.TT2dTexture, self._maskResolution, self._maskResolution, 1, Texture.TUnsignedByte, Texture.FRgba)
-        self.maskTexture.setMinfilter(Texture.FTLinear)
+        self.maskTexture.setMinfilter(Texture.FTNearest)
         self.maskTexture.setWrapU(Texture.WMClamp)
         self.maskTexture.setWrapV(Texture.WMClamp)
         self.maskTexture.load(self._maskImage)

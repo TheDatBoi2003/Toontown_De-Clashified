@@ -86,8 +86,8 @@ class CatalogFlooringItem(CatalogSurfaceItem):
         from panda3d.core import Texture
         filename = FlooringTypes[self.patternIndex][FTTextureName]
         texture = loader.loadTexture(filename)
-        texture.setMinfilter(Texture.FTLinearMipmapLinear)
-        texture.setMagfilter(Texture.FTLinear)
+        texture.setMinfilter(Texture.FTNearestMipmapLinear)
+        texture.setMagfilter(Texture.FTNearest)
         return texture
 
     def getColor(self):

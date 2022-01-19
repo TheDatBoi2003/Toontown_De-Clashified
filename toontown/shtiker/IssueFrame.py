@@ -348,7 +348,7 @@ class IssueFrame(DirectFrame):
             jpgFile.copySubImage(smallerJpgFile, 0, 0)
             guiTex = Texture('guiTex')
             guiTex.setupTexture(Texture.TT2dTexture, WEB_WIDTH, WEB_HEIGHT, 1, Texture.TUnsignedByte, Texture.FRgba)
-            guiTex.setMinfilter(Texture.FTLinear)
+            guiTex.setMinfilter(Texture.FTNearest)
             guiTex.load(jpgFile)
             guiTex.setWrapU(Texture.WMClamp)
             guiTex.setWrapV(Texture.WMClamp)

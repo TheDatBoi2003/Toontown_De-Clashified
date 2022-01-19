@@ -326,11 +326,11 @@ class Char(Avatar.Avatar):
             self.lpupil.adjustAllPriorities(1)
             self.rpupil.adjustAllPriorities(1)
         if self.eyesOpen:
-            self.eyesOpen.setMinfilter(Texture.FTLinear)
-            self.eyesOpen.setMagfilter(Texture.FTLinear)
+            self.eyesOpen.setMinfilter(Texture.FTNearest)
+            self.eyesOpen.setMagfilter(Texture.FTNearest)
         if self.eyesClosed:
-            self.eyesClosed.setMinfilter(Texture.FTLinear)
-            self.eyesClosed.setMagfilter(Texture.FTLinear)
+            self.eyesClosed.setMinfilter(Texture.FTNearest)
+            self.eyesClosed.setMagfilter(Texture.FTNearest)
         if self._name == 'mickey':
             pupilParent = self.rpupil.getParent()
             pupilOffsetNode = pupilParent.attachNewNode('pupilOffsetNode')

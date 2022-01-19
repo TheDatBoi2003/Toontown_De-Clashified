@@ -343,8 +343,8 @@ class DistributedTargetGame(DistributedMinigame):
         pick = random.randint(0, 3)
         self.umbrellaColorSelect[pick] = 0
         tex = loader.loadTexture(DistributedTargetGame.UMBRELLA_TEXTURE_LIST[pick])
-        tex.setMinfilter(Texture.FTLinearMipmapLinear)
-        tex.setMagfilter(Texture.FTLinear)
+        tex.setMinfilter(Texture.FTNearestMipmapLinear)
+        tex.setMagfilter(Texture.FTNearest)
         self.umbrella.setTexture(tex, 1)
         open = self.umbrella.find('**/open_umbrella')
         open.hide()
@@ -811,8 +811,8 @@ class DistributedTargetGame(DistributedMinigame):
                         test = 1
 
                 tex = loader.loadTexture(DistributedTargetGame.UMBRELLA_TEXTURE_LIST[pick])
-                tex.setMinfilter(Texture.FTLinearMipmapLinear)
-                tex.setMagfilter(Texture.FTLinear)
+                tex.setMinfilter(Texture.FTNearestMipmapLinear)
+                tex.setMagfilter(Texture.FTNearest)
                 umbrella.setTexture(tex, 1)
                 open = umbrella.find('**/open_umbrella')
                 open.hide()

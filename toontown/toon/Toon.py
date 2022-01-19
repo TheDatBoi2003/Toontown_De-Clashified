@@ -205,8 +205,8 @@ def loadModels():
 
         def loadTex(path):
             tex = loader.loadTexture(path)
-            tex.setMinfilter(Texture.FTLinearMipmapLinear)
-            tex.setMagfilter(Texture.FTLinear)
+            tex.setMinfilter(Texture.FTNearestMipmapLinear)
+            tex.setMagfilter(Texture.FTNearest)
             Preloaded.append(tex)
 
         for shirt in ToonDNA.Shirts:
@@ -981,8 +981,8 @@ class Toon(Avatar.Avatar, ToonHead):
             if shirtTex is None:
                 self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
                 shirtTex = loader.loadTexture(ToonDNA.Shirts[0])
-            shirtTex.setMinfilter(Texture.FTLinearMipmapLinear)
-            shirtTex.setMagfilter(Texture.FTLinear)
+            shirtTex.setMinfilter(Texture.FTNearestMipmapLinear)
+            shirtTex.setMagfilter(Texture.FTNearest)
             try:
                 shirtColor = ToonDNA.ClothesColors[self.style.topTexColor]
             except:
@@ -997,8 +997,8 @@ class Toon(Avatar.Avatar, ToonHead):
             if sleeveTex is None:
                 self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
                 sleeveTex = loader.loadTexture(ToonDNA.Sleeves[0])
-            sleeveTex.setMinfilter(Texture.FTLinearMipmapLinear)
-            sleeveTex.setMagfilter(Texture.FTLinear)
+            sleeveTex.setMinfilter(Texture.FTNearestMipmapLinear)
+            sleeveTex.setMagfilter(Texture.FTNearest)
             try:
                 sleeveColor = ToonDNA.ClothesColors[self.style.sleeveTexColor]
             except:
@@ -1023,8 +1023,8 @@ class Toon(Avatar.Avatar, ToonHead):
                     bottomTex = loader.loadTexture(ToonDNA.BoyShorts[0])
                 else:
                     bottomTex = loader.loadTexture(ToonDNA.GirlBottoms[0][0])
-            bottomTex.setMinfilter(Texture.FTLinearMipmapLinear)
-            bottomTex.setMagfilter(Texture.FTLinear)
+            bottomTex.setMinfilter(Texture.FTNearestMipmapLinear)
+            bottomTex.setMagfilter(Texture.FTNearest)
             try:
                 bottomColor = ToonDNA.ClothesColors[self.style.botTexColor]
             except:
@@ -1073,8 +1073,8 @@ class Toon(Avatar.Avatar, ToonHead):
                     if tex is None:
                         self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
                     else:
-                        tex.setMinfilter(Texture.FTLinearMipmapLinear)
-                        tex.setMagfilter(Texture.FTLinear)
+                        tex.setMinfilter(Texture.FTNearestMipmapLinear)
+                        tex.setMagfilter(Texture.FTNearest)
                         hatGeom.setTexture(tex, 1)
                 if fromRTM:
                     reload(AccessoryGlobals)
@@ -1118,8 +1118,8 @@ class Toon(Avatar.Avatar, ToonHead):
                     if tex is None:
                         self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
                     else:
-                        tex.setMinfilter(Texture.FTLinearMipmapLinear)
-                        tex.setMagfilter(Texture.FTLinear)
+                        tex.setMinfilter(Texture.FTNearestMipmapLinear)
+                        tex.setMagfilter(Texture.FTNearest)
                         glassesGeom.setTexture(tex, 1)
                 if fromRTM:
                     reload(AccessoryGlobals)
@@ -1160,8 +1160,8 @@ class Toon(Avatar.Avatar, ToonHead):
                     if tex is None:
                         self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
                     else:
-                        tex.setMinfilter(Texture.FTLinearMipmapLinear)
-                        tex.setMagfilter(Texture.FTLinear)
+                        tex.setMinfilter(Texture.FTNearestMipmapLinear)
+                        tex.setMagfilter(Texture.FTNearest)
                         geom.setTexture(tex, 1)
                 if fromRTM:
                     reload(AccessoryGlobals)
@@ -1205,8 +1205,8 @@ class Toon(Avatar.Avatar, ToonHead):
                 if tex is None:
                     self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
                 else:
-                    tex.setMinfilter(Texture.FTLinearMipmapLinear)
-                    tex.setMagfilter(Texture.FTLinear)
+                    tex.setMinfilter(Texture.FTNearestMipmapLinear)
+                    tex.setMagfilter(Texture.FTNearest)
                     geom.setTexture(tex, 1)
 
         return
