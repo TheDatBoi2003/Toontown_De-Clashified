@@ -218,19 +218,19 @@ AvProps = (('feather', 'bullhorn', 'lipstick', 'bamboocane',
 
 AvPropsNew = (
     ('inventory_feather', 'inventory_megaphone', 'inventory_lipstick', 'inventory_bamboo_cane',
-     'inventory_pixiedust', 'inventory_juggling_cubes', 'inventory_pixiedust', 'inventory_ladder'),
-    ('inventory_bannana_peel', 'inventory_rake', 'inventory_quicksand_icon', 'inventory_marbles',
-     'inventory_quicksand_icon', 'inventory_trapdoor', 'inventory_tnt', 'inventory_traintracks'),
+     'inventory_pixiedust', 'inventory_juggling_cubes', 'inventory_cannon', 'inventory_ladder'),
+    ('inventory_banana_peel', 'inventory_rake', 'inventory_springboard', 'inventory_marbles',
+     'inventory_quicksand_icon', 'inventory_trapdoor', 'inventory_wreckingball', 'inventory_tnt'),
     ('inventory_1dollarbill', 'inventory_small_magnet', 'inventory_5dollarbill', 'inventory_big_magnet',
-     'inventory_10dollarbill', 'inventory_hypno_goggles', 'inventory_5dollarbill', 'inventory_screen'),
-    ('inventory_bikehorn', 'inventory_bikehorn', 'inventory_whistle', 'inventory_bugle',
+     'inventory_10dollarbill', 'inventory_hypno_goggles', 'inventory_50dollarbill', 'inventory_screen'),
+    ('inventory_kazoo', 'inventory_bikehorn', 'inventory_whistle', 'inventory_bugle',
      'inventory_aoogah', 'inventory_elephant', 'inventory_fog_horn', 'inventory_opera_singer'),
-    ('inventory_tart', 'inventory_fruit_pie_slice', 'inventory_cream_pie_slice', 'inventory_cream_pie_slice',
+    ('inventory_cup_cake', 'inventory_fruit_pie_slice', 'inventory_cream_pie_slice', 'inventory_cake_slice',
      'inventory_fruitpie', 'inventory_creampie', 'inventory_cake', 'inventory_wedding'),
-    ('inventory_squirt_flower', 'inventory_glass_of_water', 'inventory_water_gun', 'inventory_water_gun',
+    ('inventory_squirt_flower', 'inventory_glass_of_water', 'inventory_water_gun', 'inventory_waterballoon',
      'inventory_seltzer_bottle', 'inventory_firehose', 'inventory_storm_cloud', 'inventory_geyser'),
-    ('inventory_flower_pot', 'inventory_sandbag', 'inventory_sandbag', 'inventory_anvil',
-     'inventory_weight', 'inventory_safe_box', 'inventory_piano', 'inventory_ship')
+    ('inventory_flower_pot', 'inventory_sandbag', 'inventory_bowlingball', 'inventory_anvil',
+     'inventory_weight', 'inventory_safe_box', 'inventory_boulder', 'inventory_piano')
 )
 
 # prettier on-screen versions of the prop names
