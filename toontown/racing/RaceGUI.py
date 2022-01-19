@@ -76,7 +76,7 @@ class RaceGUI:
         invTextures = loader.loadModel('phase_3.5/models/gui/inventory_icons')
         racingTextures = loader.loadModel('phase_6/models/karting/racing_textures')
         self.gagTextures = [toonInteriorTextures.find('**/couch'),
-         invTextures.find('**/inventory_bannana_peel'),
+         invTextures.find('**/inventory_banana_peel'),
          racingTextures.find('**/boost_arrow'),
          invTextures.find('**/inventory_anvil'),
          invTextures.find('**/inventory_creampie')]
