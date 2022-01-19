@@ -1,0 +1,22 @@
+*.pyc
+*.pyo
+*.fzn
+pandac/
+*.dis
+*.log
+screenshots/
+sign/
+whitelist/
+news/
+logs/
+Library/
+*.buildings
+*.trackRecords
+*.DS_Store
+backups/
+settings.json
+errorCode
+
+# PyCharm IDE
+.idea
+venv
