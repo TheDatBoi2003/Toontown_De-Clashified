@@ -5,7 +5,7 @@ from toontown.toonbase import ToontownGlobals
 from panda3d.core import *
 from toontown.battle import SuitBattleGlobals
 from direct.task.Task import Task
-from toontown.battle import BattleProps
+from toontown.battle.movies import BattleProps
 from toontown.toonbase import TTLocalizer
 from libotp import *
 from direct.showbase import AppRunnerGlobal

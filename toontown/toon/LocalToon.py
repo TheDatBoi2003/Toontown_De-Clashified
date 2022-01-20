@@ -44,18 +44,17 @@ from toontown.catalog import CatalogNotifyDialog
 from toontown.chat import ToontownChatManager
 from toontown.chat import TTTalkAssistant
 from toontown.estate import GardenGlobals
-from toontown.battle.BattleSounds import *
-from toontown.battle import Fanfare
+from toontown.battle.movies.BattleSounds import *
+from toontown.battle.movies import Fanfare
 from toontown.parties import PartyGlobals
 from toontown.toon import ElevatorNotifier
-from toontown.toon import ToonDNA
 from toontown.shtiker import WordPage
 from toontown.camera.CameraFSM import *
 import DistributedToon
 import Toon
 import LaffMeter
 from toontown.quest import QuestMap
-from toontown.toon.DistributedNPCToonBase import DistributedNPCToonBase
+
 WantNewsPage = base.config.GetBool('want-news-page', ToontownGlobals.DefaultWantNewsPageSetting)
 from toontown.toontowngui import NewsPageButtonManager
 if WantNewsPage:
@@ -670,7 +669,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         return
 
     def localPresentPie(self, time):
-        import TTEmote
         from otp.avatar import Emote
         self.__stopPresentPie()
         if self.tossTrack:
@@ -706,7 +704,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
     def __stopPresentPie(self):
         if self.__presentingPie:
-            import TTEmote
             from otp.avatar import Emote
             Emote.globalEmote.releaseBody(self)
             messenger.send('end-pie')

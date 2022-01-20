@@ -3,14 +3,14 @@ from direct.showbase.DirectObject import DirectObject
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm.FSM import FSM
 from direct.task.Task import Task
-from direct.interval.IntervalGlobal import Sequence, Parallel, LerpScaleInterval, LerpFunctionInterval, Func, Wait, LerpFunc, SoundInterval, ParallelEndTogether, LerpPosInterval, ActorInterval, LerpPosHprInterval, LerpHprInterval
+from direct.interval.IntervalGlobal import Sequence, Parallel, Func, Wait, LerpFunc, LerpPosInterval, ActorInterval
 from direct.directutil import Mopath
 from direct.showbase.PythonUtil import bound as clamp
-from panda3d.core import CollisionSphere, CollisionNode, CollisionTube, CollisionPolygon, Vec3, Point3
+from panda3d.core import CollisionSphere, CollisionNode, Vec3, Point3
 from toontown.suit import Suit
 from toontown.suit import SuitDNA
 from toontown.toonbase import ToontownGlobals
-from toontown.battle import BattleProps
+from toontown.battle.movies import BattleProps
 from CogdoFlyingUtil import swapAvatarShadowPlacer
 import CogdoUtil
 import CogdoFlyingGameGlobals as Globals

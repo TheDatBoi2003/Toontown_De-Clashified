@@ -1,11 +1,8 @@
-from panda3d.core import *
 from direct.interval.IntervalGlobal import *
-from BattleBase import *
-from BattleProps import *
 from toontown.battle import SuitBattleGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase.ToontownBattleGlobals import *
-from SuitBattleGlobals import *
+from toontown.battle.SuitBattleGlobals import *
 from direct.directnotify import DirectNotifyGlobal
 import random
 import MovieUtil

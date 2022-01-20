@@ -2,8 +2,7 @@ from direct.interval.IntervalGlobal import *
 from panda3d.core import *
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
-from toontown.battle import BattleParticles
-from direct.particles import Particles
+from toontown.battle.movies import BattleParticles
 import random
 TTBG = ToontownBattleGlobals
 TTL = TTLocalizer

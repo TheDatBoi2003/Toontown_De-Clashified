@@ -1,13 +1,13 @@
 from direct.interval.IntervalGlobal import *
 
-import BattleParticles
+import toontown.battle.movies.BattleParticles
 import MovieCamera
 import MovieUtil
-from BattleProps import *
-from BattleSounds import *
-from toontown.battle import MovieThrow
+from toontown.battle.movies.BattleProps import *
+from toontown.battle.movies.BattleSounds import *
+from toontown.battle.movies import MovieThrow
 from toontown.battle.BattleBase import TOON_SQUIRT_SUIT_DELAY, TOON_SQUIRT_DELAY
-from toontown.battle.MovieThrow import ratioMissToHit
+from toontown.battle.movies.MovieThrow import ratioMissToHit
 from toontown.suit.SuitDNA import *
 from toontown.toon.ToonDNA import *
 from toontown.toonbase import ToontownBattleGlobals
@@ -767,11 +767,11 @@ def __doStormCloud(squirt, delay, fShowStun):
                          Func(toon.loop, 'neutral'), Func(toon.setHpr, battle, origHpr))
     tracks.append(toonTrack)
     cloud = globalPropPool.getProp('stormcloud')
-    BattleParticles.loadParticles()
-    trickleEffect = BattleParticles.createParticleEffect(file='trickleLiquidate')
-    rainEffect = BattleParticles.createParticleEffect(file='liquidate')
-    rainEffect2 = BattleParticles.createParticleEffect(file='liquidate')
-    rainEffect3 = BattleParticles.createParticleEffect(file='liquidate')
+    toontown.battle.movies.BattleParticles.loadParticles()
+    trickleEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='trickleLiquidate')
+    rainEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='liquidate')
+    rainEffect2 = toontown.battle.movies.BattleParticles.createParticleEffect(file='liquidate')
+    rainEffect3 = toontown.battle.movies.BattleParticles.createParticleEffect(file='liquidate')
     cloudHeight = suit.height + 3
     cloudPosPoint = Point3(0, 0, cloudHeight)
     scaleUpPoint = Point3(3, 3, 3)
@@ -855,7 +855,7 @@ def __doGeyser(squirt, delay, fShowStun, uberClone=0):
     tracks.append(Wait(delayTime))
     tracks.append(soundTrack)
     cloud = globalPropPool.getProp('geyser')
-    BattleParticles.loadParticles()
+    toontown.battle.movies.BattleParticles.loadParticles()
     scaleUpPoint = Point3(1.8, 1.8, 1.8)
     rainDelay = 2.5
     if hp > 0:

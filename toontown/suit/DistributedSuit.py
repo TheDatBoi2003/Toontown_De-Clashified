@@ -3,23 +3,13 @@ from panda3d.toontown import *
 from libotp import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
-from direct.directtools.DirectGeometry import CLAMP
 from direct.task import Task
-from otp.avatar import DistributedAvatar
-import Suit
-from toontown.toonbase import ToontownGlobals
-from toontown.battle import DistributedBattle, SuitBattleGlobals
-from direct.fsm import ClassicFSM, State
+from direct.fsm import ClassicFSM
 from direct.fsm import State
 import SuitTimings
-import SuitBase
-import DistributedSuitPlanner
 from direct.directnotify import DirectNotifyGlobal
-import SuitDialog
-from toontown.battle import BattleProps
 from toontown.distributed.DelayDeletable import DelayDeletable
 import math
-import copy
 import DistributedSuitBase
 from otp.otpbase import OTPLocalizer
 import random

@@ -1,11 +1,12 @@
 import random
 from panda3d.core import VBase3, Point3
-from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, Track, LerpPosInterval, ProjectileInterval, SoundInterval, ActorInterval
+from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, Track, ProjectileInterval, SoundInterval, ActorInterval
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import DistributedBattleFinal
 from toontown.suit import SuitTimings
 from toontown.toonbase import ToontownGlobals
-from toontown.battle import BattleProps
+from toontown.battle.movies import BattleProps
+
 
 class DistributedBattleDiners(DistributedBattleFinal.DistributedBattleFinal):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleDiners')

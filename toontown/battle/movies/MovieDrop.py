@@ -1,7 +1,7 @@
 from direct.interval.IntervalGlobal import *
-from BattleBase import *
-from BattleProps import *
-from BattleSounds import *
+from toontown.battle.BattleBase import *
+from toontown.battle.movies.BattleProps import *
+from toontown.battle.movies.BattleSounds import *
 import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
 import MovieUtil
@@ -9,7 +9,7 @@ import MovieNPCSOS
 from MovieUtil import calcAvgSuitPos
 from direct.showutil import Effects
 
-from toontown.battle import BattleParticles
+from toontown.battle.movies import BattleParticles
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieDrop')
 hitSoundFiles = (

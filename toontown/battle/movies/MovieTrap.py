@@ -1,15 +1,13 @@
 from direct.interval.IntervalGlobal import *
-from BattleBase import *
-from BattleProps import *
-from BattleSounds import *
+from toontown.battle.BattleBase import *
+from toontown.battle.movies.BattleProps import *
+from toontown.battle.movies.BattleSounds import *
 import MovieUtil
 import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownBattleGlobals
-from direct.actor import Actor
-from direct.particles import ParticleEffect
-import BattleParticles
-import BattleProps
+import toontown.battle.movies.BattleParticles
+import toontown.battle.movies.BattleProps
 import MovieNPCSOS
 from MovieSound import createSuitResetPosTrack
 
@@ -282,7 +280,7 @@ def __createThrownTrapMultiTrack(trap, propList, propName, propPos=None, propHpr
         throwTrack.append(Func(placeTrap, trapProp, suit))
         if trapName == 'tnt':
             tip = trapProp.find('**/joint_attachEmitter')
-            sparks = BattleParticles.createParticleEffect(file='tnt')
+            sparks = toontown.battle.movies.BattleParticles.createParticleEffect(file='tnt')
             trapProp.sparksEffect = sparks
             throwTrack.append(Func(sparks.start, tip))
     throwTrack.append(Func(MovieUtil.removeProps, propList))
@@ -491,7 +489,7 @@ def createThrowingTrack(object, target, duration=1.0, parent=render, gravity=-32
 
 def createCartoonExplosionTrack(parent, animName, explosionPoint=None):
     explosionTrack = Sequence()
-    explosion = BattleProps.globalPropPool.getProp(animName)
+    explosion = toontown.battle.movies.BattleProps.globalPropPool.getProp(animName)
     explosion.setBillboardPointEye()
     if not explosionPoint:
         explosionPoint = Point3(0, 3.6, 2.1)

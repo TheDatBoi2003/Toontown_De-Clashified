@@ -9,7 +9,7 @@ from panda3d.physics import *
 from toontown.toonbase import ToontownGlobals
 from toontown.suit import Suit
 from toontown.suit import SuitDNA
-from toontown.battle import BattleProps
+from toontown.battle.movies import BattleProps
 import CogdoUtil
 import CogdoFlyingGameGlobals as Globals
 from CogdoFlyingUtil import swapAvatarShadowPlacer

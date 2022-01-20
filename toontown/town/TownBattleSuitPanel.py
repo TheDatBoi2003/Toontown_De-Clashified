@@ -3,7 +3,7 @@ from direct.gui.DirectGui import *
 from direct.task.Task import Task
 from direct.task.TaskManagerGlobal import taskMgr
 
-from toontown.battle import BattleProps
+from toontown.battle.movies import BattleProps
 from toontown.suit.Suit import Suit
 from toontown.suit.SuitAvatarPanel import SuitAvatarPanel
 from toontown.toonbase.ToontownBattleGlobals import *

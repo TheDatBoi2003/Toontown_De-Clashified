@@ -1,7 +1,4 @@
-from panda3d.core import *
 from direct.showbase.DirectObject import DirectObject
-from direct.interval.IntervalGlobal import *
-from toontown.battle.BattleProps import *
 from toontown.racing import Piejectile
 
 class PiejectileManager(DirectObject):

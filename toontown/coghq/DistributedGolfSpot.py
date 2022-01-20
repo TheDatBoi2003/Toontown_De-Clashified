@@ -6,7 +6,8 @@ from direct.distributed import DistributedObject
 from direct.distributed.ClockDelta import globalClockDelta
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import DGG, DirectButton, DirectLabel, DirectWaitBar
-from direct.interval.IntervalGlobal import Sequence, Wait, ActorInterval, Parallel, Func, LerpPosInterval, LerpHprInterval, ProjectileInterval, LerpScaleInterval, SoundInterval
+from direct.interval.IntervalGlobal import Sequence, Wait, ActorInterval, Parallel, Func, LerpPosInterval, \
+    ProjectileInterval, LerpScaleInterval, SoundInterval
 from direct.showbase import PythonUtil
 from direct.task import Task
 from toontown.golf import GolfGlobals
@@ -728,8 +729,7 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
                 pass
 
     def getFlyBallSplatInterval(self, x, y, z, flyBallCode, throwerId):
-        from toontown.toonbase import ToontownBattleGlobals
-        from toontown.battle import BattleProps
+        from toontown.battle.movies import BattleProps
         splatName = 'dust'
         splat = BattleProps.globalPropPool.getProp(splatName)
         splat.setBillboardPointWorld(2)

@@ -1,17 +1,13 @@
 from libotp import *
-from toontown.toonbase.ToontownGlobals import *
-from SuitBattleGlobals import *
 from direct.interval.IntervalGlobal import *
-from BattleBase import *
-from BattleProps import *
+from toontown.battle.movies.BattleProps import *
 from toontown.suit.SuitDNA import *
-from BattleBase import *
-from BattleSounds import *
+from toontown.battle.BattleBase import *
+from toontown.battle.movies.BattleSounds import *
 import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
 import MovieUtil
-from direct.particles import ParticleEffect
-import BattleParticles
+import toontown.battle.movies.BattleParticles
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 
@@ -879,9 +875,9 @@ def doPoundKey(attack):
     battle = attack['battle']
     phone = globalPropPool.getProp('phone')
     receiver = globalPropPool.getProp('receiver')
-    BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect('PoundKey')
-    BattleParticles.setEffectTexture(particleEffect, 'poundsign', color=Vec4(0, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.loadParticles()
+    particleEffect = toontown.battle.movies.BattleParticles.createParticleEffect('PoundKey')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect, 'poundsign', color=Vec4(0, 0, 0, 1))
     suitTrack = getSuitTrack(attack)
     partTrack = getPartTrack(particleEffect, 2.1, 1.55, [particleEffect, suit, 0])
     phonePosPoints = [Point3(0.23, 0.17, -0.11), VBase3(5.939, 2.763, -177.591)]
@@ -904,7 +900,7 @@ def doShred(attack):
     battle = attack['battle']
     paper = globalPropPool.getProp('shredder-paper')
     shredder = globalPropPool.getProp('shredder')
-    particleEffect = BattleParticles.createParticleEffect('Shred')
+    particleEffect = toontown.battle.movies.BattleParticles.createParticleEffect('Shred')
     suitTrack = getSuitTrack(attack)
     partTrack = getPartTrack(particleEffect, 3.5, 1.9, [particleEffect, suit, 0])
     paperPosPoints = [Point3(0.59, -0.31, 0.81), VBase3(79.224, 32.576, -179.449)]
@@ -927,15 +923,15 @@ def doFillWithLead(attack):
     dmg = target['hp']
     pencil = globalPropPool.getProp('pencil')
     sharpener = globalPropPool.getProp('sharpener')
-    BattleParticles.loadParticles()
-    sprayEffect = BattleParticles.createParticleEffect(file='fillWithLeadSpray')
-    headSmotherEffect = BattleParticles.createParticleEffect(file='fillWithLeadSmother')
-    torsoSmotherEffect = BattleParticles.createParticleEffect(file='fillWithLeadSmother')
-    legsSmotherEffect = BattleParticles.createParticleEffect(file='fillWithLeadSmother')
-    BattleParticles.setEffectTexture(sprayEffect, 'roll-o-dex', color=Vec4(0, 0, 0, 1))
-    BattleParticles.setEffectTexture(headSmotherEffect, 'roll-o-dex', color=Vec4(0, 0, 0, 1))
-    BattleParticles.setEffectTexture(torsoSmotherEffect, 'roll-o-dex', color=Vec4(0, 0, 0, 1))
-    BattleParticles.setEffectTexture(legsSmotherEffect, 'roll-o-dex', color=Vec4(0, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.loadParticles()
+    sprayEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='fillWithLeadSpray')
+    headSmotherEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='fillWithLeadSmother')
+    torsoSmotherEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='fillWithLeadSmother')
+    legsSmotherEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='fillWithLeadSmother')
+    toontown.battle.movies.BattleParticles.setEffectTexture(sprayEffect, 'roll-o-dex', color=Vec4(0, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.setEffectTexture(headSmotherEffect, 'roll-o-dex', color=Vec4(0, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.setEffectTexture(torsoSmotherEffect, 'roll-o-dex', color=Vec4(0, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.setEffectTexture(legsSmotherEffect, 'roll-o-dex', color=Vec4(0, 0, 0, 1))
     suitTrack = getSuitTrack(attack)
     startDelay = 2.5
     sprayTrack = getPartTrack(sprayEffect, startDelay, 1.9, [sprayEffect, suit, 0])
@@ -1077,7 +1073,7 @@ def doFountainPen(attack):
             splashTrack.append(Func(nextPart.clearColorScale))
 
         splashTrack.append(Func(battle.movie.clearRestoreColor))
-    penSpill = BattleParticles.createParticleEffect(file='penSpill')
+    penSpill = toontown.battle.movies.BattleParticles.createParticleEffect(file='penSpill')
     penSpill.setPos(getPenTip())
     penSpillTrack = getPartTrack(penSpill, 1.4, 0.7, [penSpill, pen, 0])
     toonTrack = getToonTrack(attack, 1.81, ['conked'], dodgeDelay=0.11, splicedDodgeAnims=[['duck', 0.01, 0.6]],
@@ -1094,9 +1090,9 @@ def doRubOut(attack):
     dmg = target['hp']
     pad = globalPropPool.getProp('pad')
     pencil = globalPropPool.getProp('pencil')
-    headEffect = BattleParticles.createParticleEffect('RubOut', color=toon.style.getHeadColor())
-    torsoEffect = BattleParticles.createParticleEffect('RubOut', color=toon.style.getArmColor())
-    legsEffect = BattleParticles.createParticleEffect('RubOut', color=toon.style.getLegColor())
+    headEffect = toontown.battle.movies.BattleParticles.createParticleEffect('RubOut', color=toon.style.getHeadColor())
+    torsoEffect = toontown.battle.movies.BattleParticles.createParticleEffect('RubOut', color=toon.style.getArmColor())
+    legsEffect = toontown.battle.movies.BattleParticles.createParticleEffect('RubOut', color=toon.style.getLegColor())
     suitTrack = getSuitTrack(attack)
     padPosPoints = [Point3(-0.66, 0.81, -0.06), VBase3(14.93, -2.29, 180.0)]
     padPropTrack = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 0.5, 2.57)
@@ -1164,9 +1160,9 @@ def doRubOut(attack):
 def doFingerWag(attack):
     suit = attack['suit']
     battle = attack['battle']
-    BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect('FingerWag')
-    BattleParticles.setEffectTexture(particleEffect, 'blah', color=Vec4(0.55, 0, 0.55, 1))
+    toontown.battle.movies.BattleParticles.loadParticles()
+    particleEffect = toontown.battle.movies.BattleParticles.createParticleEffect('FingerWag')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect, 'blah', color=Vec4(0.55, 0, 0.55, 1))
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
         partDelay = 1.3
@@ -1207,8 +1203,8 @@ def doWriteOff(attack):
     toon = target['toon']
     pad = globalPropPool.getProp('pad')
     pencil = globalPropPool.getProp('pencil')
-    BattleParticles.loadParticles()
-    checkmark = MovieUtil.copyProp(BattleParticles.getParticle('checkmark'))
+    toontown.battle.movies.BattleParticles.loadParticles()
+    checkmark = MovieUtil.copyProp(toontown.battle.movies.BattleParticles.getParticle('checkmark'))
     checkmark.setBillboardPointEye()
     suitTrack = getSuitTrack(attack)
     padPosPoints = [Point3(-0.25, 1.38, -0.08), VBase3(-19.078, -6.603, -171.594)]
@@ -1281,8 +1277,8 @@ def doRazzleDazzle(attack):
     dmg = target['hp']
     hitSuit = dmg > 0
     sign = globalPropPool.getProp('smile')
-    BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect('Smile')
+    toontown.battle.movies.BattleParticles.loadParticles()
+    particleEffect = toontown.battle.movies.BattleParticles.createParticleEffect('Smile')
     suitTrack = getSuitTrack(attack)
     signPosPoints = [Point3(0.0, -0.42, -0.04), VBase3(105.715, 73.977, 65.932)]
     if hitSuit:
@@ -1313,8 +1309,8 @@ def doSynergy(attack):
         if t['hp'] > 0:
             hitAtleastOneToon = 1
 
-    particleEffect = BattleParticles.createParticleEffect('Synergy')
-    waterfallEffect = BattleParticles.createParticleEffect(file='synergyWaterfall')
+    particleEffect = toontown.battle.movies.BattleParticles.createParticleEffect('Synergy')
+    waterfallEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='synergyWaterfall')
     suitTrack = getSuitAnimTrack(attack)
     partTrack = getPartTrack(particleEffect, 1.0, 1.9, [particleEffect, suit, 0])
     waterfallTrack = getPartTrack(waterfallEffect, 0.8, 1.9, [waterfallEffect, suit, 0])
@@ -1377,14 +1373,14 @@ def doBrainStorm(attack):
     battle = attack['battle']
     target = attack['target']
     toon = target['toon']
-    BattleParticles.loadParticles()
-    snowEffect = BattleParticles.createParticleEffect('BrainStorm')
-    snowEffect2 = BattleParticles.createParticleEffect('BrainStorm')
-    snowEffect3 = BattleParticles.createParticleEffect('BrainStorm')
+    toontown.battle.movies.BattleParticles.loadParticles()
+    snowEffect = toontown.battle.movies.BattleParticles.createParticleEffect('BrainStorm')
+    snowEffect2 = toontown.battle.movies.BattleParticles.createParticleEffect('BrainStorm')
+    snowEffect3 = toontown.battle.movies.BattleParticles.createParticleEffect('BrainStorm')
     effectColor = Vec4(0.65, 0.79, 0.93, 0.85)
-    BattleParticles.setEffectTexture(snowEffect, 'brainstorm-box', color=effectColor)
-    BattleParticles.setEffectTexture(snowEffect2, 'brainstorm-env', color=effectColor)
-    BattleParticles.setEffectTexture(snowEffect3, 'brainstorm-track', color=effectColor)
+    toontown.battle.movies.BattleParticles.setEffectTexture(snowEffect, 'brainstorm-box', color=effectColor)
+    toontown.battle.movies.BattleParticles.setEffectTexture(snowEffect2, 'brainstorm-env', color=effectColor)
+    toontown.battle.movies.BattleParticles.setEffectTexture(snowEffect3, 'brainstorm-track', color=effectColor)
     cloud = globalPropPool.getProp('stormcloud')
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
@@ -1443,7 +1439,7 @@ def doBuzzWord(attack):
     target = attack['target']
     toon = target['toon']
     battle = attack['battle']
-    BattleParticles.loadParticles()
+    toontown.battle.movies.BattleParticles.loadParticles()
     particleEffects = []
     texturesList = ['buzzwords-crash',
                     'buzzwords-inc',
@@ -1451,11 +1447,11 @@ def doBuzzWord(attack):
                     'buzzwords-over',
                     'buzzwords-syn']
     for i in xrange(0, 5):
-        effect = BattleParticles.createParticleEffect('BuzzWord')
+        effect = toontown.battle.movies.BattleParticles.createParticleEffect('BuzzWord')
         if random.random() > 0.5:
-            BattleParticles.setEffectTexture(effect, texturesList[i], color=Vec4(1, 0.94, 0.02, 1))
+            toontown.battle.movies.BattleParticles.setEffectTexture(effect, texturesList[i], color=Vec4(1, 0.94, 0.02, 1))
         else:
-            BattleParticles.setEffectTexture(effect, texturesList[i], color=Vec4(0, 0, 0, 1))
+            toontown.battle.movies.BattleParticles.setEffectTexture(effect, texturesList[i], color=Vec4(0, 0, 0, 1))
         particleEffects.append(effect)
 
     suitType = getSuitBodyType(attack['suitName'])
@@ -1501,13 +1497,13 @@ def doDemotion(attack):
     target = attack['target']
     toon = target['toon']
     dmg = target['hp']
-    BattleParticles.loadParticles()
-    sprayEffect = BattleParticles.createParticleEffect('DemotionSpray')
-    freezeEffect = BattleParticles.createParticleEffect('DemotionFreeze')
-    unFreezeEffect = BattleParticles.createParticleEffect(file='demotionUnFreeze')
-    BattleParticles.setEffectTexture(sprayEffect, 'snow-particle')
-    BattleParticles.setEffectTexture(freezeEffect, 'snow-particle')
-    BattleParticles.setEffectTexture(unFreezeEffect, 'snow-particle')
+    toontown.battle.movies.BattleParticles.loadParticles()
+    sprayEffect = toontown.battle.movies.BattleParticles.createParticleEffect('DemotionSpray')
+    freezeEffect = toontown.battle.movies.BattleParticles.createParticleEffect('DemotionFreeze')
+    unFreezeEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='demotionUnFreeze')
+    toontown.battle.movies.BattleParticles.setEffectTexture(sprayEffect, 'snow-particle')
+    toontown.battle.movies.BattleParticles.setEffectTexture(freezeEffect, 'snow-particle')
+    toontown.battle.movies.BattleParticles.setEffectTexture(unFreezeEffect, 'snow-particle')
     facePoint = __toonFacePoint(toon)
     freezeEffect.setPos(0, 0, facePoint.getZ())
     unFreezeEffect.setPos(0, 0, facePoint.getZ())
@@ -1630,8 +1626,8 @@ def doDownsize(attack):
     toon = target['toon']
     dmg = target['hp']
     damageDelay = 2.3
-    sprayEffect = BattleParticles.createParticleEffect(file='downsizeSpray')
-    cloudEffect = BattleParticles.createParticleEffect(file='downsizeCloud')
+    sprayEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='downsizeSpray')
+    cloudEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='downsizeCloud')
     toonPos = toon.getPos(toon)
     cloudPos = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.getHeight() * 0.55)
     cloudEffect.setPos(cloudPos)
@@ -1735,7 +1731,7 @@ def doReOrg(attack):
     dmg = target['hp']
     damageDelay = 1.7
     attackDelay = 1.7
-    sprayEffect = BattleParticles.createParticleEffect(file='reorgSpray')
+    sprayEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='reorgSpray')
     suitTrack = getSuitTrack(attack)
     partTrack = getPartTrack(sprayEffect, 1.0, 1.9, [sprayEffect, suit, 0])
     if dmg > 0:
@@ -1959,9 +1955,9 @@ def doHeadShrink(attack):
     dmg = target['hp']
     damageDelay = 2.1
     dodgeDelay = 1.4
-    shrinkSpray = BattleParticles.createParticleEffect(file='headShrinkSpray')
-    shrinkCloud = BattleParticles.createParticleEffect(file='headShrinkCloud')
-    shrinkDrop = BattleParticles.createParticleEffect(file='headShrinkDrop')
+    shrinkSpray = toontown.battle.movies.BattleParticles.createParticleEffect(file='headShrinkSpray')
+    shrinkCloud = toontown.battle.movies.BattleParticles.createParticleEffect(file='headShrinkCloud')
+    shrinkDrop = toontown.battle.movies.BattleParticles.createParticleEffect(file='headShrinkDrop')
     suitTrack = getSuitTrack(attack)
     sprayTrack = getPartTrack(shrinkSpray, 0.3, 1.4, [shrinkSpray, suit, 0])
     shrinkCloud.reparentTo(battle)
@@ -2060,8 +2056,8 @@ def doRolodex(attack):
     target = attack['target']
     toon = target['toon']
     rollodex = globalPropPool.getProp('rollodex')
-    particleEffect2 = BattleParticles.createParticleEffect(file='rollodexWaterfall')
-    particleEffect3 = BattleParticles.createParticleEffect(file='rollodexStream')
+    particleEffect2 = toontown.battle.movies.BattleParticles.createParticleEffect(file='rollodexWaterfall')
+    particleEffect3 = toontown.battle.movies.BattleParticles.createParticleEffect(file='rollodexStream')
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
         propPosPoints = [Point3(-0.51, -0.03, -0.1), VBase3(89.673, 2.166, 177.786)]
@@ -2271,11 +2267,11 @@ def doPowerTie(attack):
 def doDoubleTalk(attack):
     suit = attack['suit']
     battle = attack['battle']
-    BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect('DoubleTalkLeft')
-    particleEffect2 = BattleParticles.createParticleEffect('DoubleTalkRight')
-    BattleParticles.setEffectTexture(particleEffect, 'doubletalk-double', color=Vec4(0, 1.0, 0.0, 1))
-    BattleParticles.setEffectTexture(particleEffect2, 'doubletalk-good', color=Vec4(0, 1.0, 0.0, 1))
+    toontown.battle.movies.BattleParticles.loadParticles()
+    particleEffect = toontown.battle.movies.BattleParticles.createParticleEffect('DoubleTalkLeft')
+    particleEffect2 = toontown.battle.movies.BattleParticles.createParticleEffect('DoubleTalkRight')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect, 'doubletalk-double', color=Vec4(0, 1.0, 0.0, 1))
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect2, 'doubletalk-good', color=Vec4(0, 1.0, 0.0, 1))
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
         partDelay = 3.3
@@ -2307,9 +2303,9 @@ def doFreezeAssets(attack):
     battle = attack['battle']
     target = attack['target']
     toon = target['toon']
-    BattleParticles.loadParticles()
-    snowEffect = BattleParticles.createParticleEffect('FreezeAssets')
-    BattleParticles.setEffectTexture(snowEffect, 'snow-particle')
+    toontown.battle.movies.BattleParticles.loadParticles()
+    snowEffect = toontown.battle.movies.BattleParticles.createParticleEffect('FreezeAssets')
+    toontown.battle.movies.BattleParticles.setEffectTexture(snowEffect, 'snow-particle')
     cloud = globalPropPool.getProp('stormcloud')
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
@@ -2357,15 +2353,15 @@ def doHotAir(attack):
     target = attack['target']
     toon = target['toon']
     dmg = target['hp']
-    BattleParticles.loadParticles()
-    sprayEffect = BattleParticles.createParticleEffect('HotAir')
-    baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame')
-    flameEffect = BattleParticles.createParticleEffect('FiredFlame')
-    flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
-    BattleParticles.setEffectTexture(sprayEffect, 'fire')
-    BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
-    BattleParticles.setEffectTexture(flameEffect, 'fire')
-    BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
+    toontown.battle.movies.BattleParticles.loadParticles()
+    sprayEffect = toontown.battle.movies.BattleParticles.createParticleEffect('HotAir')
+    baseFlameEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='firedBaseFlame')
+    flameEffect = toontown.battle.movies.BattleParticles.createParticleEffect('FiredFlame')
+    flecksEffect = toontown.battle.movies.BattleParticles.createParticleEffect('SpriteFiredFlecks')
+    toontown.battle.movies.BattleParticles.setEffectTexture(sprayEffect, 'fire')
+    toontown.battle.movies.BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
+    toontown.battle.movies.BattleParticles.setEffectTexture(flameEffect, 'fire')
+    toontown.battle.movies.BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
     sprayDelay = 1.3
     flameDelay = 3.2
     flameDuration = 2.6
@@ -2454,16 +2450,16 @@ def doFilibuster(attack):
     target = attack['target']
     dmg = target['hp']
     battle = attack['battle']
-    BattleParticles.loadParticles()
-    sprayEffect = BattleParticles.createParticleEffect(file='filibusterSpray')
-    sprayEffect2 = BattleParticles.createParticleEffect(file='filibusterSpray')
-    sprayEffect3 = BattleParticles.createParticleEffect(file='filibusterSpray')
-    sprayEffect4 = BattleParticles.createParticleEffect(file='filibusterSpray')
+    toontown.battle.movies.BattleParticles.loadParticles()
+    sprayEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='filibusterSpray')
+    sprayEffect2 = toontown.battle.movies.BattleParticles.createParticleEffect(file='filibusterSpray')
+    sprayEffect3 = toontown.battle.movies.BattleParticles.createParticleEffect(file='filibusterSpray')
+    sprayEffect4 = toontown.battle.movies.BattleParticles.createParticleEffect(file='filibusterSpray')
     color = Vec4(0.4, 0, 0, 1)
-    BattleParticles.setEffectTexture(sprayEffect, 'filibuster-cut', color=color)
-    BattleParticles.setEffectTexture(sprayEffect2, 'filibuster-fiscal', color=color)
-    BattleParticles.setEffectTexture(sprayEffect3, 'filibuster-impeach', color=color)
-    BattleParticles.setEffectTexture(sprayEffect4, 'filibuster-inc', color=color)
+    toontown.battle.movies.BattleParticles.setEffectTexture(sprayEffect, 'filibuster-cut', color=color)
+    toontown.battle.movies.BattleParticles.setEffectTexture(sprayEffect2, 'filibuster-fiscal', color=color)
+    toontown.battle.movies.BattleParticles.setEffectTexture(sprayEffect3, 'filibuster-impeach', color=color)
+    toontown.battle.movies.BattleParticles.setEffectTexture(sprayEffect4, 'filibuster-inc', color=color)
     partDelay = 1.3
     partDuration = 1.15
     damageDelay = 2.45
@@ -2492,7 +2488,7 @@ def doFilibuster(attack):
 def doSchmooze(attack):
     suit = attack['suit']
     battle = attack['battle']
-    BattleParticles.loadParticles()
+    toontown.battle.movies.BattleParticles.loadParticles()
     upperEffects = []
     lowerEffects = []
     textureNames = ['schmooze-genius',
@@ -2500,10 +2496,10 @@ def doSchmooze(attack):
                     'schmooze-master',
                     'schmooze-viz']
     for i in xrange(0, 4):
-        upperEffect = BattleParticles.createParticleEffect(file='schmoozeUpperSpray')
-        lowerEffect = BattleParticles.createParticleEffect(file='schmoozeLowerSpray')
-        BattleParticles.setEffectTexture(upperEffect, textureNames[i], color=Vec4(0, 0, 1, 1))
-        BattleParticles.setEffectTexture(lowerEffect, textureNames[i], color=Vec4(0, 0, 1, 1))
+        upperEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='schmoozeUpperSpray')
+        lowerEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='schmoozeLowerSpray')
+        toontown.battle.movies.BattleParticles.setEffectTexture(upperEffect, textureNames[i], color=Vec4(0, 0, 1, 1))
+        toontown.battle.movies.BattleParticles.setEffectTexture(lowerEffect, textureNames[i], color=Vec4(0, 0, 1, 1))
         upperEffects.append(upperEffect)
         lowerEffects.append(lowerEffect)
 
@@ -2688,7 +2684,7 @@ def doParadigmShift(attack):
 
     damageDelay = 1.95
     dodgeDelay = 0.95
-    sprayEffect = BattleParticles.createParticleEffect('ShiftSpray')
+    sprayEffect = toontown.battle.movies.BattleParticles.createParticleEffect('ShiftSpray')
     suitName = suit.getStyleName()
     sprayEffect.setPos(Point3(-5.2, 4.6, 2.7))
     suitTrack = getSuitAnimTrack(attack)
@@ -2699,7 +2695,7 @@ def doParadigmShift(attack):
         toon = t['toon']
         dmg = t['hp']
         if dmg > 0:
-            liftEffect = BattleParticles.createParticleEffect('ShiftLift')
+            liftEffect = toontown.battle.movies.BattleParticles.createParticleEffect('ShiftLift')
             liftEffect.setPos(toon.getPos(battle))
             liftEffect.setZ(liftEffect.getZ() - 1.3)
             liftTracks.append(getPartTrack(liftEffect, 1.1, 4.1, [liftEffect, battle, 0]))
@@ -2765,8 +2761,8 @@ def doPowerTrip(attack):
     targets = attack['target']
     centerColor = Vec4(0.1, 0.1, 0.1, 0.4)
     edgeColor = Vec4(0.4, 0.1, 0.9, 0.7)
-    powerBar1 = BattleParticles.createParticleEffect(file='powertrip')
-    powerBar2 = BattleParticles.createParticleEffect(file='powertrip2')
+    powerBar1 = toontown.battle.movies.BattleParticles.createParticleEffect(file='powertrip')
+    powerBar2 = toontown.battle.movies.BattleParticles.createParticleEffect(file='powertrip2')
     powerBar1.setPos(0, 6.1, 0.4)
     powerBar1.setHpr(-60, 0, 0)
     powerBar2.setPos(0, 6.1, 0.4)
@@ -2777,7 +2773,7 @@ def doPowerTrip(attack):
     powerBar1Particles.renderer.setEdgeColor(edgeColor)
     powerBar2Particles.renderer.setCenterColor(centerColor)
     powerBar2Particles.renderer.setEdgeColor(edgeColor)
-    waterfallEffect = BattleParticles.createParticleEffect('Waterfall')
+    waterfallEffect = toontown.battle.movies.BattleParticles.createParticleEffect('Waterfall')
     waterfallEffect.setScale(11)
     waterfallParticles = waterfallEffect.getParticlesNamed('particles-1')
     waterfallParticles.renderer.setCenterColor(centerColor)
@@ -2935,19 +2931,19 @@ def doFired(attack):
     target = attack['target']
     toon = target['toon']
     dmg = target['hp']
-    BattleParticles.loadParticles()
-    baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame')
-    flameEffect = BattleParticles.createParticleEffect('FiredFlame')
-    flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
-    BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
-    BattleParticles.setEffectTexture(flameEffect, 'fire')
-    BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
-    baseFlameSmall = BattleParticles.createParticleEffect(file='firedBaseFlame')
-    flameSmall = BattleParticles.createParticleEffect('FiredFlame')
-    flecksSmall = BattleParticles.createParticleEffect('SpriteFiredFlecks')
-    BattleParticles.setEffectTexture(baseFlameSmall, 'fire')
-    BattleParticles.setEffectTexture(flameSmall, 'fire')
-    BattleParticles.setEffectTexture(flecksSmall, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
+    toontown.battle.movies.BattleParticles.loadParticles()
+    baseFlameEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='firedBaseFlame')
+    flameEffect = toontown.battle.movies.BattleParticles.createParticleEffect('FiredFlame')
+    flecksEffect = toontown.battle.movies.BattleParticles.createParticleEffect('SpriteFiredFlecks')
+    toontown.battle.movies.BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
+    toontown.battle.movies.BattleParticles.setEffectTexture(flameEffect, 'fire')
+    toontown.battle.movies.BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
+    baseFlameSmall = toontown.battle.movies.BattleParticles.createParticleEffect(file='firedBaseFlame')
+    flameSmall = toontown.battle.movies.BattleParticles.createParticleEffect('FiredFlame')
+    flecksSmall = toontown.battle.movies.BattleParticles.createParticleEffect('SpriteFiredFlecks')
+    toontown.battle.movies.BattleParticles.setEffectTexture(baseFlameSmall, 'fire')
+    toontown.battle.movies.BattleParticles.setEffectTexture(flameSmall, 'fire')
+    toontown.battle.movies.BattleParticles.setEffectTexture(flecksSmall, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
     baseFlameSmall.setScale(0.7)
     flameSmall.setScale(0.7)
     flecksSmall.setScale(0.7)
@@ -3016,17 +3012,17 @@ def doAudit(attack):
     toon = target['toon']
     dmg = target['hp']
     calculator = globalPropPool.getProp('calculator')
-    BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect, 'audit-one', color=Vec4(0, 0, 0, 1))
-    particleEffect2 = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect2, 'audit-two', color=Vec4(0, 0, 0, 1))
-    particleEffect3 = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect3, 'audit-three', color=Vec4(0, 0, 0, 1))
-    particleEffect4 = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect4, 'audit-four', color=Vec4(0, 0, 0, 1))
-    particleEffect5 = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect5, 'audit-mult', color=Vec4(0, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.loadParticles()
+    particleEffect = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect, 'audit-one', color=Vec4(0, 0, 0, 1))
+    particleEffect2 = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect2, 'audit-two', color=Vec4(0, 0, 0, 1))
+    particleEffect3 = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect3, 'audit-three', color=Vec4(0, 0, 0, 1))
+    particleEffect4 = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect4, 'audit-four', color=Vec4(0, 0, 0, 1))
+    particleEffect5 = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect5, 'audit-mult', color=Vec4(0, 0, 0, 1))
     suitTrack = getSuitTrack(attack)
     partTrack = getPartTrack(particleEffect, 2.1, 1.9, [particleEffect, suit, 0])
     partTrack2 = getPartTrack(particleEffect2, 2.2, 2.0, [particleEffect2, suit, 0])
@@ -3057,17 +3053,17 @@ def doCalculate(attack):
     target = attack['target']
     toon = target['toon']
     calculator = globalPropPool.getProp('calculator')
-    BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect, 'audit-one', color=Vec4(0, 0, 0, 1))
-    particleEffect2 = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect2, 'audit-plus', color=Vec4(0, 0, 0, 1))
-    particleEffect3 = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect3, 'audit-mult', color=Vec4(0, 0, 0, 1))
-    particleEffect4 = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect4, 'audit-three', color=Vec4(0, 0, 0, 1))
-    particleEffect5 = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect5, 'audit-div', color=Vec4(0, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.loadParticles()
+    particleEffect = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect, 'audit-one', color=Vec4(0, 0, 0, 1))
+    particleEffect2 = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect2, 'audit-plus', color=Vec4(0, 0, 0, 1))
+    particleEffect3 = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect3, 'audit-mult', color=Vec4(0, 0, 0, 1))
+    particleEffect4 = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect4, 'audit-three', color=Vec4(0, 0, 0, 1))
+    particleEffect5 = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect5, 'audit-div', color=Vec4(0, 0, 0, 1))
     suitTrack = getSuitTrack(attack)
     partTrack = getPartTrack(particleEffect, 2.1, 1.9, [particleEffect, suit, 0])
     partTrack2 = getPartTrack(particleEffect2, 2.2, 2.0, [particleEffect2, suit, 0])
@@ -3098,17 +3094,17 @@ def doTabulate(attack):
     target = attack['target']
     toon = target['toon']
     calculator = globalPropPool.getProp('calculator')
-    BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect, 'audit-plus', color=Vec4(0, 0, 0, 1))
-    particleEffect2 = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect2, 'audit-minus', color=Vec4(0, 0, 0, 1))
-    particleEffect3 = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect3, 'audit-mult', color=Vec4(0, 0, 0, 1))
-    particleEffect4 = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect4, 'audit-div', color=Vec4(0, 0, 0, 1))
-    particleEffect5 = BattleParticles.createParticleEffect('Calculate')
-    BattleParticles.setEffectTexture(particleEffect5, 'audit-one', color=Vec4(0, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.loadParticles()
+    particleEffect = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect, 'audit-plus', color=Vec4(0, 0, 0, 1))
+    particleEffect2 = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect2, 'audit-minus', color=Vec4(0, 0, 0, 1))
+    particleEffect3 = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect3, 'audit-mult', color=Vec4(0, 0, 0, 1))
+    particleEffect4 = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect4, 'audit-div', color=Vec4(0, 0, 0, 1))
+    particleEffect5 = toontown.battle.movies.BattleParticles.createParticleEffect('Calculate')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect5, 'audit-one', color=Vec4(0, 0, 0, 1))
     suitTrack = getSuitTrack(attack)
     partTrack = getPartTrack(particleEffect, 2.1, 1.9, [particleEffect, suit, 0])
     partTrack2 = getPartTrack(particleEffect2, 2.2, 2.0, [particleEffect2, suit, 0])
@@ -3145,21 +3141,21 @@ def doCrunch(attack):
                    'four',
                    'five',
                    'six']
-    BattleParticles.loadParticles()
-    numberSpill1 = BattleParticles.createParticleEffect(file='numberSpill')
-    numberSpill2 = BattleParticles.createParticleEffect(file='numberSpill')
+    toontown.battle.movies.BattleParticles.loadParticles()
+    numberSpill1 = toontown.battle.movies.BattleParticles.createParticleEffect(file='numberSpill')
+    numberSpill2 = toontown.battle.movies.BattleParticles.createParticleEffect(file='numberSpill')
     spillTexture1 = random.choice(numberNames)
     spillTexture2 = random.choice(numberNames)
-    BattleParticles.setEffectTexture(numberSpill1, 'audit-' + spillTexture1)
-    BattleParticles.setEffectTexture(numberSpill2, 'audit-' + spillTexture2)
+    toontown.battle.movies.BattleParticles.setEffectTexture(numberSpill1, 'audit-' + spillTexture1)
+    toontown.battle.movies.BattleParticles.setEffectTexture(numberSpill2, 'audit-' + spillTexture2)
     numberSpillTrack1 = getPartTrack(numberSpill1, 1.1, 2.2, [numberSpill1, suit, 0])
     numberSpillTrack2 = getPartTrack(numberSpill2, 1.5, 1.0, [numberSpill2, suit, 0])
     numberSprayTracks = Parallel()
     numOfNumbers = random.randint(5, 9)
     for i in xrange(0, numOfNumbers - 1):
-        nextSpray = BattleParticles.createParticleEffect(file='numberSpray')
+        nextSpray = toontown.battle.movies.BattleParticles.createParticleEffect(file='numberSpray')
         nextTexture = random.choice(numberNames)
-        BattleParticles.setEffectTexture(nextSpray, 'audit-' + nextTexture)
+        toontown.battle.movies.BattleParticles.setEffectTexture(nextSpray, 'audit-' + nextTexture)
         nextStartTime = random.random() * 0.6 + throwDuration
         nextDuration = random.random() * 0.4 + 1.4
         nextSprayTrack = getPartTrack(nextSpray, nextStartTime, nextDuration, [nextSpray, suit, 0])
@@ -3168,7 +3164,7 @@ def doCrunch(attack):
     numberTracks = Parallel()
     for i in xrange(0, numOfNumbers):
         texture = random.choice(numberNames)
-        next = MovieUtil.copyProp(BattleParticles.getParticle('audit-' + texture))
+        next = MovieUtil.copyProp(toontown.battle.movies.BattleParticles.getParticle('audit-' + texture))
         next.reparentTo(suit.getRightHand())
         next.setScale(0.01, 0.01, 0.01)
         next.setColor(Vec4(0.0, 0.0, 0.0, 1.0))
@@ -3203,10 +3199,10 @@ def doLiquidate(attack):
     target = attack['target']
     dmg = target['hp']
     toon = target['toon']
-    BattleParticles.loadParticles()
-    rainEffect = BattleParticles.createParticleEffect(file='liquidate')
-    rainEffect2 = BattleParticles.createParticleEffect(file='liquidate')
-    rainEffect3 = BattleParticles.createParticleEffect(file='liquidate')
+    toontown.battle.movies.BattleParticles.loadParticles()
+    rainEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='liquidate')
+    rainEffect2 = toontown.battle.movies.BattleParticles.createParticleEffect(file='liquidate')
+    rainEffect3 = toontown.battle.movies.BattleParticles.createParticleEffect(file='liquidate')
     cloud = globalPropPool.getProp('stormcloud')
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
@@ -3511,9 +3507,9 @@ def doWithdrawal(attack):
     target = attack['target']
     toon = target['toon']
     dmg = target['hp']
-    BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect('Withdrawal')
-    BattleParticles.setEffectTexture(particleEffect, 'snow-particle')
+    toontown.battle.movies.BattleParticles.loadParticles()
+    particleEffect = toontown.battle.movies.BattleParticles.createParticleEffect('Withdrawal')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect, 'snow-particle')
     suitTrack = getSuitAnimTrack(attack)
     partTrack = getPartTrack(particleEffect, 1e-05, suitTrack.getDuration() + 1.2, [particleEffect, suit, 0])
     toonTrack = getToonTrack(attack, 1.2, ['cringe'], 0.2, splicedDodgeAnims=[['duck', 1e-05, 0.8]],
@@ -3557,15 +3553,15 @@ def doWithdrawal(attack):
 def doJargon(attack):
     suit = attack['suit']
     battle = attack['battle']
-    BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect(file='jargonSpray')
-    particleEffect2 = BattleParticles.createParticleEffect(file='jargonSpray')
-    particleEffect3 = BattleParticles.createParticleEffect(file='jargonSpray')
-    particleEffect4 = BattleParticles.createParticleEffect(file='jargonSpray')
-    BattleParticles.setEffectTexture(particleEffect, 'jargon-brow', color=Vec4(1, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect2, 'jargon-deep', color=Vec4(0, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect3, 'jargon-hoop', color=Vec4(1, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect4, 'jargon-ipo', color=Vec4(0, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.loadParticles()
+    particleEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='jargonSpray')
+    particleEffect2 = toontown.battle.movies.BattleParticles.createParticleEffect(file='jargonSpray')
+    particleEffect3 = toontown.battle.movies.BattleParticles.createParticleEffect(file='jargonSpray')
+    particleEffect4 = toontown.battle.movies.BattleParticles.createParticleEffect(file='jargonSpray')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect, 'jargon-brow', color=Vec4(1, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect2, 'jargon-deep', color=Vec4(0, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect3, 'jargon-hoop', color=Vec4(1, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect4, 'jargon-ipo', color=Vec4(0, 0, 0, 1))
     damageDelay = 2.2
     dodgeDelay = 1.5
     partDelay = 1.1
@@ -3630,17 +3626,17 @@ def doMumboJumbo(attack):
     target = attack['target']
     toon = target['toon']
     dmg = target['hp']
-    BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect(file='mumboJumboSpray')
-    particleEffect2 = BattleParticles.createParticleEffect(file='mumboJumboSpray')
-    particleEffect3 = BattleParticles.createParticleEffect(file='mumboJumboSmother')
-    particleEffect4 = BattleParticles.createParticleEffect(file='mumboJumboSmother')
-    particleEffect5 = BattleParticles.createParticleEffect(file='mumboJumboSmother')
-    BattleParticles.setEffectTexture(particleEffect, 'mumbojumbo-boiler', color=Vec4(1, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect2, 'mumbojumbo-creative', color=Vec4(1, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect3, 'mumbojumbo-deben', color=Vec4(1, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect4, 'mumbojumbo-high', color=Vec4(1, 0, 0, 1))
-    BattleParticles.setEffectTexture(particleEffect5, 'mumbojumbo-iron', color=Vec4(1, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.loadParticles()
+    particleEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='mumboJumboSpray')
+    particleEffect2 = toontown.battle.movies.BattleParticles.createParticleEffect(file='mumboJumboSpray')
+    particleEffect3 = toontown.battle.movies.BattleParticles.createParticleEffect(file='mumboJumboSmother')
+    particleEffect4 = toontown.battle.movies.BattleParticles.createParticleEffect(file='mumboJumboSmother')
+    particleEffect5 = toontown.battle.movies.BattleParticles.createParticleEffect(file='mumboJumboSmother')
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect, 'mumbojumbo-boiler', color=Vec4(1, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect2, 'mumbojumbo-creative', color=Vec4(1, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect3, 'mumbojumbo-deben', color=Vec4(1, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect4, 'mumbojumbo-high', color=Vec4(1, 0, 0, 1))
+    toontown.battle.movies.BattleParticles.setEffectTexture(particleEffect5, 'mumbojumbo-iron', color=Vec4(1, 0, 0, 1))
     suitTrack = getSuitTrack(attack)
     partTrack = getPartTrack(particleEffect, 2.5, 2, [particleEffect, suit, 0])
     partTrack2 = getPartTrack(particleEffect2, 2.5, 2, [particleEffect2, suit, 0])
@@ -3660,8 +3656,8 @@ def doGuiltTrip(attack):
     battle = attack['battle']
     centerColor = Vec4(1.0, 0.2, 0.2, 0.9)
     edgeColor = Vec4(0.9, 0.9, 0.9, 0.4)
-    powerBar1 = BattleParticles.createParticleEffect(file='guiltTrip')
-    powerBar2 = BattleParticles.createParticleEffect(file='guiltTrip')
+    powerBar1 = toontown.battle.movies.BattleParticles.createParticleEffect(file='guiltTrip')
+    powerBar2 = toontown.battle.movies.BattleParticles.createParticleEffect(file='guiltTrip')
     powerBar1.setPos(0, 6.1, 0.4)
     powerBar1.setHpr(-90, 0, 0)
     powerBar2.setPos(0, 6.1, 0.4)
@@ -3674,7 +3670,7 @@ def doGuiltTrip(attack):
     powerBar1Particles.renderer.setEdgeColor(edgeColor)
     powerBar2Particles.renderer.setCenterColor(centerColor)
     powerBar2Particles.renderer.setEdgeColor(edgeColor)
-    waterfallEffect = BattleParticles.createParticleEffect('Waterfall')
+    waterfallEffect = toontown.battle.movies.BattleParticles.createParticleEffect('Waterfall')
     waterfallEffect.setScale(11)
     waterfallParticles = waterfallEffect.getParticlesNamed('particles-1')
     waterfallParticles.renderer.setCenterColor(centerColor)
@@ -3720,7 +3716,7 @@ def doRestrainingOrder(attack):
     toonTrack = getToonTrack(attack, damageDelay=3.4, splicedDamageAnims=damageAnims, dodgeDelay=2.8,
                              dodgeAnimNames=['sidestep'])
     if dmg > 0:
-        restraintCloud = BattleParticles.createParticleEffect(file='restrainingOrderCloud')
+        restraintCloud = toontown.battle.movies.BattleParticles.createParticleEffect(file='restrainingOrderCloud')
         restraintCloud.setPos(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ())
         cloudTrack = getPartTrack(restraintCloud, 3.5, 0.2, [restraintCloud, battle, 0])
         return Parallel(suitTrack, cloudTrack, toonTrack, propTrack)
@@ -3735,10 +3731,10 @@ def doSpin(attack):
     toon = target['toon']
     dmg = target['hp']
     damageDelay = 1.7
-    sprayEffect = BattleParticles.createParticleEffect(file='spinSpray')
-    spinEffect1 = BattleParticles.createParticleEffect(file='spinEffect')
-    spinEffect2 = BattleParticles.createParticleEffect(file='spinEffect')
-    spinEffect3 = BattleParticles.createParticleEffect(file='spinEffect')
+    sprayEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='spinSpray')
+    spinEffect1 = toontown.battle.movies.BattleParticles.createParticleEffect(file='spinEffect')
+    spinEffect2 = toontown.battle.movies.BattleParticles.createParticleEffect(file='spinEffect')
+    spinEffect3 = toontown.battle.movies.BattleParticles.createParticleEffect(file='spinEffect')
     spinEffect1.reparentTo(toon)
     spinEffect2.reparentTo(toon)
     spinEffect3.reparentTo(toon)
@@ -3785,14 +3781,14 @@ def doSpin(attack):
 
 def doLegalese(attack):
     suit = attack['suit']
-    BattleParticles.loadParticles()
-    sprayEffect1 = BattleParticles.createParticleEffect(file='legaleseSpray')
-    sprayEffect2 = BattleParticles.createParticleEffect(file='legaleseSpray')
-    sprayEffect3 = BattleParticles.createParticleEffect(file='legaleseSpray')
+    toontown.battle.movies.BattleParticles.loadParticles()
+    sprayEffect1 = toontown.battle.movies.BattleParticles.createParticleEffect(file='legaleseSpray')
+    sprayEffect2 = toontown.battle.movies.BattleParticles.createParticleEffect(file='legaleseSpray')
+    sprayEffect3 = toontown.battle.movies.BattleParticles.createParticleEffect(file='legaleseSpray')
     color = Vec4(0.4, 0, 0, 1)
-    BattleParticles.setEffectTexture(sprayEffect1, 'legalese-hc', color=color)
-    BattleParticles.setEffectTexture(sprayEffect2, 'legalese-qpq', color=color)
-    BattleParticles.setEffectTexture(sprayEffect3, 'legalese-vd', color=color)
+    toontown.battle.movies.BattleParticles.setEffectTexture(sprayEffect1, 'legalese-hc', color=color)
+    toontown.battle.movies.BattleParticles.setEffectTexture(sprayEffect2, 'legalese-qpq', color=color)
+    toontown.battle.movies.BattleParticles.setEffectTexture(sprayEffect3, 'legalese-vd', color=color)
     partDelay = 1.3
     partDuration = 1.15
     damageDelay = 1.9
@@ -3867,10 +3863,10 @@ def doCigarSmoke(attack):
     dmg = target['hp']
     cigar = globalPropPool.getProp('cigar')
 
-    BattleParticles.loadParticles()
-    smokeEffect = BattleParticles.createParticleEffect('BuzzWord')
+    toontown.battle.movies.BattleParticles.loadParticles()
+    smokeEffect = toontown.battle.movies.BattleParticles.createParticleEffect('BuzzWord')
     color = Vec4(0, 0, 0, 0.6)
-    BattleParticles.setEffectTexture(smokeEffect, 'fire', color=color)
+    toontown.battle.movies.BattleParticles.setEffectTexture(smokeEffect, 'fire', color=color)
     partDelay = 3.5
     partDuration = 1.15
     partTrack = getPartTrack(smokeEffect, partDelay, partDuration, [smokeEffect, suit, 0])
@@ -4002,13 +3998,13 @@ def doDigUp(attack):
                    'four',
                    'five',
                    'six']
-    BattleParticles.loadParticles()
+    toontown.battle.movies.BattleParticles.loadParticles()
     numberSprayTracks = Parallel()
     numOfNumbers = 75
     for i in xrange(0, numOfNumbers - 1):
-        nextSpray = BattleParticles.createParticleEffect(file='numberSpray')
+        nextSpray = toontown.battle.movies.BattleParticles.createParticleEffect(file='numberSpray')
         nextTexture = random.choice(numberNames)
-        BattleParticles.setEffectTexture(nextSpray, 'audit-' + nextTexture)
+        toontown.battle.movies.BattleParticles.setEffectTexture(nextSpray, 'audit-' + nextTexture)
         nextStartTime = random.random() * 0.6 + 0.5
         nextDuration = random.random() * 0.4 + 3.5
         nextSprayTrack = getPartTrack(nextSpray, nextStartTime, nextDuration, [nextSpray, suit, 0])
@@ -4017,7 +4013,7 @@ def doDigUp(attack):
     numberTracks = Parallel()
     for i in xrange(0, numOfNumbers):
         texture = random.choice(numberNames)
-        next = MovieUtil.copyProp(BattleParticles.getParticle('audit-' + texture))
+        next = MovieUtil.copyProp(toontown.battle.movies.BattleParticles.getParticle('audit-' + texture))
         next.setScale(0.01, 0.01, 0.01)
         next.setColor(Vec4(0.0, 0.0, 0.0, 1.0))
         next.setPos(random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3)

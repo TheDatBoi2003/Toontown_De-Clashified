@@ -13,8 +13,7 @@ from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPGlobals
 from toontown.building import ElevatorUtils
 from toontown.building import ElevatorConstants
-from toontown.battle import MovieToonVictory
-from toontown.battle import RewardPanel
+from toontown.battle.movies import MovieToonVictory, RewardPanel
 from toontown.distributed import DelayDelete
 from toontown.chat import ResistanceChat
 from toontown.coghq import CogDisguiseGlobals

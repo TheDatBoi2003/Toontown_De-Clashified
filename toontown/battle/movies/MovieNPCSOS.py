@@ -1,13 +1,12 @@
 from libotp import *
 from direct.interval.IntervalGlobal import *
-from BattleProps import *
-from BattleSounds import *
+from toontown.battle.movies.BattleProps import *
+from toontown.battle.movies.BattleSounds import *
 from direct.directnotify import DirectNotifyGlobal
 import MovieCamera
 import random
 import MovieUtil
-import BattleParticles
-import HealJokes
+import toontown.battle.movies.BattleParticles
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toon import NPCToons
@@ -145,11 +144,11 @@ def __doSprinkle(attack, recipients, hp = 0):
     effectTrack = Sequence()
     parallelEffects = Parallel()
     for target in targets:
-        sprayEffect = BattleParticles.createParticleEffect(file='pixieSpray')
-        dropEffect = BattleParticles.createParticleEffect(file='pixieDrop')
-        explodeEffect = BattleParticles.createParticleEffect(file='pixieExplode')
-        poofEffect = BattleParticles.createParticleEffect(file='pixiePoof')
-        wallEffect = BattleParticles.createParticleEffect(file='pixieWall')
+        sprayEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='pixieSpray')
+        dropEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='pixieDrop')
+        explodeEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='pixieExplode')
+        poofEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='pixiePoof')
+        wallEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='pixieWall')
         mtrack = Parallel(__getPartTrack(sprayEffect, 1.5, 0.5, [sprayEffect, toon, 0]), __getPartTrack(dropEffect, 1.9, 2.0, [dropEffect, target, 0]), __getPartTrack(explodeEffect, 2.7, 1.0, [explodeEffect, toon, 0]), __getPartTrack(poofEffect, 3.4, 1.0, [poofEffect, target, 0]), __getPartTrack(wallEffect, 4.05, 1.2, [wallEffect, toon, 0]), __getSoundTrack(level, 2, duration=3.1, node=toon), Sequence(Func(face90, target, toon, battle), ActorInterval(toon, 'sprinkle-dust')), Sequence(Wait(delay), Func(__healToon, target, hp)))
         parallelEffects.append(mtrack)
 
@@ -191,7 +190,8 @@ def __doSmooch(attack, hp = 0):
     parallelTracks = Parallel()
     for target in targets:
         lipcopy = MovieUtil.copyProp(lips)
-        lipsTrack = Sequence(Wait(tLips), Func(MovieUtil.showProp, lipcopy, render, getLipPos), Func(lipcopy.setBillboardPointWorld), LerpScaleInterval(lipcopy, dScale, Point3(3, 3, 3), startScale=MovieUtil.PNT3_NEARZERO), Wait(tThrow - tLips - dScale), LerpPosInterval(lipcopy, dThrow, Point3(target.getPos() + Point3(0, 0, target.getHeight()))), Func(MovieUtil.removeProp, lipcopy))
+        lipsTrack = Sequence(Wait(tLips), Func(MovieUtil.showProp, lipcopy, render, getLipPos), Func(lipcopy.setBillboardPointWorld), LerpScaleInterval(lipcopy, dScale, Point3(3, 3, 3), startScale=MovieUtil.PNT3_NEARZERO), Wait(tThrow - tLips - dScale), LerpPosInterval(lipcopy, dThrow, Point3(target.getPos() + Point3(0, 0, target.getHeight()))), Func(
+            MovieUtil.removeProp, lipcopy))
         delay = tThrow + dThrow
         mtrack = Parallel(lipstickTrack, lipsTrack, __getSoundTrack(level, 2, node=toon), Sequence(ActorInterval(toon, 'smooch')), Sequence(Wait(delay), ActorInterval(target, 'conked')), Sequence(Wait(delay), Func(__healToon, target, hp)))
         parallelTracks.append(mtrack)

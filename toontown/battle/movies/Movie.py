@@ -3,7 +3,7 @@ import copy
 from direct.interval.IntervalGlobal import *
 from direct.showbase import DirectObject
 
-import BattleExperience
+import toontown.battle.BattleExperience
 import MovieDrop
 import MovieFire
 import MovieHeal
@@ -18,9 +18,9 @@ import MovieThrow
 import MovieToonVictory
 import MovieTrap
 import MovieUtil
-import PlayByPlayText
-import RewardPanel
-from SuitBattleGlobals import *
+import toontown.battle.movies.PlayByPlayText
+import toontown.battle.movies.RewardPanel
+from toontown.battle.SuitBattleGlobals import *
 from libotp import *
 from toontown.battle.BattleBase import *
 from toontown.distributed import DelayDelete
@@ -43,7 +43,7 @@ class Movie(DirectObject.DirectObject):
         self.track = None
         self.rewardPanel = None
         self.rewardCallback = None
-        self.playByPlayText = PlayByPlayText.PlayByPlayText()
+        self.playByPlayText = toontown.battle.movies.PlayByPlayText.PlayByPlayText()
         self.playByPlayText.hide()
         self.renderProps = []
         self.hasBeenReset = 0
@@ -272,7 +272,7 @@ class Movie(DirectObject.DirectObject):
         self.rewardHasBeenReset = 0
         playTrack = Sequence()
         cameraTrack = Sequence()
-        self.rewardPanel = RewardPanel.RewardPanel(name)
+        self.rewardPanel = toontown.battle.movies.RewardPanel.RewardPanel(name)
         self.rewardPanel.hide()
         victory, camVictory, skipper = MovieToonVictory.doToonVictory(self.battle.localToonActive(),
                                                                       self.battle.activeToons, self.toonRewardIds,
@@ -299,7 +299,7 @@ class Movie(DirectObject.DirectObject):
 
     def playTutorialReward(self, ts, name, callback):
         self.rewardHasBeenReset = 0
-        self.rewardPanel = RewardPanel.RewardPanel(name)
+        self.rewardPanel = toontown.battle.movies.RewardPanel.RewardPanel(name)
         self.rewardCallback = callback
         self.questList = self.rewardPanel.getQuestIntervalList(base.localAvatar, [0,
                                                                                   1,
@@ -509,7 +509,7 @@ class Movie(DirectObject.DirectObject):
         self.toonRewardIds = []
         for reward in rewards:
             self.toonRewardIds.append(reward[0])
-        self.toonRewardDicts = BattleExperience.genRewardDicts(rewards)
+        self.toonRewardDicts = toontown.battle.BattleExperience.genRewardDicts(rewards)
 
     def genAttackDicts(self, toons, suits, toonAttacks, suitAttacks):
         if self.track and self.track.isPlaying():

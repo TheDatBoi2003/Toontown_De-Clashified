@@ -1,16 +1,6 @@
 from toontown.suit import DistributedFactorySuit
-from toontown.suit.Suit import *
 from direct.directnotify import DirectNotifyGlobal
-from direct.actor import Actor
-from otp.avatar import Avatar
-import SuitDNA
-from toontown.toonbase import ToontownGlobals
-from panda3d.core import *
-from toontown.battle import SuitBattleGlobals
-from direct.task import Task
-from toontown.battle import BattleProps
-from toontown.toonbase import TTLocalizer
-import string
+
 
 class DistributedStageSuit(DistributedFactorySuit.DistributedFactorySuit):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedStageSuit')

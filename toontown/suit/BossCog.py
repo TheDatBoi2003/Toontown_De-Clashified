@@ -1,20 +1,14 @@
 from panda3d.core import *
 from libotp import *
 from direct.interval.IntervalGlobal import *
-from direct.actor import Actor
 from otp.avatar import Avatar
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from direct.fsm import FSM
-from direct.fsm import State
-from toontown.toonbase import TTLocalizer
-from toontown.battle import BattleParticles
 import Suit
 from direct.task.Task import Task
 import SuitDNA
-from toontown.battle import BattleProps
-from direct.showbase.PythonUtil import Functor
-import string
+from toontown.battle.movies import BattleProps, BattleParticles
 import types
 
 GenericModel = 'phase_9/models/char/bossCog'

@@ -1,23 +1,18 @@
 from direct.interval.IntervalGlobal import *
-from BattleBase import *
-from BattleProps import *
-from BattleSounds import *
-from toontown.toon.ToonDNA import *
-from toontown.suit.SuitDNA import *
-from direct.particles.ParticleEffect import *
+from toontown.battle.movies.BattleProps import *
+from toontown.battle.movies.BattleSounds import *
 from direct.gui.DirectGui import *
 from panda3d.core import *
-import MovieUtil
-import MovieCamera
+from toontown.battle.movies import MovieUtil
 from direct.directnotify import DirectNotifyGlobal
-import BattleParticles
+import toontown.battle.movies.BattleParticles
 from toontown.toonbase import ToontownGlobals
-import RewardPanel
+import toontown.battle.movies.RewardPanel
 notify = DirectNotifyGlobal.directNotify.newCategory('Fanfare')
 
 def makePanel(toon, showToonName):
     panel = DirectFrame(relief=None, geom=DGG.getDefaultDialogGeom(), geom_color=ToontownGlobals.GlobalDialogColor, geom_scale=(1.75, 1, 0.75), pos=(0, 0, 0.587))
-    panel.initialiseoptions(RewardPanel)
+    panel.initialiseoptions(toontown.battle.movies.RewardPanel)
     panel.setTransparency(1)
     panel.hide()
     if showToonName is 1:
@@ -120,16 +115,16 @@ def doFanfare(delay, toon, panel):
     trumpturn1 = LerpHprInterval(trumpet1, duration=4, startHpr=Vec3(80, 15, 0), hpr=Vec3(150, 40, 0))
     trumpturn2 = LerpHprInterval(trumpet2, duration=4, startHpr=Vec3(-80, 15, 0), hpr=Vec3(-150, 40, 0))
     trumpetTurn = Parallel(trumpturn1, trumpturn2)
-    BattleParticles.loadParticles()
-    confettiBlue = BattleParticles.createParticleEffect('Confetti')
+    toontown.battle.movies.BattleParticles.loadParticles()
+    confettiBlue = toontown.battle.movies.BattleParticles.createParticleEffect('Confetti')
     confettiBlue.reparentTo(confettiNode)
     blue_p0 = confettiBlue.getParticlesNamed('particles-1')
     blue_p0.renderer.getColorInterpolationManager().addConstant(0.0, 1.0, Vec4(0.0, 0.0, 1.0, 1.0), 1)
-    confettiYellow = BattleParticles.createParticleEffect('Confetti')
+    confettiYellow = toontown.battle.movies.BattleParticles.createParticleEffect('Confetti')
     confettiYellow.reparentTo(confettiNode)
     yellow_p0 = confettiYellow.getParticlesNamed('particles-1')
     yellow_p0.renderer.getColorInterpolationManager().addConstant(0.0, 1.0, Vec4(1.0, 1.0, 0.0, 1.0), 1)
-    confettiRed = BattleParticles.createParticleEffect('Confetti')
+    confettiRed = toontown.battle.movies.BattleParticles.createParticleEffect('Confetti')
     confettiRed.reparentTo(confettiNode)
     red_p0 = confettiRed.getParticlesNamed('particles-1')
     red_p0.renderer.getColorInterpolationManager().addConstant(0.0, 1.0, Vec4(1.0, 0.0, 0.0, 1.0), 1)

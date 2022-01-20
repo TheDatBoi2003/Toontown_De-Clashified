@@ -12,7 +12,7 @@ from direct.task import Task
 import random
 from toontown.minigame import Trajectory
 from direct.interval.IntervalGlobal import *
-from toontown.battle import MovieUtil
+
 
 class DistributedMoleField(DistributedNodePathEntity, MoleFieldBase.MoleFieldBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMoleField')

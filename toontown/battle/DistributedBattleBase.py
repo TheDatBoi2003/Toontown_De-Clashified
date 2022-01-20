@@ -6,10 +6,7 @@ from direct.fsm import State
 from direct.interval.IntervalGlobal import *
 from direct.task.Task import Task
 
-import BattleParticles
-import BattleProps
-import Movie
-import MovieUtil
+from toontown.battle.movies import MovieUtil, Movie, BattleProps, BattleParticles
 from BattleBase import *
 from otp.avatar import Emote
 from toontown.distributed import DelayDelete

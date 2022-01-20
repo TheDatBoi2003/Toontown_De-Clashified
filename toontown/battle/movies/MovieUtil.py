@@ -1,9 +1,8 @@
 from direct.interval.ActorInterval import ActorInterval as interval
-from direct.interval.FunctionInterval import Func as func
 from direct.interval.IntervalGlobal import *
 
-import BattleParticles
-from BattleProps import *
+import toontown.battle.movies.BattleParticles
+from toontown.battle.movies.BattleProps import *
 from toontown.toonbase import TTLocalizer
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieUtil')
@@ -307,9 +306,9 @@ def __deathSoundTrack(deathSuit):
 
 
 def __deathParticleTracks(battle, suit, suitPos, explosionDelay=5.4):
-    BattleParticles.loadParticles()
+    toontown.battle.movies.BattleParticles.loadParticles()
     gearPoint = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height - 0.2)
-    smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
+    smallGears = toontown.battle.movies.BattleParticles.createParticleEffect(file='gearExplosionSmall')
     smallGears.setPos(gearPoint)
     smallGears.setDepthWrite(False)
     gears1Track = Sequence(Wait(2.1), ParticleInterval(smallGears, battle, worldRelative=False,
@@ -317,13 +316,13 @@ def __deathParticleTracks(battle, suit, suitPos, explosionDelay=5.4):
     explosionTrack = Sequence()
     explosionTrack.append(Wait(explosionDelay))
     explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
-    singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
+    singleGear = toontown.battle.movies.BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
     singleGear.setPos(gearPoint)
     singleGear.setDepthWrite(False)
-    smallGearExplosion = BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
+    smallGearExplosion = toontown.battle.movies.BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
     smallGearExplosion.setPos(gearPoint)
     smallGearExplosion.setDepthWrite(False)
-    bigGearExplosion = BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
+    bigGearExplosion = toontown.battle.movies.BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
     bigGearExplosion.setPos(gearPoint)
     bigGearExplosion.setDepthWrite(False)
     gears2MTrack = Track((0.0, explosionTrack),
@@ -568,7 +567,7 @@ def getSuitRakeOffset(suit):
 
 def startSparksIval(tntProp):
     tip = tntProp.find('**/joint_attachEmitter')
-    sparks = BattleParticles.createParticleEffect(file='tnt')
+    sparks = toontown.battle.movies.BattleParticles.createParticleEffect(file='tnt')
     return Func(sparks.start, tip)
 
 

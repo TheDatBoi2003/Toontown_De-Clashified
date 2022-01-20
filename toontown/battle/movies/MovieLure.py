@@ -1,11 +1,11 @@
 from direct.interval.IntervalGlobal import *
 
-import BattleProps
+import toontown.battle.movies.BattleProps
 import MovieCamera
 import MovieNPCSOS
 import MovieUtil
-from BattleProps import *
-from BattleSounds import *
+from toontown.battle.movies.BattleProps import *
+from toontown.battle.movies.BattleSounds import *
 from toontown.toon.ToonDNA import *
 from toontown.toonbase import ToontownBattleGlobals
 
@@ -508,7 +508,7 @@ def lerpSuit(suit, delay, duration, reachPos, battle, trapProp):
 
 def createTNTExplosionTrack(parent, explosionPoint=None, trapProp=None, relativeTo=render):
     explosionTrack = Sequence()
-    explosion = BattleProps.globalPropPool.getProp('kapow')
+    explosion = toontown.battle.movies.BattleProps.globalPropPool.getProp('kapow')
     explosion.setBillboardPointEye()
     if not explosionPoint:
         if trapProp:

@@ -1,8 +1,6 @@
 from panda3d.core import *
 from libotp import *
 from direct.interval.IntervalGlobal import *
-from direct.distributed.ClockDelta import *
-from direct.directtools.DirectGeometry import CLAMP
 from direct.controls.ControlManager import CollisionHandlerRayStart
 from direct.task import Task
 from otp.otpbase import OTPGlobals
@@ -11,18 +9,13 @@ import Suit
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase import TTLocalizer
-from toontown.battle import DistributedBattle, SuitBattleGlobals
-from direct.fsm import ClassicFSM
-from direct.fsm import State
+from toontown.battle import SuitBattleGlobals
 import SuitTimings
 import SuitBase
-import DistributedSuitPlanner
-import SuitDNA
 from direct.directnotify import DirectNotifyGlobal
 import SuitDialog
-from toontown.battle import BattleProps
-import math
-import copy
+from toontown.battle.movies import BattleProps
+
 
 class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBase.SuitBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSuitBase')

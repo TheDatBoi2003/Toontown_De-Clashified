@@ -1,20 +1,14 @@
-from panda3d.core import *
-from toontown.battle.BattleProps import *
-from toontown.battle.BattleSounds import *
-from toontown.distributed.ToontownMsgTypes import *
+from toontown.battle.movies.BattleProps import *
+from toontown.battle.movies.BattleSounds import *
 from toontown.toonbase.ToontownGlobals import *
 from direct.gui.DirectGui import cleanupDialog
 from direct.directnotify import DirectNotifyGlobal
-from toontown.hood import Place
-from direct.showbase import DirectObject
-from direct.fsm import StateData
-from direct.fsm import ClassicFSM, State
+from direct.fsm import ClassicFSM
 from direct.fsm import State
-from direct.task import Task
 import TownBattle
 from toontown.toon import Toon
 from toontown.toon.Toon import teleportDebug
-from toontown.battle import BattleParticles
+from toontown.battle.movies import BattleParticles
 from direct.fsm import StateData
 from toontown.building import ToonInterior
 from toontown.hood import QuietZoneState

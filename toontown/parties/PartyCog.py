@@ -10,8 +10,8 @@ from direct.task import Task
 from direct.fsm.FSM import FSM
 from panda3d.core import CollisionTube, CollisionNode, CollisionSphere, Point3, Vec4, NodePath, TextNode, Mat4
 from toontown.toonbase import ToontownGlobals
-from toontown.battle.BattleProps import globalPropPool
-from toontown.battle.BattleSounds import globalBattleSoundCache
+from toontown.battle.movies.BattleProps import globalPropPool
+from toontown.battle.movies.BattleSounds import globalBattleSoundCache
 import PartyGlobals
 
 class PartyCogManager:

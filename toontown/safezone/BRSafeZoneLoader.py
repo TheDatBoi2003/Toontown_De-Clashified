@@ -1,8 +1,8 @@
-from panda3d.core import *
 from direct.interval.IntervalGlobal import *
 import SafeZoneLoader
 import BRPlayground
-from toontown.battle import BattleParticles
+from toontown.battle.movies import BattleParticles
+
 
 class BRSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
     SnowFadeLerpTime = 2.0

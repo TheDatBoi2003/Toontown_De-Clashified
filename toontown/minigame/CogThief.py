@@ -7,8 +7,8 @@ from toontown.suit import Suit
 from toontown.suit import SuitDNA
 from toontown.toonbase import ToontownGlobals
 from toontown.minigame import CogThiefGameGlobals
-from toontown.battle.BattleProps import globalPropPool
-from toontown.battle.BattleSounds import globalBattleSoundCache
+from toontown.battle.movies.BattleProps import globalPropPool
+from toontown.battle.movies.BattleSounds import globalBattleSoundCache
 CTGG = CogThiefGameGlobals
 
 class CogThief(DirectObject):

@@ -1,8 +1,7 @@
-from direct.interval.IntervalGlobal import *
 from libotp import *
 from direct.showbase.DirectObject import DirectObject
-from RewardPanel import *
-from BattleSounds import *
+from toontown.battle.movies.RewardPanel import *
+from toontown.battle.movies.BattleSounds import *
 import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
 import types

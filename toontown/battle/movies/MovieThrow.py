@@ -2,8 +2,8 @@ from direct.interval.IntervalGlobal import *
 
 import MovieCamera
 import MovieUtil
-from BattleProps import *
-from BattleSounds import *
+from toontown.battle.movies.BattleProps import *
+from toontown.battle.movies.BattleSounds import *
 from MovieUtil import calcAvgSuitPos
 from toontown.battle.BattleBase import *
 from toontown.suit.SuitDNA import *

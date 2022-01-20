@@ -1,11 +1,11 @@
-import BattleParticles
+import toontown.battle.movies.BattleParticles
 import MovieCamera
 import MovieNPCSOS
 import MovieUtil
-from BattleBase import *
-from BattleProps import *
-from BattleSounds import *
-from RewardPanel import *
+from toontown.battle.BattleBase import *
+from toontown.battle.movies.BattleProps import *
+from toontown.battle.movies.BattleSounds import *
+from toontown.battle.movies.RewardPanel import *
 from toontown.toonbase import ToontownBattleGlobals
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSound')
@@ -88,7 +88,7 @@ def __getSuitTrack(sound, hitCount, totalDamages):
             showDamage = Func(suit.showHpText, -totalDamages[targetIndex], openEnded=0)
             updateHealthBar = Func(suit.updateHealthBar, totalDamages[targetIndex])
             if isUber:
-                breakEffect = BattleParticles.createParticleEffect(file='soundBreak')
+                breakEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='soundBreak')
                 breakEffect.setDepthWrite(0)
                 breakEffect.setDepthTest(0)
                 breakEffect.setTwoSided(1)
@@ -139,9 +139,9 @@ def headExplodeTrack(suit, battle):
     suitTrack.append(explodeTrack)
     deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
     deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.8))
-    BattleParticles.loadParticles()
+    toontown.battle.movies.BattleParticles.loadParticles()
     gearPoint = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height + 1)
-    smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
+    smallGears = toontown.battle.movies.BattleParticles.createParticleEffect(file='gearExplosionSmall')
     smallGears.setPos(gearPoint)
     smallGears.setDepthWrite(False)
     gears1Track = Sequence(Wait(0.5),
@@ -149,13 +149,13 @@ def headExplodeTrack(suit, battle):
                            name='gears1Track')
     explosionTrack = Sequence()
     explosionTrack.append(MovieUtil.createKapowExplosionTrack(battle, explosionPoint=gearPoint))
-    singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
+    singleGear = toontown.battle.movies.BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
     singleGear.setPos(gearPoint)
     singleGear.setDepthWrite(False)
-    smallGearExplosion = BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
+    smallGearExplosion = toontown.battle.movies.BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
     smallGearExplosion.setPos(gearPoint)
     smallGearExplosion.setDepthWrite(False)
-    bigGearExplosion = BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
+    bigGearExplosion = toontown.battle.movies.BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
     bigGearExplosion.setPos(gearPoint)
     bigGearExplosion.setDepthWrite(False)
     gears2MTrack = Track(
@@ -231,7 +231,7 @@ def __createToonInterval(sound, delay, toon, operaInstrument=None):
             retval.append(Parallel(ActorInterval(toon, 'walk', startTime=1, duration=TIME_TO_WALK_BACK, endTime=0.0001),
                                    LerpPosInterval(toon, TIME_TO_WALK_BACK, newPos, other=battle)))
     if operaInstrument:
-        sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
+        sprayEffect = toontown.battle.movies.BattleParticles.createParticleEffect(file='soundWave')
         sprayEffect.setDepthWrite(0)
         sprayEffect.setDepthTest(0)
         sprayEffect.setTwoSided(1)

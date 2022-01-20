@@ -474,7 +474,10 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
             toon = self.air.doId2do.get(avId)
             if toon:
                 suitTier += toon.cogTypes[self.deptIndex]
-        suitTierAvg = (suitTier / float(len(sourceToons)))
+        if len(sourceToons) > 0:
+            suitTierAvg = (suitTier / float(len(sourceToons)))
+        else:
+            suitTierAvg = 0
         if 0 <= suitTierAvg < 3:
             self.b_setBattleTier(0)
         elif 3 <= suitTierAvg < 6:

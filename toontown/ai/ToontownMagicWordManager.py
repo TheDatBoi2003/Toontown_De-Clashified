@@ -1,26 +1,19 @@
 from direct.interval.IntervalGlobal import *
 from direct.distributed import PyDatagram
 from direct.distributed.MsgTypes import MsgName2Id
-from panda3d.core import *
-from direct.distributed import DistributedObject
 from toontown.toon import DistributedToon
-from direct.directnotify import DirectNotifyGlobal
 from toontown.town import TownBattleAttackPanel
 from toontown.suit import RoguesGallery
-from otp.avatar import Avatar
 from otp.chat import ChatManager
-from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 import string
-from toontown.toon import Toon
-from direct.showbase import PythonUtil
 from toontown.suit import DistributedSuitPlanner
 from toontown.suit import DistributedBossCog
 from otp.otpbase import OTPGlobals
 from direct.distributed.ClockDelta import *
 from otp.ai import MagicWordManager
 from toontown.hood import ZoneUtil
-from toontown.battle import Fanfare
+from toontown.battle.movies import Fanfare
 from toontown.golf import GolfGlobals
 from toontown.distributed import ToontownDistrictStats
 from toontown.coderedemption import TTCodeRedemptionConsts
@@ -29,7 +22,7 @@ if base.wantKarts:
     from toontown.racing.KartDNA import *
     from toontown.racing.KartShopGui import *
 if (__debug__):
-    import pdb
+    pass
 
 class ToontownMagicWordManager(MagicWordManager.MagicWordManager):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToontownMagicWordManager')

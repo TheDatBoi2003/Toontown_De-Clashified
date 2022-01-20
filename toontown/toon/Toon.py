@@ -3,10 +3,8 @@ from otp.avatar.Avatar import teleportNotify
 import ToonDNA
 from direct.task.Task import Task
 
-from toontown.battle.BattleSounds import globalBattleSoundCache
+from toontown.battle.movies.BattleSounds import globalBattleSoundCache
 from toontown.suit import SuitDNA
-from direct.actor import Actor
-import string
 from ToonHead import *
 from panda3d.core import *
 from panda3d.direct import *
@@ -15,20 +13,17 @@ from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 
 from toontown.suit import Suit
-from toontown.suit.Suit import SuitDialogArray
 from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPLocalizer
 from toontown.toonbase import TTLocalizer
-import random
 from toontown.effects import Wake
-import TTEmote
 from otp.avatar import Emote
 import Motion
 from toontown.hood import ZoneUtil
-from toontown.battle import SuitBattleGlobals, MovieThrow
+from toontown.battle import SuitBattleGlobals
+from toontown.battle.movies import MovieThrow, BattleProps
 from otp.otpbase import OTPGlobals
 from toontown.effects import DustCloud
-from direct.showbase.PythonUtil import Functor
 from toontown.distributed import DelayDelete
 import AccessoryGlobals
 import types
@@ -2899,7 +2894,6 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def getPieModel(self):
         from toontown.toonbase import ToontownBattleGlobals
-        from toontown.battle import BattleProps
         if self.pieModel and self.__pieModelType != self.pieType:
             self.pieModel.detachNode()
             self.pieModel = None
@@ -2913,7 +2907,7 @@ class Toon(Avatar.Avatar, ToonHead):
     def getPresentPieInterval(self, x, y, z, h, p, r):
         from toontown.toonbase import ToontownBattleGlobals
         from toontown.battle import BattleProps
-        from toontown.battle import MovieUtil
+        from toontown.battle.movies import MovieUtil
         pie = self.getPieModel()
         pieName = ToontownBattleGlobals.pieNames[self.pieType]
         pieType = BattleProps.globalPropPool.getPropType(pieName)

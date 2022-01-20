@@ -3,7 +3,8 @@ from direct.interval.IntervalGlobal import Sequence, LerpScaleInterval, Parallel
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.DirectObject import DirectObject
 from toontown.toonbase import ToontownGlobals
-from toontown.battle import BattleParticles
+from toontown.battle.movies import BattleParticles
+
 
 class IceTreasure(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('IceTreasure')

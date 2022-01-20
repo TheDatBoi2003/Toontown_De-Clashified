@@ -9,6 +9,10 @@ from otp.otpbase.PythonUtil import ParamObj
 from toontown.camera import CameraMode
 from toontown.toonbase import ToontownGlobals
 
+NUM_ZOOMS = 23
+INIT_DIST = 3.0
+DEFAULT_Z = 2.5
+INC_RATE = 1. / 3.
 
 class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
     notify = DirectNotifyGlobal.directNotify.newCategory('FPSCamera')
@@ -48,11 +52,11 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
         try:
             self._defaultZ = base.localAvatar.getClampedAvatarHeight()
         except:
-            self._defaultZ = 2.5
-        self._defaultDistance = -3.0 * self._defaultZ
+            self._defaultZ = DEFAULT_Z
+        self._defaultDistance = -INIT_DIST * self._defaultZ
         self._minDistance = -self._defaultZ
-        self._maxDistance = -8.94427191 * self._defaultZ
-        self._zoomIncrement = self._defaultZ * (1.0 / 3.0)
+        self._zoomIncrement = self._defaultZ * INC_RATE
+        self._maxDistance = self._minDistance - self._zoomIncrement * NUM_ZOOMS
         self._defaultOffset = Vec3(0, self._defaultDistance, self._defaultZ)
 
     def destroy(self):
@@ -93,6 +97,7 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
         camera.setHpr(0, 0, 0)
         self._startCollisionCheck()
         base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov / (4. / 3.))
+        base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
 
     def exitActive(self):
         if self.camIval:
@@ -199,7 +204,7 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
             return
 
         self.camOffset = self._defaultOffset
-        self._collSolid.setPointB(0, self._getCollPointY(), 0)
+        self.notify.info('resetWheel: ' + str(self.camOffset))
         self.setZ(self._defaultZ)
 
     def _getCollPointY(self):

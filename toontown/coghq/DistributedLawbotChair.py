@@ -1,19 +1,14 @@
-from direct.gui.DirectGui import *
 from panda3d.core import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from direct.fsm import FSM
 from direct.distributed import DistributedObject
-from direct.showutil import Rope
-from direct.showbase import PythonUtil
-from direct.task import Task
 from toontown.toonbase import ToontownGlobals
-from otp.otpbase import OTPGlobals
 from direct.actor import Actor
 from toontown.suit import Suit
 from toontown.suit import SuitDNA
 import random
-from toontown.battle import BattleProps
+from toontown.battle.movies import BattleProps
 from toontown.toon import NPCToons
 
 class DistributedLawbotChair(DistributedObject.DistributedObject, FSM.FSM):

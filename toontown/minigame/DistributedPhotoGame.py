@@ -1,18 +1,11 @@
-from direct.directnotify import DirectNotifyGlobal
-from panda3d.core import *
 from panda3d.toontown import *
-from libotp import *
-from toontown.toonbase.ToonBaseGlobal import *
 from DistributedMinigame import *
 from direct.distributed.ClockDelta import *
-from direct.interval.IntervalGlobal import *
-from direct.fsm import ClassicFSM, State
+from direct.fsm import ClassicFSM
 from direct.fsm import State
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownTimer
 from direct.task.Task import Task
-import math
-from toontown.toon import ToonHead
 import PhotoGameGlobals
 from direct.gui.DirectGui import *
 from toontown.toonbase import TTLocalizer
@@ -21,12 +14,10 @@ from toontown.toon import Toon
 from toontown.toon import ToonDNA
 from direct.interval.IntervalGlobal import *
 import random
-from direct.showbase import PythonUtil
 import math
 import time
 from toontown.makeatoon import NameGenerator
-from otp.otpbase import OTPGlobals
-from toontown.battle import BattleParticles
+from toontown.battle.movies import BattleParticles
 from toontown.minigame import PhotoGameBase
 WORLD_SCALE = 2.0
 FAR_PLANE_DIST = 600 * WORLD_SCALE

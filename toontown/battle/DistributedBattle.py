@@ -1,15 +1,9 @@
-from panda3d.core import *
 from libotp import *
 from direct.interval.IntervalGlobal import *
 from BattleBase import *
-from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 import DistributedBattleBase
 from direct.directnotify import DirectNotifyGlobal
-import MovieUtil
-from toontown.suit import Suit
-from direct.actor import Actor
-from toontown.toon import TTEmote
 from otp.avatar import Emote
 import SuitBattleGlobals
 from toontown.distributed import DelayDelete

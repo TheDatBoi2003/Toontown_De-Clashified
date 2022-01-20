@@ -1,7 +1,7 @@
 from direct.interval.IntervalGlobal import *
 from panda3d.core import *
-from direct.particles import ParticleEffect
-from toontown.battle import BattleParticles
+from toontown.battle.movies import BattleParticles
+
 
 def createExplosionTrack(parent, deathNode, scale):
     explosion = loader.loadModel('phase_3.5/models/props/explosion.bam')

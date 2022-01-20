@@ -159,7 +159,7 @@ class FactoryInterior(BattlePlace.BattlePlace):
         FactoryInterior.notify.info('exitBattle')
         BattlePlace.BattlePlace.exitBattle(self)
         self.loader.music.stop()
-        base.playMusic(self.factoryMusic, looping=1, time=time)
+        base.playMusic(self.factoryMusic, looping=1)
 
     def enterStickerBook(self, page=None):
         BattlePlace.BattlePlace.enterStickerBook(self, page)

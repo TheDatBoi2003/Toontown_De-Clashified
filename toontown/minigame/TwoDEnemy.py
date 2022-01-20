@@ -1,16 +1,11 @@
-from panda3d.core import *
-from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.DirectObject import DirectObject
 from direct.showbase import PythonUtil
 from direct.interval.IntervalGlobal import *
-from toontown.minigame import ToonBlitzGlobals
 from toontown.toonbase import ToontownGlobals
 from toontown.suit import Suit
 from toontown.suit import SuitDNA
-from toontown.battle.BattleProps import *
-from toontown.battle import MovieUtil
-from toontown.battle import BattleParticles, BattleProps
-from direct.particles import ParticleEffect
+from toontown.battle.movies.BattleProps import *
+from toontown.battle.movies import MovieUtil, BattleProps, BattleParticles
 import math
 COLOR_RED = VBase4(1, 0, 0, 0.3)
 
@@ -208,7 +203,8 @@ class TwoDEnemy(DirectObject):
 
         splash = globalPropPool.getProp('splash-from-splat')
         splash.setScale(scale)
-        splashTrack = Sequence(Func(prepSplash, splash, point), ActorInterval(splash, 'splash-from-splat'), Wait(splashHold), Func(MovieUtil.removeProp, splash))
+        splashTrack = Sequence(Func(prepSplash, splash, point), ActorInterval(splash, 'splash-from-splat'), Wait(splashHold), Func(
+            MovieUtil.removeProp, splash))
         self.shotTrack = Parallel(Func(self.game.assetMgr.playSplashSound), blinkRed, splashTrack)
         self.shotTrack.start()
 

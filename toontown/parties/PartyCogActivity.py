@@ -501,7 +501,7 @@ class PartyCogActivity(DirectObject):
 
     def getTossPieInterval(self, toon, x, y, z, h, p, r, power, beginFlyIval = Sequence()):
         from toontown.toonbase import ToontownBattleGlobals
-        from toontown.battle import BattleProps
+        from toontown.battle.movies import BattleProps
         pie = toon.getPieModel()
         pie.setScale(0.5)
         flyPie = pie.copyTo(NodePath('a'))
