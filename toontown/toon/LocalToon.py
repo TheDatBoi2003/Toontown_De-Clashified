@@ -1991,10 +1991,14 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.animMultiplier = 1.0
 
     def startSprintTask(self):
-        self.b_setAnimState('Sprinting', 1.0)
+        self.setSprinting(True)
+        if not self.controlManager.getIsAirborne():
+            self.b_setAnimState('Sprinting', 1.0)
 
     def endSprintTask(self):
-        self.b_setAnimState('Happy', 1.0)
+        self.setSprinting(False)
+        if not self.controlManager.getIsAirborne():
+            self.b_setAnimState('Happy', 1.0)
 
     def returnToWalk(self, task):
         if self.sleepFlag:

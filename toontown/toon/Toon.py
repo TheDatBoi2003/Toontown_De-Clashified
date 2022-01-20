@@ -1486,7 +1486,6 @@ class Toon(Avatar.Avatar, ToonHead):
                                     ('run', 1.0 + ((self.sprintMultiplier - 1) * 0.25)),
                                     ('walk', -1.0))
         self.setSpeed(self.forwardSpeed, self.rotateSpeed)
-        self.__sprinting = True
         self.setActiveShadow(1)
         return
 
@@ -1505,7 +1504,7 @@ class Toon(Avatar.Avatar, ToonHead):
                                     ('walk', -1.0))
         self.setSpeed(self.forwardSpeed, self.rotateSpeed)
         if self.__sprinting:
-            self.__sprinting = False
+            self.setSprinting(False)
         self.setActiveShadow(1)
         return
 
@@ -3143,6 +3142,9 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def getSprinting(self):
         return self.__sprinting
+
+    def setSprinting(self, sprint):
+        self.__sprinting = sprint
 
 
 loadModels()
