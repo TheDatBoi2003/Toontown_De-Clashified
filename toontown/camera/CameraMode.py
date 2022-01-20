@@ -23,6 +23,7 @@ class CameraMode(DirectObject.DirectObject, FSM):
         self.origMousePos = (0, 0)
         self.request('Off')
         self.__inputEnabled = False
+        self._hadMouse = False
         self.__cursorLock = 0.0
 
     def destroy(self):
@@ -87,6 +88,7 @@ class CameraMode(DirectObject.DirectObject, FSM):
 
     def disableInput(self):
         self.__inputEnabled = False
+        self._hadMouse = self.mouseControl
         self.disableMouseControl()
         self.ignore('mouse3')
         self.ignore('mouse3-up')

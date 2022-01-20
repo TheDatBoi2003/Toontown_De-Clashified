@@ -1,8 +1,8 @@
+from direct.showbase.MessengerGlobal import messenger
 from pandac.PandaModules import *
 from direct.showbase.InputStateGlobal import inputState
 from direct.directnotify import DirectNotifyGlobal
-from direct.interval.IntervalGlobal import *
-from direct.showbase.PythonUtil import reduceAngle, fitSrcAngle2Dest, clamp, lerp
+from direct.showbase.PythonUtil import reduceAngle, fitSrcAngle2Dest, clamp
 from direct.task import Task
 from otp.otpbase import OTPGlobals
 from otp.otpbase.PythonUtil import ParamObj
@@ -35,9 +35,11 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
         self.mouseX = 0.0
         self.mouseY = 0.0
         self._paramStack = []
-        self._hadMouse = False
         self._getDefaultOffsets()
         self.camOffset = self._defaultOffset
+        self._lastZoomLevel = self._defaultDistance
+        self._firstPerson = False
+        self._lastFov = None
         if params is None:
             self.setDefaultParams()
         else:
@@ -48,18 +50,8 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
         self.forceMaxDistance = True
         self.avFacingScreen = False
 
-    def _getDefaultOffsets(self):
-        try:
-            self._defaultZ = base.localAvatar.getClampedAvatarHeight()
-        except:
-            self._defaultZ = DEFAULT_Z
-        self._defaultDistance = -INIT_DIST * self._defaultZ
-        self._minDistance = -self._defaultZ
-        self._zoomIncrement = self._defaultZ * INC_RATE
-        self._maxDistance = self._minDistance - self._zoomIncrement * NUM_ZOOMS
-        self._defaultOffset = Vec3(0, self._defaultDistance, self._defaultZ)
-
     def destroy(self):
+
         if self.zIval:
             self.zIval.finish()
             self.zIval = None
@@ -85,6 +77,7 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
 
         self._getDefaultOffsets()
         self.camOffset = self._defaultOffset
+        self.camOffset.setY(self._lastZoomLevel)
         self.accept('wheel_up', self._handleWheelUp)
         self.accept('wheel_down', self._handleWheelDown)
         self._resetWheel()
@@ -98,12 +91,14 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
         self._startCollisionCheck()
         base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov / (4. / 3.))
         base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
+        self._zoomToDistance(self._lastZoomLevel)
 
     def exitActive(self):
         if self.camIval:
             self.camIval.finish()
             self.camIval = None
 
+        self._lastZoomLevel = self.camOffset.getY()
         self.ignore('wheel_up')
         self.ignore('wheel_down')
         self._resetWheel()
@@ -111,6 +106,17 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
         base.camNode.setLodCenter(NodePath())
 
         CameraMode.CameraMode.exitActive(self)
+
+    def _getDefaultOffsets(self):
+        try:
+            self._defaultZ = base.localAvatar.getClampedAvatarHeight()
+        except:
+            self._defaultZ = DEFAULT_Z
+        self._defaultDistance = -INIT_DIST * self._defaultZ
+        self._minDistance = self._defaultDistance * 0.3
+        self._zoomIncrement = self._defaultZ * INC_RATE
+        self._maxDistance = self._minDistance - self._zoomIncrement * NUM_ZOOMS
+        self._defaultOffset = Vec3(0, self._defaultDistance, self._defaultZ)
 
     def enableMouseControl(self):
         CameraMode.CameraMode.enableMouseControl(self)
@@ -187,17 +193,48 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
             hNode.setH(reduceAngle(self.maxH))
 
     def _handleWheelUp(self):
+        if self._firstPerson:
+            return
         yDist = self.camOffset[1] + self._zoomIncrement
         self._zoomToDistance(yDist)
 
     def _handleWheelDown(self):
+        if self._firstPerson:
+            self._exitFPSMode()
         yDist = self.camOffset[1] - self._zoomIncrement
         self._zoomToDistance(yDist)
 
     def _zoomToDistance(self, yDist):
-        y = clamp(yDist, self._minDistance, self._maxDistance)
+        if yDist >= self.camOffset.getY() >= self._minDistance:
+            self._beginFPSMode()
+            y = 0
+        else:
+            y = clamp(yDist, self._minDistance, self._maxDistance)
         self.camOffset.setY(y)
         self._collSolid.setPointB(0, self._getCollPointY(), 0)
+
+    def _beginFPSMode(self):
+        self.enableMouseControl()
+        self.ignore('mouse3')
+        self.ignore('mouse3-up')
+        self.accept('mouse3', self.clickSecondAction)
+        self.accept('mouse3-up', self.clickSecondAction)
+        self.MinP = -70
+        self.MaxP = 40
+        self._lastFov = base.localAvatar.fov
+        self.avatar.setCameraFov(90.0)
+        self._firstPerson = True
+
+    def _exitFPSMode(self):
+        self.disableMouseControl()
+        self.ignore('mouse3')
+        self.ignore('mouse3-up')
+        self.accept('mouse3', self.enableMouseControl)
+        self.accept('mouse3-up', self.disableMouseControl)
+        self.MinP = -50
+        self.MaxP = 20
+        self.avatar.setCameraFov(self._lastFov)
+        self._firstPerson = False
 
     def _resetWheel(self):
         if not self.isActive():
@@ -227,6 +264,7 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
             return Task.cont
 
         self._cTrav.traverse(render)
+        self.cTravOnFloor.traverse(render)
         try:
             self._cHandlerQueue.sortEntries()
         except AssertionError:
@@ -244,20 +282,19 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
             if self.forceMaxDistance:
                 camera.setPos(self.camOffset)
                 camera.setZ(0)
-
-            self.avatar.getGeomNode().show()
-            return task.cont
-
-        cPoint = collEntry.getSurfacePoint(self)
-        offset = 0.9
-        camera.setPos(cPoint + cNormal * offset)
-        distance = camera.getDistance(self)
-        if distance < 1.8:
-            self.avatar.getGeomNode().hide()
         else:
-            self.avatar.getGeomNode().show()
+            cPoint = collEntry.getSurfacePoint(self)
+            offset = 0.9
+            camera.setPos(cPoint + cNormal * offset)
 
-        localAvatar.ccPusherTrav.traverse(render)
+        if not base.localAvatar.isDisguised:
+            distance = camera.getDistance(self)
+            if distance < self._zoomIncrement:
+                self.avatar.getGeomNode().hide()
+            else:
+                self.avatar.getGeomNode().show()
+
+        base.localAvatar.ccPusherTrav.traverse(render)
         return Task.cont
 
     def _stopCollisionCheck(self):
@@ -267,4 +304,9 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
         del self._cTrav
         self._collSolidNp.detachNode()
         del self._collSolidNp
-        self.avatar.getGeomNode().show()
+        if not base.localAvatar.isDisguised:
+            self.avatar.getGeomNode().show()
+
+    def clickSecondAction(self):
+        if self.camOffset.getY() == 0:
+            messenger.send(base.SECOND_ACTION_BUTTON)

@@ -8,7 +8,7 @@ def isGoofySpeedwayZone(zoneId):
 
 
 def isCogHQZone(zoneId):
-    return zoneId >= 10000 and zoneId < 15000
+    return 10000 <= zoneId < 15000
 
 
 def isMintInteriorZone(zoneId):
@@ -141,7 +141,7 @@ def isWelcomeValley(zoneId):
 def getCanonicalZoneId(zoneId):
     if zoneId == WelcomeValleyToken:
         zoneId = ToontownCentral
-    elif zoneId >= WelcomeValleyBegin and zoneId < WelcomeValleyEnd:
+    elif WelcomeValleyBegin <= zoneId < WelcomeValleyEnd:
         zoneId = zoneId % 2000
         if zoneId < 1000:
             zoneId = zoneId + ToontownCentral
@@ -151,9 +151,9 @@ def getCanonicalZoneId(zoneId):
 
 
 def getTrueZoneId(zoneId, currentZoneId):
-    if zoneId >= WelcomeValleyBegin and zoneId < WelcomeValleyEnd or zoneId == WelcomeValleyToken:
+    if WelcomeValleyBegin <= zoneId < WelcomeValleyEnd or zoneId == WelcomeValleyToken:
         zoneId = getCanonicalZoneId(zoneId)
-    if currentZoneId >= WelcomeValleyBegin and currentZoneId < WelcomeValleyEnd:
+    if WelcomeValleyBegin <= currentZoneId < WelcomeValleyEnd:
         hoodId = getHoodId(zoneId)
         offset = currentZoneId - currentZoneId % 2000
         if hoodId == ToontownCentral:

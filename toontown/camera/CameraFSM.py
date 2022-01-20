@@ -34,9 +34,6 @@ class CameraFSM(FSM):
     def getCurrentCamera(self):
         return self.currentCamera
 
-    def getOrbitCamera(self):
-        return self.orbitCamera
-
     def getFPSCamera(self):
         return self.fpsCamera
 

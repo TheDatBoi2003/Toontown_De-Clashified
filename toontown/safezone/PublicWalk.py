@@ -88,12 +88,12 @@ class PublicWalk(Walk.Walk):
         self.__endSprintCheck()
         self.lastFov = base.localAvatar.fov
         base.localAvatar.setWalkSpeedSprint()
-        base.localAvatar.lerpCameraFov(ToontownGlobals.BossBattleCameraFov, 0.3)
+        base.localAvatar.lerpCameraFov(base.localAvatar.fov * 1.2, 0.3)
         base.localAvatar.startSprintTask()
 
     def __exitSprint(self):
         if not hasattr(base.localAvatar, 'sprintMultiplier'):
-            pass
+            return
         self.__endSprintCheck()
         base.localAvatar.endSprintTask()
         base.localAvatar.setWalkSpeedNormal()
