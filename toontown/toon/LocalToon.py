@@ -70,9 +70,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
     piePowerExponent = base.config.GetDouble('pie-power-exponent', 0.75)
 
     def __init__(self, cr):
-        try:
-            self.LocalToon_initialized
-        except:
+        if not hasattr(self, 'LocalToon_initialized'):
             self.LocalToon_initialized = 1
             self.numFlowers = 0
             self.maxFlowerBasket = 0
@@ -1966,3 +1964,46 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
     def getTeleporting(self):
         return self.teleporting
+
+    def setWalkSpeedSprint(self):
+        if self.controlManager.fullTurning:
+            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeed * self.sprintMultiplier, OTPGlobals.ToonJumpForce,
+                                          OTPGlobals.ToonForwardSpeed * self.sprintMultiplier, OTPGlobals.ToonRotateSpeed)
+        else:
+            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeed * self.sprintMultiplier, OTPGlobals.ToonJumpForce,
+                                          OTPGlobals.ToonReverseSpeed * self.sprintMultiplier * 0.8, OTPGlobals.ToonRotateSpeed)
+
+    def setWalkSpeedNormal(self):
+        if self.controlManager.fullTurning:
+            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeed, OTPGlobals.ToonJumpForce,
+                                          OTPGlobals.ToonForwardSpeed, OTPGlobals.ToonRotateSpeed)
+        else:
+            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeed, OTPGlobals.ToonJumpForce,
+                                          OTPGlobals.ToonReverseSpeed, OTPGlobals.ToonRotateSpeed)
+
+    def setWalkSpeedSlow(self):
+        if self.controlManager.fullTurning:
+            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSlowSpeed, OTPGlobals.ToonJumpSlowForce,
+                                          OTPGlobals.ToonForwardSlowSpeed, OTPGlobals.ToonRotateSlowSpeed)
+        else:
+            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSlowSpeed, OTPGlobals.ToonJumpSlowForce,
+                                          OTPGlobals.ToonReverseSlowSpeed, OTPGlobals.ToonRotateSlowSpeed)
+        self.animMultiplier = 1.0
+
+    def startSprintTask(self):
+        self.b_setAnimState('Sprinting', 1.0)
+
+    def endSprintTask(self):
+        self.b_setAnimState('Happy', 1.0)
+
+    def returnToWalk(self, task):
+        if self.sleepFlag:
+            state = 'Sleep'
+        elif self.getSprinting():
+            state = 'Sprinting'
+        elif self.hp > 0:
+            state = 'Happy'
+        else:
+            state = 'Sad'
+        self.b_setAnimState(state, 1.0)
+        return Task.done

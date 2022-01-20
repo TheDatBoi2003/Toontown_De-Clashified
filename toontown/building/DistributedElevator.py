@@ -21,6 +21,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
+        self.offsetNP = None
         self.bldgRequest = None
         self.toonRequests = {}
         self.deferredSlots = []
@@ -121,7 +122,8 @@ class DistributedElevator(DistributedObject.DistributedObject):
         del self.closeSfx
         self.isSetup = 0
         self.fillSlotTrack = None
-        self.offsetNP.removeNode()
+        if self.offsetNP:
+            self.offsetNP.removeNode()
         if hasattr(base.localAvatar, 'elevatorNotifier'):
             base.localAvatar.elevatorNotifier.cleanup()
         DistributedObject.DistributedObject.delete(self)

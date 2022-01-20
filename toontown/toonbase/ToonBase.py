@@ -155,7 +155,7 @@ class ToonBase(OTPBase.OTPBase):
             self.ACTION_BUTTON = keymap.get('ACTION_BUTTON', self.ACTION_BUTTON)
             self.SECOND_ACTION_BUTTON = keymap.get('SECOND_ACTION_BUTTON', self.SECOND_ACTION_BUTTON)
             self.SCREENSHOT_KEY = keymap.get('SCREENSHOT_KEY', self.SCREENSHOT_KEY)
-            self.SPRINT = keymap.get('INTERACT', self.SPRINT)
+            self.SPRINT = keymap.get('SPRINT', self.SPRINT)
             ToontownGlobals.OptionsPageHotkey = keymap.get('OPTIONS-PAGE', ToontownGlobals.OptionsPageHotkey)
             self.CHAT_HOTKEY = keymap.get('CHAT_HOTKEY', 'enter')
 

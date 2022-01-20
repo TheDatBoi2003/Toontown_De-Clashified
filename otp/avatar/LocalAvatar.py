@@ -433,29 +433,11 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         self.controlManager.disable()
         self.clearPageUpDown()
 
-    def setWalkSpeedSprint(self):
-        if self.controlManager.fullTurning:
-            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeed * 1.5, OTPGlobals.ToonJumpForce * 2,
-                                          OTPGlobals.ToonForwardSpeed * 1.5, OTPGlobals.ToonRotateSpeed)
-        else:
-            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeed * 1.5, OTPGlobals.ToonJumpForce * 2,
-                                          OTPGlobals.ToonReverseSpeed * 1.2, OTPGlobals.ToonRotateSpeed)
-
     def setWalkSpeedNormal(self):
-        if self.controlManager.fullTurning:
-            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeed, OTPGlobals.ToonJumpForce,
-                                          OTPGlobals.ToonForwardSpeed, OTPGlobals.ToonRotateSpeed)
-        else:
-            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeed, OTPGlobals.ToonJumpForce,
-                                          OTPGlobals.ToonReverseSpeed, OTPGlobals.ToonRotateSpeed)
+        self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeed, OTPGlobals.ToonJumpForce, OTPGlobals.ToonReverseSpeed, OTPGlobals.ToonRotateSpeed)
 
     def setWalkSpeedSlow(self):
-        if self.controlManager.fullTurning:
-            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSlowSpeed, OTPGlobals.ToonJumpSlowForce,
-                                          OTPGlobals.ToonForwardSlowSpeed, OTPGlobals.ToonRotateSlowSpeed)
-        else:
-            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSlowSpeed, OTPGlobals.ToonJumpSlowForce,
-                                          OTPGlobals.ToonReverseSlowSpeed, OTPGlobals.ToonRotateSlowSpeed)
+        self.controlManager.setSpeeds(OTPGlobals.ToonForwardSlowSpeed, OTPGlobals.ToonJumpSlowForce, OTPGlobals.ToonReverseSlowSpeed, OTPGlobals.ToonRotateSlowSpeed)
 
     def pageUp(self):
         if not self.avatarControlsEnabled:
@@ -948,38 +930,6 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
 
     def getAnimMultiplier(self):
         return self.animMultiplier
-
-    def enableRun(self):
-        self.accept('arrow_up', self.startRunWatch)
-        self.accept('arrow_up-up', self.stopRunWatch)
-        self.accept('control-arrow_up', self.startRunWatch)
-        self.accept('control-arrow_up-up', self.stopRunWatch)
-        self.accept('alt-arrow_up', self.startRunWatch)
-        self.accept('alt-arrow_up-up', self.stopRunWatch)
-        self.accept('shift-arrow_up', self.startRunWatch)
-        self.accept('shift-arrow_up-up', self.stopRunWatch)
-
-    def disableRun(self):
-        self.ignore('arrow_up')
-        self.ignore('arrow_up-up')
-        self.ignore('control-arrow_up')
-        self.ignore('control-arrow_up-up')
-        self.ignore('alt-arrow_up')
-        self.ignore('alt-arrow_up-up')
-        self.ignore('shift-arrow_up')
-        self.ignore('shift-arrow_up-up')
-
-    def startRunWatch(self):
-        def setRun(ignored):
-            messenger.send('running-on')
-
-        taskMgr.doMethodLater(self.runTimeout, setRun, self.uniqueName('runWatch'))
-        return Task.cont
-
-    def stopRunWatch(self):
-        taskMgr.remove(self.uniqueName('runWatch'))
-        messenger.send('running-off')
-        return Task.cont
 
     def runSound(self):
         self.soundWalk.stop()

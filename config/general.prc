@@ -41,6 +41,7 @@ want-news-tab false
 want-gardening false
 want-cogdominiums false
 want-emblems true
+sprint-multiplier 1.75
 
 # Misc. settings
 respect-prev-transform true

@@ -524,6 +524,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.animFSM = ClassicFSM('Toon', [State('off', self.enterOff, self.exitOff),
                                            State('neutral', self.enterNeutral, self.exitNeutral),
                                            State('victory', self.enterVictory, self.exitVictory),
+                                           State('Sprinting', self.enterSprinting, self.exitSprinting),
                                            State('Happy', self.enterHappy, self.exitHappy),
                                            State('Sad', self.enterSad, self.exitSad),
                                            State('Catching', self.enterCatching, self.exitCatching),
@@ -572,6 +573,8 @@ class Toon(Avatar.Avatar, ToonHead):
                                            State('ScientistPlay', self.enterScientistPlay, self.enterScientistPlay)],
                                   'off', 'off')
         animStateList = self.animFSM.getStates()
+        self.sprintMultiplier = base.config.GetFloat('sprint-multiplier', 5)
+        self.__sprinting = False
         self.animFSM.enterInitialState()
 
     def stopAnimations(self):
@@ -1475,6 +1478,24 @@ class Toon(Avatar.Avatar, ToonHead):
     def exitVictory(self):
         self.stop()
 
+    def enterSprinting(self, animMultiplier=1, ts=0, callback=None, extraArgs=[]):
+        self.playingAnim = None
+        self.playingRate = None
+        self.standWalkRunReverse = (('neutral', 1.0),
+                                    ('walk', 1.0),
+                                    ('run', 1.0 + ((self.sprintMultiplier - 1) * 0.25)),
+                                    ('walk', -1.0))
+        self.setSpeed(self.forwardSpeed, self.rotateSpeed)
+        self.__sprinting = True
+        self.setActiveShadow(1)
+        return
+
+    def exitSprinting(self):
+        self.standWalkRunReverse = None
+        self.stop()
+        self.motion.exit()
+        return
+
     def enterHappy(self, animMultiplier=1, ts=0, callback=None, extraArgs=[]):
         self.playingAnim = None
         self.playingRate = None
@@ -1483,6 +1504,8 @@ class Toon(Avatar.Avatar, ToonHead):
                                     ('run', 1.0),
                                     ('walk', -1.0))
         self.setSpeed(self.forwardSpeed, self.rotateSpeed)
+        if self.__sprinting:
+            self.__sprinting = False
         self.setActiveShadow(1)
         return
 
@@ -3117,6 +3140,9 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def exitScientistPlay(self):
         self.stop()
+
+    def getSprinting(self):
+        return self.__sprinting
 
 
 loadModels()
