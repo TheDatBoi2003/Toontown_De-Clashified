@@ -63,7 +63,7 @@ class ToontownControlManager(ControlManager):
                 inputState.watchWithModifiers('jump', keymap.get('JUMP', base.JUMP))
             ))
 
-            self.setWASDTurn(self.getWASDTurn())
+            self.setWASDTurn(self.getWASDTurn(), 1)
         else:
             self.istNormal.extend((
                 inputState.watch('turnLeft', 'mouse-look_left', 'mouse-look_left-done'),
@@ -135,16 +135,17 @@ class ToontownControlManager(ControlManager):
                         base.MOVE_RIGHT,
                         inputSource=inputState.ArrowKeys))
 
-    def setWASDTurn(self, turn):
+    def setWASDTurn(self, turn, ignorePreviousInput=0):
         self.__WASDTurn = turn
 
         if not self.isEnabled:
             return
 
-        turnLeftWASDSet = inputState.isSet("turnLeft", inputSource=inputState.WASD)
-        turnRightWASDSet = inputState.isSet("turnRight", inputSource=inputState.WASD)
-        slideLeftWASDSet = inputState.isSet("slideLeft", inputSource=inputState.WASD)
-        slideRightWASDSet = inputState.isSet("slideRight", inputSource=inputState.WASD)
+        if not ignorePreviousInput:
+            turnLeftWASDSet = inputState.isSet("turnLeft", inputSource=inputState.WASD)
+            turnRightWASDSet = inputState.isSet("turnRight", inputSource=inputState.WASD)
+            slideLeftWASDSet = inputState.isSet("slideLeft", inputSource=inputState.WASD)
+            slideRightWASDSet = inputState.isSet("slideRight", inputSource=inputState.WASD)
 
         for token in self.WASDTurnTokens:
             token.release()
@@ -155,8 +156,9 @@ class ToontownControlManager(ControlManager):
                 inputState.watchWithModifiers("turnRight", base.MOVE_RIGHT, inputSource=inputState.WASD),
                 )
 
-            inputState.set("turnLeft", slideLeftWASDSet, inputSource=inputState.WASD)
-            inputState.set("turnRight", slideRightWASDSet, inputSource=inputState.WASD)
+            if not ignorePreviousInput:
+                inputState.set("turnLeft", slideLeftWASDSet, inputSource=inputState.WASD)
+                inputState.set("turnRight", slideRightWASDSet, inputSource=inputState.WASD)
 
             inputState.set("slideLeft", False, inputSource=inputState.WASD)
             inputState.set("slideRight", False, inputSource=inputState.WASD)
@@ -167,8 +169,9 @@ class ToontownControlManager(ControlManager):
                 inputState.watchWithModifiers("slideRight", base.MOVE_RIGHT, inputSource=inputState.WASD),
                 )
 
-            inputState.set("slideLeft", turnLeftWASDSet, inputSource=inputState.WASD)
-            inputState.set("slideRight", turnRightWASDSet, inputSource=inputState.WASD)
+            if not ignorePreviousInput:
+                inputState.set("slideLeft", turnLeftWASDSet, inputSource=inputState.WASD)
+                inputState.set("slideRight", turnRightWASDSet, inputSource=inputState.WASD)
 
             inputState.set("turnLeft", False, inputSource=inputState.WASD)
             inputState.set("turnRight", False, inputSource=inputState.WASD)

@@ -13,7 +13,7 @@ from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 
 from toontown.suit import Suit
-from toontown.toonbase import ToontownGlobals
+from toontown.toonbase import ToontownGlobals, ToontownBattleGlobals
 from otp.otpbase import OTPLocalizer
 from toontown.toonbase import TTLocalizer
 from toontown.effects import Wake
@@ -21,7 +21,7 @@ from otp.avatar import Emote
 import Motion
 from toontown.hood import ZoneUtil
 from toontown.battle import SuitBattleGlobals
-from toontown.battle.movies import MovieThrow, BattleProps
+from toontown.battle.movies import MovieThrow, BattleProps, MovieUtil
 from otp.otpbase import OTPGlobals
 from toontown.effects import DustCloud
 from toontown.distributed import DelayDelete
@@ -2807,7 +2807,6 @@ class Toon(Avatar.Avatar, ToonHead):
             self.takeOffSuit()
         if launcher and not launcher.getPhaseComplete(5):
             return
-        from toontown.suit import Suit
         deptIndex = suitType
         suit = Suit.Suit()
         dna = SuitDNA.SuitDNA()
@@ -2915,7 +2914,6 @@ class Toon(Avatar.Avatar, ToonHead):
         self.suit.makeWaiter(self.suitGeom)
 
     def getPieModel(self):
-        from toontown.toonbase import ToontownBattleGlobals
         if self.pieModel and self.__pieModelType != self.pieType:
             self.pieModel.detachNode()
             self.pieModel = None
@@ -2927,9 +2925,6 @@ class Toon(Avatar.Avatar, ToonHead):
         return self.pieModel
 
     def getPresentPieInterval(self, x, y, z, h, p, r):
-        from toontown.toonbase import ToontownBattleGlobals
-        from toontown.battle import BattleProps
-        from toontown.battle.movies import MovieUtil
         pie = self.getPieModel()
         pieName = ToontownBattleGlobals.pieNames[self.pieType]
         pieType = BattleProps.globalPropPool.getPropType(pieName)
@@ -2946,8 +2941,6 @@ class Toon(Avatar.Avatar, ToonHead):
         return track
 
     def getTossPieInterval(self, x, y, z, h, p, r, power, beginFlyIval=Sequence()):
-        from toontown.toonbase import ToontownBattleGlobals
-        from toontown.battle import BattleProps
         pie = self.getPieModel()
         flyPie = pie.copyTo(NodePath('a'))
         pieName = ToontownBattleGlobals.pieNames[self.pieType]
@@ -2992,8 +2985,6 @@ class Toon(Avatar.Avatar, ToonHead):
             return ProjectileInterval(None, startPos=Point3(0, 0, 0), endPos=Point3(0, dist, 0), duration=time)
 
     def getPieSplatInterval(self, x, y, z, pieCode):
-        from toontown.toonbase import ToontownBattleGlobals
-        from toontown.battle import BattleProps
         pieName = ToontownBattleGlobals.pieNames[self.pieType]
         splatName = 'splat-' + pieName
         if pieName == 'wedding-cake':
