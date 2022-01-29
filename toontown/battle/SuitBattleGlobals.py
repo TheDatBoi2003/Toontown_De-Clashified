@@ -122,11 +122,6 @@ SUIT_CAPACITY = 4
 EXE_HP_MOD = 0.5
 EXE_DMG_MOD = 0.2
 
-LURED_STATUS = 0
-SOAKED_STATUS = 1
-TRAPPED_STATUS = 2
-COGS_MISS_STATUS = 3
-
 # Formatted by Jake S. - You're welcome!
 SuitAttributes = {'f': {'name': TTLocalizer.SuitFlunky,  # cog name
                         'singularName': TTLocalizer.SuitFlunkyS,  # cogs singular name, for tasks
@@ -662,11 +657,11 @@ SuitAttributes = {'f': {'name': TTLocalizer.SuitFlunky,  # cog name
                               ('MumboJumbo',
                                (6, 7, 8, 10, 11, 12, 13, 14, 15, 17),
                                (55, 60, 75, 80, 85, 90, 95, 95, 95, 95),
-                               (15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+                               (25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
                               ('EvictionNotice',
                                (8, 9, 10, 11, 12, 13, 15, 17, 19, 20),
                                (50, 55, 65, 70, 75, 80, 85, 90, 90, 95),
-                               (20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+                               (30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
                               ('PowerTrip',
                                (5, 6, 7, 8, 9, 10, 11, 12, 13, 15),
                                (60, 65, 70, 80, 85, 90, 90, 90, 95, 95),
@@ -1289,16 +1284,23 @@ def getAttackTaunt(attackName, index=None):
 
 
 SuitAttackTaunts = TTLocalizer.SuitAttackTaunts
-SuitStatusNames = ['lured', 'soaked', 'trapped', 'cogs-miss', 'immune']
-SuitStatuses = [{'name': SuitStatusNames[0], 'rounds': 1, 'kbBonus': 0.5, 'decay': 100, 'toons': [], 'levels': []},
-                {'name': SuitStatusNames[1], 'rounds': 1, 'defense': -15, 'toons': [0]},
-                {'name': SuitStatusNames[2], 'level': -1, 'damage': 0, 'toon': 0},
-                {'name': SuitStatusNames[3], 'rounds': 1},
-                {'name': SuitStatusNames[4], 'rounds': 2}]
-ROUND_STATUSES = ['lured', 'soaked', 'cogs-miss', 'immune']
+SuitStatusNames = ['lured', 'soaked', 'trapped', 'dmg-down', 'immune']
+
+LURED_STATUS = SuitStatusNames[0]
+SOAKED_STATUS = SuitStatusNames[1]
+TRAPPED_STATUS = SuitStatusNames[2]
+DMG_DOWN_STATUS = SuitStatusNames[3]
+IMMUNE_STATUS = SuitStatusNames[4]
+
+SuitStatuses = [{'name': LURED_STATUS, 'rounds': 1, 'kbBonus': 0.5, 'decay': 100, 'toons': [], 'levels': []},
+                {'name': SOAKED_STATUS, 'rounds': 1, 'defense': -15, 'toons': [0]},
+                {'name': TRAPPED_STATUS, 'level': -1, 'damage': 0, 'toon': 0},
+                {'name': DMG_DOWN_STATUS, 'rounds': 1, 'percent': 0.4},
+                {'name': IMMUNE_STATUS, 'rounds': 2}]
+ROUND_STATUSES = [LURED_STATUS, SOAKED_STATUS, DMG_DOWN_STATUS, IMMUNE_STATUS]
 
 
-def getSuitStatus(name):
+def genSuitStatus(name):
     statusEffect = None
     for status in SuitStatuses:
         if name == status['name']:
@@ -1326,7 +1328,7 @@ def makeStatusString(status):
 def getStatusFromString(statusString):
     dg = PyDatagram(statusString)
     dgi = PyDatagramIterator(dg)
-    status = getSuitStatus(dgi.getString())
+    status = genSuitStatus(dgi.getString())
     if status['name'] in ROUND_STATUSES:
         status['rounds'] = dgi.getInt16()
     if status['name'] == 'lured':

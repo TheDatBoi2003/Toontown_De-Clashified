@@ -100,7 +100,7 @@ def assignRewards(activeToons, toonSkillPtsGained, suitsKilled, zoneId, helpfulT
                     newGagList = toon.experience.getNewGagIndexList(i, exp)
                     toon.experience.addExp(i, amount=exp)
                     toon.inventory.addItemWithList(i, newGagList)
-        toon.b_setExperience(toon.experience.makeNetString())
+        toon.b_setExperience(toon.experience.experience)
         toon.d_setInventory(toon.inventory.makeNetString())
         toon.b_setAnimState('victory', 1)
 

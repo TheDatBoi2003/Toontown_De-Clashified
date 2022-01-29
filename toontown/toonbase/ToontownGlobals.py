@@ -656,33 +656,6 @@ BossCogBattleBPosHpr = (0,
  180,
  0,
  0)
-SellbotBossMaxDamage = [1000, 1250, 1500]
-SellbotBossMaxDamageNerfed = 500
-SellbotBossBattleOnePosHpr = (0,
- -35,
- 0,
- -90,
- 0,
- 0)
-SellbotBossBattleTwoPosHpr = (0,
- 60,
- 18,
- -90,
- 0,
- 0)
-SellbotBossBattleThreeHpr = (180, 0, 0)
-SellbotBossBottomPos = (0, -110, -6.5)
-SellbotBossDeathPos = (0, -175, -6.5)
-SellbotBossDooberTurnPosA = (-20, -50, 0)
-SellbotBossDooberTurnPosB = (20, -50, 0)
-SellbotBossDooberTurnPosDown = (0, -50, 0)
-SellbotBossDooberFlyPos = (0, -135, -6.5)
-SellbotBossTopRampPosA = (-80, -35, 18)
-SellbotBossTopRampTurnPosA = (-80, 10, 18)
-SellbotBossP3PosA = (-50, 40, 18)
-SellbotBossTopRampPosB = (80, -35, 18)
-SellbotBossTopRampTurnPosB = (80, 10, 18)
-SellbotBossP3PosB = (50, 60, 18)
 CashbotBossMaxDamage = 500
 CashbotBossOffstagePosHpr = (120,
  -195,
@@ -696,10 +669,28 @@ CashbotBossBattleOnePosHpr = (120,
  90,
  0,
  0)
+CashbotBossBattleTwoPosHpr = (120,
+ -315,
+ 0,
+ 180,
+ 0,
+ 0)
 CashbotRTBattleOneStartPosHpr = (94,
  -220,
  0,
  110,
+ 0,
+ 0)
+CashbotRTBattleTwoStartPosHpr = (120,
+ -260,
+ 0.025,
+ 0,
+ 0,
+ 0)
+CashbotRTBattleTwoEndPosHpr = (120,
+ -290,
+ 0.025,
+ 0,
  0,
  0)
 CashbotBossBattleThreePosHpr = (120,

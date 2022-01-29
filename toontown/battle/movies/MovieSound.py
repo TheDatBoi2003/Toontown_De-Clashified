@@ -100,7 +100,7 @@ def __getSuitTrack(sound, hitCount, totalDamages):
                 suitTrack.append(Parallel(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit),
                                           __getPartTrack(breakEffect, 0.0, 1.0, [suit, 0], softStop=-0.5)))
                 if died and not suit.getSkelecog():
-                    suitTrack.append(headExplodeTrack(suit, battle))
+                    suitTrack.append(MovieUtil.spawnHeadExplodeTrack(suit, battle))
             else:
                 suitTrack.append(showDamage)
                 suitTrack.append(updateHealthBar)
@@ -110,7 +110,7 @@ def __getSuitTrack(sound, hitCount, totalDamages):
             else:
                 suitTrack.append(ActorInterval(suit, 'squirt-small-react'))
             if target['kbBonus'] == 0:
-                suitTrack.append(__createSuitResetPosTrack(suit, battle))
+                suitTrack.append(MovieUtil.createSuitResetPosTrack(suit, battle))
                 suitTrack.append(Func(battle.unlureSuit, suit))
             bonusTrack = None
             if hpBonus > 0:
@@ -126,46 +126,6 @@ def __getSuitTrack(sound, hitCount, totalDamages):
             tracks.append(Sequence(Wait(2.9), Func(MovieUtil.indicateMissed, suit, 1.0)))
 
     return tracks
-
-
-def headExplodeTrack(suit, battle):
-    headParts = suit.getHeadParts()
-    suitTrack = Sequence()
-    suitPos, suitHpr = battle.getActorPosHpr(suit)
-    suitTrack.append(Wait(0.15))
-    explodeTrack = Parallel()
-    for part in headParts:
-        explodeTrack.append(Func(part.detachNode))
-    suitTrack.append(explodeTrack)
-    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
-    deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.8))
-    toontown.battle.movies.BattleParticles.loadParticles()
-    gearPoint = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height + 1)
-    smallGears = toontown.battle.movies.BattleParticles.createParticleEffect(file='gearExplosionSmall')
-    smallGears.setPos(gearPoint)
-    smallGears.setDepthWrite(False)
-    gears1Track = Sequence(Wait(0.5),
-                           ParticleInterval(smallGears, battle, worldRelative=False, duration=1.0, cleanup=True),
-                           name='gears1Track')
-    explosionTrack = Sequence()
-    explosionTrack.append(MovieUtil.createKapowExplosionTrack(battle, explosionPoint=gearPoint))
-    singleGear = toontown.battle.movies.BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
-    singleGear.setPos(gearPoint)
-    singleGear.setDepthWrite(False)
-    smallGearExplosion = toontown.battle.movies.BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
-    smallGearExplosion.setPos(gearPoint)
-    smallGearExplosion.setDepthWrite(False)
-    bigGearExplosion = toontown.battle.movies.BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
-    bigGearExplosion.setPos(gearPoint)
-    bigGearExplosion.setDepthWrite(False)
-    gears2MTrack = Track(
-        (0.1, ParticleInterval(singleGear, battle, worldRelative=False, duration=0.4, cleanup=True)),
-        (0.5, ParticleInterval(smallGearExplosion, battle, worldRelative=False, duration=0.5, cleanup=True)),
-        (0.9, ParticleInterval(bigGearExplosion, battle, worldRelative=False, duration=2.0, cleanup=True)),
-        name='gears2MTrack'
-    )
-
-    return Parallel(suitTrack, explosionTrack, deathSoundTrack, gears1Track, gears2MTrack)
 
 
 def __getSuitDeathTracks(npcToons, sound):
@@ -199,20 +159,6 @@ def __doSoundsLevel(sounds):
 
     mainTrack.append(tracks)
     return mainTrack
-
-
-def __createSuitResetPosTrack(suit, battle):
-    resetPos, resetHpr = battle.getActorPosHpr(suit)
-    moveDuration = 0.5
-    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr),
-                         ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001),
-                         Func(suit.loop, 'neutral'))
-    moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
-    return Parallel(walkTrack, moveTrack)
-
-
-def createSuitResetPosTrack(suit, battle):
-    return __createSuitResetPosTrack(suit, battle)
 
 
 def __createToonInterval(sound, delay, toon, operaInstrument=None):

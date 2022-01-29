@@ -212,8 +212,8 @@ class ToonAvatarDetailPanel(DirectFrame):
             DirectLabel(parent=self, relief=None, text=TextEncoder.upper(TTLocalizer.BattleGlobalTracks[track]), text_scale=TTLocalizer.TADPtrackLabel, text_align=TextNode.ALeft, pos=(-0.9, 0, TTLocalizer.TADtrackLabelPosZ + track * ySpacing))
             if self.avatar.hasTrackAccess(track):
                 curExp, nextExp = inventory.getCurAndNextExpValues(track)
-                for item in xrange(0, len(Levels[track])):
-                    level = Levels[track][item]
+                for item in xrange(0, len(Levels)):
+                    level = Levels[item]
                     if curExp >= level:
                         numItems = inventory.numItem(track, item)
                         if numItems == 0:

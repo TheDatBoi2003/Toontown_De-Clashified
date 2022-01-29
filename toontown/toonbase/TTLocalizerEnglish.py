@@ -5281,6 +5281,7 @@ InventorySkillCreditNone = 'Skill credit: None'
 InventoryDetailAmount = '%(numItems)s / %(maxItems)s'
 InventoryTrapDetailData = 'Normal/Exe: %(damage)d|%(damageExe)d\n%(healthy)s\n%(singleOrGroup)s'
 InventoryLureDetailData = 'Accuracy: %(accuracy)s\nKnockback: %(bonus)s%%\n%(singleOrGroup)s'
+InventoryZapDetailData = 'Accuracy: %(accuracy)s\nUnsoaked: %(damage)d\nSoaked: %(jump1)d, %(jump2)d, %(jump3)d'
 InventoryDetailData = 'Accuracy: %(accuracy)s\n%(damageString)s: %(damage)d%(bonus)s\n%(singleOrGroup)s'
 InventoryTrackExp = '%(curExp)s / %(nextExp)s'
 InventoryMaxOut = 'MAXED OUT!'
@@ -5321,6 +5322,7 @@ BattleGlobalTracks = ['toon-up',
                       'sound',
                       'throw',
                       'squirt',
+                      'zap',
                       'drop']
 BattleGlobalNPCTracks = ['restock', 'toons hit', 'cogs miss']
 BattleGlobalAvPropStrings = (('Feather',
@@ -5372,6 +5374,14 @@ BattleGlobalAvPropStrings = (('Feather',
                               'Fire Hose',
                               'Storm Cloud',
                               'Geyser'),
+                             ('Joybuzzer',
+                              'Carpet',
+                              'Balloon',
+                              'Kart Battery',
+                              'Taser',
+                              'Broken Television',
+                              'Tesla Coil',
+                              'Lightning'),
                              ('Flower Pot',
                               'Sandbag',
                               'Bowling Ball',
@@ -5395,6 +5405,7 @@ BattleGlobalAvPropStringsSingular = (('a Feather',
                                       'a set of Marbles',
                                       'a patch of Quicksand',
                                       'a Trapdoor',
+                                      'a Wrecking Ball',
                                       'a TNT',
                                       'a Railroad'),
                                      ('a $1 bill',
@@ -5429,12 +5440,21 @@ BattleGlobalAvPropStringsSingular = (('a Feather',
                                       'a Fire Hose',
                                       'a Storm Cloud',
                                       'a Geyser'),
+                                     ('a Joybuzzer',
+                                      'a Carpet',
+                                      'a Balloon',
+                                      'a Kart Battery',
+                                      'a Taser',
+                                      'a Broken Television',
+                                      'a Tesla Coil',
+                                      'a Lightning Strike'),
                                      ('a Flower Pot',
                                       'a Sandbag',
                                       'a Bowling Ball',
                                       'an Anvil',
                                       'a Big Weight',
                                       'a Safe',
+                                      'a Boulder',
                                       'a Grand Piano',
                                       'the Toontanic'))
 BattleGlobalAvPropStringsPlural = (('Feathers',
@@ -5451,6 +5471,7 @@ BattleGlobalAvPropStringsPlural = (('Feathers',
                                     'sets of Marbles',
                                     'patches of Quicksand',
                                     'Trapdoors',
+                                    'Wrecking Balls'
                                     'TNTs',
                                     'Railroads'),
                                    ('$1 bills',
@@ -5485,14 +5506,23 @@ BattleGlobalAvPropStringsPlural = (('Feathers',
                                     'Fire Hoses',
                                     'Storm Clouds',
                                     'Geysers'),
+                                   ('Joybuzzers',
+                                    'Carpets',
+                                    'Balloons',
+                                    'Kart Batteries',
+                                    'Tasers',
+                                    'Broken Televisions',
+                                    'Tesla Coils',
+                                    'Lightning Strikes'),
                                    ('Flower Pots',
                                     'Sandbags',
                                     'Bowling Balls',
                                     'Anvils',
                                     'Big Weights',
                                     'Safes',
+                                    'Boulders',
                                     'Grand Pianos',
-                                    'Oceanliners'))
+                                    'Toontanics'))
 BattleGlobalAvTrackAccStrings = ('Perfect',
                                  'High',
                                  'Medium',
@@ -6133,12 +6163,16 @@ ResistanceToonRestockAllInstructions = 'all the Toons near you will restock all 
 ResistanceToonLastPromotion = "\x07Wow, you've reached level %s on your Cog suit!\x07Cogs don't get promoted higher than that.\x07You can't upgrade your Cog suit anymore, but you can certainly keep working for the Resistance!"
 ResistanceToonHPBoost = "\x07You've done a lot of work for the Resistance.\x07The Toon Council has decided to give you another Laff point. Congratulations!"
 ResistanceToonMaxed = '\x07I see that you have a level %s Cog suit. Very impressive!\x07On behalf of the Toon Council, thank you for coming back to rescue more Toons!'
+CashbotBossCogTaunt = 'Your fun ends here, toons.'
 CashbotBossCogAttack = 'Get them!!!'
 ResistanceToonWelcome = 'Hey, you made it!  Follow me to the main vault before the C.F.O. finds us!'
 ResistanceToonTooLate = "Blast it!  We're too late!"
 CashbotBossDiscoverToons1 = 'Ah-HAH!'
 CashbotBossDiscoverToons2 = 'I thought I smelled something a little toony in here!  Imposters!'
 ResistanceToonKeepHimBusy = "Keep him busy!  I'm going to set a trap!"
+ResistanceToonFollowHim = 'Come on toons! Follow that bag of bolts!'
+CashbotBossTrapped = "I've got you right where I want you now, toons."
+CashbotBossCogAgain = 'Err, again...'
 ResistanceToonWatchThis = 'Watch this!'
 CashbotBossGetAwayFromThat = 'Hey!  Get away from that!'
 ResistanceToonCraneInstructions1 = 'Control a magnet by stepping up to a podium.'
@@ -10264,12 +10298,13 @@ SillySurgeTerms = {1: 'Amusing Ascent!',
                    11: 'Insanity Increase!',
                    12: 'Cracked-Uptick!'}
 InteractivePropTrackBonusTerms = {0: 'Super Toon-Up!',
-                                  1: '',
-                                  2: '',
-                                  3: '',
+                                  1: 'Super Trap!',
+                                  2: 'Super Lure!',
+                                  3: 'Super Sound!',
                                   4: 'Super Throw!',
                                   5: 'Super Squirt!',
-                                  6: ''}
+                                  6: 'Super Zap!',
+                                  7: 'Super Drop!'}
 PlayingCardUnknown = 'Card Name is unknown'
 SpellbookPageTitle = 'Spellbook'
 WordPageTabTitle = 'Spellbook'

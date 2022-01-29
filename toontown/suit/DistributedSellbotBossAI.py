@@ -37,12 +37,12 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def updateBattleTier(self):
         DistributedBossCogAI.DistributedBossCogAI.updateBattleTier(self)
         if self.nerfed:
-            self.bossMaxDamage = ToontownGlobals.SellbotBossMaxDamageNerfed
+            self.bossMaxDamage = SellbotBossMaxDamageNerfed
             self.pieHitToonup = PieToonup[self.battleTier] * 2
             self.pieDamageMult = PieDamageMult
             self.hitCountDamage = HitCountDamageNerfed
         else:
-            self.bossMaxDamage = ToontownGlobals.SellbotBossMaxDamage[self.battleTier]
+            self.bossMaxDamage = SellbotBossMaxDamage[self.battleTier]
             self.pieHitToonup = PieToonup[self.battleTier]
             self.pieDamageMult = PieDamageMult
             self.hitCountDamage = HitCountDamage[self.battleTier]
@@ -86,7 +86,7 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             self.totalDamage += damage
         self.b_setBossDamage(bossDamage, 0, 0)
         if self.bossDamage >= self.bossMaxDamage:
-            self.setState('NearVictory')
+            self.setState('Victory')
         else:
             self.__recordHit()
 
@@ -103,7 +103,7 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             bonusDamage = self.bossMaxDamage - bossDamage
         self.b_addBonusDamage(bonusDamage)
         if self.bossDamage >= self.bossMaxDamage:
-            self.setState('NearVictory')
+            self.setState('Victory')
 
     def hitBossInsides(self):
         avId = self.air.getAvatarIdFromSender()
@@ -134,7 +134,7 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def touchCage(self):
         avId = self.air.getAvatarIdFromSender()
         currState = self.getCurrentOrNextState()
-        if currState != 'BattleThree' and currState != 'NearVictory':
+        if currState != 'BattleThree':
             return
         if not self.validate(avId, avId in self.involvedToons, 'touchCage from unknown avatar'):
             return
@@ -144,16 +144,13 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             toon.__touchedCage = 1
             self.__goodJump(avId)
 
-    def finalPieSplat(self):
-        if self.state != 'NearVictory':
-            return
-        self.b_setState('Victory')
-
     def doNextAttack(self, task):
         if self.attackCode == ToontownGlobals.BossCogDizzyNow:
             attackCode = ToontownGlobals.BossCogRecoverDizzyAttack
         else:
-            attackCode = random.choice([ToontownGlobals.BossCogSpinAttack])
+            attackCode = random.choice([ToontownGlobals.BossCogSpinAttack, ToontownGlobals.BossCogAreaAttack,
+                                        ToontownGlobals.BossCogDirectedAttack, ToontownGlobals.BossCogDirectedAttack,
+                                        ToontownGlobals.BossCogDirectedAttack, ToontownGlobals.BossCogDirectedAttack])
         if attackCode == ToontownGlobals.BossCogAreaAttack:
             self.__doAreaAttack()
         else:
@@ -247,7 +244,7 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
     def makeBattleOneBattles(self):
         self.postBattleState = 'RollToBattleTwo'
-        self.initializeBattles(1, ToontownGlobals.SellbotBossBattleOnePosHpr)
+        self.initializeBattles(1, SellbotBossBattleOnePosHpr)
 
     def generateSuits(self, battleNumber):
         if self.nerfed:
@@ -308,7 +305,7 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
     def makeBattleTwoBattles(self):
         self.postBattleState = 'PrepareBattleThree'
-        self.initializeBattles(2, ToontownGlobals.SellbotBossBattleTwoPosHpr)
+        self.initializeBattles(2, SellbotBossBattleTwoPosHpr)
 
     def enterBattleTwo(self):
         if self.battleA:
@@ -381,12 +378,6 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.stopStrafes()
         taskName = self.uniqueName('CagedToonSaySomething')
         taskMgr.remove(taskName)
-
-    def enterNearVictory(self):
-        self.resetBattles()
-
-    def exitNearVictory(self):
-        pass
 
     def enterVictory(self):
         self.resetBattles()

@@ -9,7 +9,6 @@ from toontown.toonbase import ToontownBattleGlobals
 import toontown.battle.movies.BattleParticles
 import toontown.battle.movies.BattleProps
 import MovieNPCSOS
-from MovieSound import createSuitResetPosTrack
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieTrap')
 

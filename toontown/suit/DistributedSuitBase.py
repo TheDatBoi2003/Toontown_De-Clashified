@@ -461,13 +461,13 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.HpTextGenerator.setText(textStr)
             self.HpTextGenerator.clearShadow()
             self.HpTextGenerator.setAlign(TextNode.ACenter)
-            if statusName == SuitBattleGlobals.SuitStatusNames[0]:
+            if statusName == SuitBattleGlobals.LURED_STATUS:
                 r = 0.1
                 g = 0.7
                 b = 0.1
                 a = 1
-            elif statusName == SuitBattleGlobals.SuitStatusNames[1]\
-                    or statusName == SuitBattleGlobals.SuitStatusNames[3]:
+            elif statusName == SuitBattleGlobals.SOAKED_STATUS\
+                    or statusName == SuitBattleGlobals.DMG_DOWN_STATUS:
                 r = 0
                 g = 0
                 b = 1
@@ -516,11 +516,11 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
     def addStatus(self, statusString):
         SuitBase.SuitBase.addStatus(self, statusString)
 
-    def removeStatus(self, statusName):
-        return SuitBase.SuitBase.removeStatus(self, statusName)
+    def removeStatus(self, name):
+        return SuitBase.SuitBase.removeStatus(self, name)
 
     def doNeutralAnim(self, restart=1):
-        if self.getStatus(SuitBattleGlobals.SuitStatusNames[0]):
+        if self.getStatus(SuitBattleGlobals.LURED_STATUS):
             self.loop('lured', restart)
         else:
             self.loop('neutral', restart)

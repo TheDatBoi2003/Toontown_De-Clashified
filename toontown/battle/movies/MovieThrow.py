@@ -2,10 +2,10 @@ from direct.interval.IntervalGlobal import *
 
 import MovieCamera
 import MovieUtil
-from toontown.battle.movies.BattleProps import *
-from toontown.battle.movies.BattleSounds import *
 from MovieUtil import calcAvgSuitPos
 from toontown.battle.BattleBase import *
+from toontown.battle.movies.BattleProps import *
+from toontown.battle.movies.BattleSounds import *
 from toontown.suit.SuitDNA import *
 from toontown.toon.ToonDNA import *
 
@@ -43,19 +43,11 @@ def doThrows(throws):
             else:
                 suitThrowsDict[suitId] = [throw]
 
-    suitThrows = suitThrowsDict.values()
-
-    def compFunc(a, b):
-        if len(a) > len(b):
-            return 1
-        elif len(a) < len(b):
-            return -1
-        return 0
-
-    suitThrows.sort(compFunc)
+    suitThrows = MovieUtil.sortAttacks(suitThrowsDict)
     totalHitDict = {}
     singleHitDict = {}
     groupHitDict = {}
+    
     for throw in throws:
         if attackAffectsGroup(throw['track'], throw['level']):
             for i in xrange(len(throw['target'])):
@@ -292,13 +284,7 @@ def __throwPie(throw, delay, hitCount):
     if pieName == 'wedding-cake':
         splatName = 'splat-birthday-cake'
     splat = globalPropPool.getProp(splatName)
-    toonTrack = Sequence()
-    toonFace = Func(toon.headsUp, battle, suitPos)
-    toonTrack.append(Wait(delay))
-    toonTrack.append(toonFace)
-    toonTrack.append(ActorInterval(toon, 'throw'))
-    toonTrack.append(Func(toon.loop, 'neutral'))
-    toonTrack.append(Func(toon.setHpr, battle, origHpr))
+    toonTrack = toonThrowTrack(toon, battle, delay, suitPos, origHpr)
     pieShow = Func(MovieUtil.showProps, pies, hands)
     pieAnim = Func(__animProp, pies, pieName, pieType)
     pieScale1 = LerpScaleInterval(pie, 1.0, pie.getScale(), startScale=MovieUtil.PNT3_NEARZERO)
@@ -342,19 +328,8 @@ def __throwPie(throw, delay, hitCount):
         showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=THROW_TRACK)
         updateHealthBar = Func(suit.updateHealthBar, hp)
         if kbBonus > 0:
-            suitPos, suitHpr = battle.getActorPosHpr(suit)
-            suitType = getSuitBodyType(suit.getStyleName())
-            animTrack = Sequence()
-            animTrack.append(ActorInterval(suit, 'pie-small-react', duration=0.2))
-            if suitType == 'a':
-                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.43))
-            elif suitType == 'b':
-                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=1.94))
-            elif suitType == 'c':
-                animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.58))
-            animTrack.append(Func(battle.unlureSuit, suit))
-            moveTrack = Sequence(Wait(0.2), LerpPosInterval(suit, 0.6, pos=suitPos, other=battle))
-            suitInterval = Parallel(animTrack, moveTrack)
+            anim = 'pie-small-react'
+            suitInterval = MovieUtil.startSuitKnockbackInterval(suit, anim, battle)
         elif hitCount == 1:
             suitInterval = Parallel(ActorInterval(suit, 'pie-small-react'),
                                     MovieUtil.createSuitStunInterval(suit, 0.3, 1.3))
@@ -476,13 +451,7 @@ def __throwGroupPie(throw, delay, groupHitDict):
     numTargets = len(throw['target'])
     avgSuitPos = calcAvgSuitPos(throw)
     origHpr = toon.getHpr(battle)
-    toonTrack = Sequence()
-    toonFace = Func(toon.headsUp, battle, avgSuitPos)
-    toonTrack.append(Wait(delay))
-    toonTrack.append(toonFace)
-    toonTrack.append(ActorInterval(toon, 'throw'))
-    toonTrack.append(Func(toon.loop, 'neutral'))
-    toonTrack.append(Func(toon.setHpr, battle, origHpr))
+    toonTrack = toonThrowTrack(toon, battle, delay, avgSuitPos, origHpr)
     suits = []
     for i in xrange(numTargets):
         suits.append(throw['target'][i]['suit'])
@@ -531,19 +500,8 @@ def __throwGroupPie(throw, delay, groupHitDict):
             showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=THROW_TRACK)
             updateHealthBar = Func(suit.updateHealthBar, hp)
             if kbBonus > 0:
-                suitPos, suitHpr = battle.getActorPosHpr(suit)
-                suitType = getSuitBodyType(suit.getStyleName())
-                animTrack = Sequence()
-                animTrack.append(ActorInterval(suit, 'pie-small-react', duration=0.2))
-                if suitType == 'a':
-                    animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.43))
-                elif suitType == 'b':
-                    animTrack.append(ActorInterval(suit, 'slip-forward', startTime=1.94))
-                elif suitType == 'c':
-                    animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.58))
-                animTrack.append(Func(battle.unlureSuit, suit))
-                moveTrack = Sequence(Wait(0.2), LerpPosInterval(suit, 0.6, pos=suitPos, other=battle))
-                suitInterval = Parallel(animTrack, moveTrack)
+                anim = 'pie-small-react'
+                suitInterval = MovieUtil.startSuitKnockbackInterval(suit, anim, battle)
             elif groupHitDict[suit.doId] == 1:
                 suitInterval = Parallel(ActorInterval(suit, 'pie-small-react'),
                                         MovieUtil.createSuitStunInterval(suit, 0.3, 1.3))
@@ -580,6 +538,11 @@ def __throwGroupPie(throw, delay, groupHitDict):
             pieTrack,
             soundTrack,
             groupSuitResponseTrack]
+
+
+def toonThrowTrack(toon, battle, delay, suitPos, origHpr):
+    return Sequence(Wait(delay), Func(toon.headsUp, battle, suitPos), ActorInterval(toon, 'throw'),
+                    Func(toon.loop, 'neutral'), Func(toon.setHpr, battle, origHpr))
 
 
 def changeCakePartParent(pie, cakeParts):

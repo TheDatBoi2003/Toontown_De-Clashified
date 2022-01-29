@@ -2,12 +2,13 @@ from otp.ai.AIBase import *
 from direct.distributed.ClockDelta import *
 from BattleBase import *
 import BattleCalculatorAI
+from toontown.battle.calc.BattleCalculatorGlobals import TRAP_CONFLICT
 from toontown.toonbase.ToontownBattleGlobals import *
 from SuitBattleGlobals import *
 from panda3d.core import *
 import BattleExperienceAI
 from direct.distributed import DistributedObjectAI
-from direct.fsm import ClassicFSM, State
+from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.task import Task
 from direct.directnotify import DirectNotifyGlobal
@@ -262,7 +263,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         for s in self.suits:
             if s.battleTrap == NO_TRAP:
                 suitTraps += '9'
-            elif s.battleTrap == BattleCalculatorAI.BattleCalculatorAI.TRAP_CONFLICT:
+            elif s.battleTrap == TRAP_CONFLICT:
                 suitTraps += '9'
             else:
                 suitTraps += str(s.battleTrap)
@@ -377,7 +378,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 index = self.activeToons.index(toon)
                 toonAttack = getToonAttack(index)
             attackInfo = [index, toonAttack[TOON_TRACK_COL], toonAttack[TOON_LVL_COL], target,
-                          toonAttack[TOON_HP_COL], toonAttack[TOON_ACCBONUS_COL],
+                          toonAttack[TOON_HP_COL], toonAttack[TOON_MISSED_COL],
                           toonAttack[TOON_HPBONUS_COL], toonAttack[TOON_KBBONUS_COL],
                           toonAttack[SUIT_DIED_COL], toonAttack[SUIT_REVIVE_COL]]
             toonAttacks.append(attackInfo)
@@ -652,15 +653,6 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         else:
             self.needAdjust = 1
             self.__requestAdjust()
-
-    def __removeSuit(self, suit):
-        self.notify.debug('__removeSuit(%d)' % suit.doId)
-        self.suits.remove(suit)
-        self.activeSuits.remove(suit)
-        if self.luredSuits.count(suit) == 1:
-            self.luredSuits.remove(suit)
-        self.suitGone = 1
-        del suit.battleTrap
 
     def __removeToon(self, toonId, userAborted=0):
         self.notify.debug('__removeToon(%d)' % toonId)
@@ -1283,6 +1275,8 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.notify.debug('enterWaitForInput()')
         self.joinableFsm.request('Joinable')
         self.runableFsm.request('Runable')
+        for suit in self.activeSuits:
+            self.notify.info(suit.dna.name)
         self.resetResponses()
         self.__requestAdjust()
         if not self.tutorialFlag:
@@ -1466,7 +1460,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                                     self.notify.warning('Invalid targetIndex %s in hps %s.' % (targetIndex, hps))
                                     hp = 0
                                 toonHpDict[toon.doId][0] += hp
-                    elif attackAffectsGroup(track, level, attack[TOON_TRACK_COL]):
+                    elif attackAffectsGroup(track, level, attack[TOON_TRACK_COL]) or track == ZAP:
                         for suit in self.activeSuits:
                             targetIndex = self.activeSuits.index(suit)
                             if targetIndex < 0 or targetIndex >= len(hps):
@@ -1560,7 +1554,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 if target:
                     target.battleTrap = NO_TRAP
 
-        if self.battleCalc.trainTrapTriggered:
+        if self.battleCalc.trapCalculator.trainTrapTriggered:
             self.notify.debug('Train trap triggered, clearing all traps')
             for otherSuit in self.activeSuits:
                 self.notify.debug('suit =%d, oldBattleTrap=%d' % (otherSuit.doId, otherSuit.battleTrap))

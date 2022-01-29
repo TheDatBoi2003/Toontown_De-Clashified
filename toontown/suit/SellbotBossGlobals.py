@@ -10,6 +10,24 @@ AttackMultNerfed = 0.5
 HitCountDamage = (350, 375, 375)
 HitCountDamageNerfed = 175
 
+SellbotBossMaxDamage = [1000, 1250, 1500]
+SellbotBossMaxDamageNerfed = 500
+SellbotBossBattleOnePosHpr = (0, -35, 0, -90, 0, 0)
+SellbotBossBattleTwoPosHpr = (0, 60, 18, -90, 0, 0)
+SellbotBossBattleThreeHpr = (180, 0, 0)
+SellbotBossBottomPos = (0, -110, -6.5)
+SellbotBossDeathPos = (0, -175, -6.5)
+SellbotBossDooberTurnPosA = (-20, -50, 0)
+SellbotBossDooberTurnPosB = (20, -50, 0)
+SellbotBossDooberTurnPosDown = (0, -50, 0)
+SellbotBossDooberFlyPos = (0, -135, -6.5)
+SellbotBossTopRampPosA = (-80, -35, 18)
+SellbotBossTopRampTurnPosA = (-80, 10, 18)
+SellbotBossP3PosA = (-50, 40, 18)
+SellbotBossTopRampPosB = (80, -35, 18)
+SellbotBossTopRampTurnPosB = (80, 10, 18)
+SellbotBossP3PosB = (50, 60, 18)
+
 
 def getPieDamage(tier, toon=None):
     if toon:
@@ -23,10 +41,10 @@ def getPieLevel(tier):
     return 4 - tier
 
 
-StrafeGearSizes = (0.15, 0.2, 0.27)
-StrafeGearCount = (0.7, 1.0, 2.2)
+StrafeGearSizes = (0.15, 0.2, 0.25)
+StrafeGearCount = (0.7, 1.0, 2.0)
 StrafeGearTime = (1.8, 1.0, 0.8)
-StrafeSpreadAngles = (50, 60, 75)
+StrafeSpreadAngles = (50, 60, 65)
 
 BarrelDefs = {8000: {'type': DistributedHealBarrelAI.DistributedHealBarrelAI,
         'pos': Point3(15, 23, 0),

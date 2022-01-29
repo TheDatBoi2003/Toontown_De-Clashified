@@ -364,13 +364,9 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
         if indicator:
             indicator.request('Dead')
         diner = self.diners[chairIndex]
-        deathSuit = diner
-        locator = self.tableGroup.find('**/chair_%d' % (chairIndex + 1))
         deathSuit = diner.getLoseActor()
         interval = Sequence(Func(self.notify.debug, 'before actorinterval sit-lose'), ActorInterval(diner, 'sit-lose'), Func(self.notify.debug, 'before deathSuit.setHpr'), Func(deathSuit.setHpr, diner.getHpr()), Func(self.notify.debug, 'before diner.hide'), Func(diner.hide), Func(self.notify.debug, 'before deathSuit.reparentTo'), Func(deathSuit.reparentTo, self.chairLocators[chairIndex]), Func(self.notify.debug, 'befor ActorInterval lose'), ActorInterval(deathSuit, 'lose', duration=MovieUtil.SUIT_LOSE_DURATION), Func(self.notify.debug, 'before remove deathsuit'), Func(removeDeathSuit, diner, deathSuit, name='remove-death-suit-%d-%d' % (chairIndex, self.index)), Func(self.notify.debug, 'diner.stash'), Func(diner.stash))
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
-        deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
-        deathSoundTrack = Sequence(Wait(0.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2, node=deathSuit), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8, node=deathSuit), SoundInterval(deathSound, volume=0.32, node=deathSuit))
+        deathSoundTrack = MovieUtil.getDeathSoundtrack(deathSuit)
         intervalName = 'dinerDie-%d-%d' % (self.index, chairIndex)
         deathIval = Parallel(interval, deathSoundTrack)
         deathIval.start()
@@ -819,67 +815,6 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
             self.pitcherSmoother.applySmoothHpr(self.waterPitcherNode)
         self.pitcherSmoother.clearPositions(1)
 
-    def getSprayTrack(self, color, origin, target, dScaleUp, dHold, dScaleDown, horizScale = 1.0, vertScale = 1.0, parent = render):
-        track = Sequence()
-        SPRAY_LEN = 1.5
-        sprayProp = MovieUtil.globalPropPool.getProp('spray')
-        sprayScale = hidden.attachNewNode('spray-parent')
-        sprayRot = hidden.attachNewNode('spray-rotate')
-        spray = sprayRot
-        spray.setColor(color)
-        if color[3] < 1.0:
-            spray.setTransparency(1)
-
-        def showSpray(sprayScale, sprayRot, sprayProp, origin, target, parent):
-            if callable(origin):
-                origin = origin()
-            if callable(target):
-                target = target()
-            sprayRot.reparentTo(parent)
-            sprayRot.clearMat()
-            sprayScale.reparentTo(sprayRot)
-            sprayScale.clearMat()
-            sprayProp.reparentTo(sprayScale)
-            sprayProp.clearMat()
-            sprayRot.setPos(origin)
-            sprayRot.lookAt(Point3(target))
-
-        track.append(Func(showSpray, sprayScale, sprayRot, sprayProp, origin, target, parent))
-
-        def calcTargetScale(target = target, origin = origin, horizScale = horizScale, vertScale = vertScale):
-            if callable(target):
-                target = target()
-            if callable(origin):
-                origin = origin()
-            distance = Vec3(target - origin).length()
-            yScale = distance / SPRAY_LEN
-            targetScale = Point3(yScale * horizScale, yScale, yScale * vertScale)
-            return targetScale
-
-        track.append(LerpScaleInterval(sprayScale, dScaleUp, calcTargetScale, startScale=Point3(0.01, 0.01, 0.01)))
-        track.append(Func(self.checkHitObject))
-        track.append(Wait(dHold))
-
-        def prepareToShrinkSpray(spray, sprayProp, origin, target):
-            if callable(target):
-                target = target()
-            if callable(origin):
-                origin = origin()
-            sprayProp.setPos(Point3(0.0, -SPRAY_LEN, 0.0))
-            spray.setPos(target)
-
-        track.append(Func(prepareToShrinkSpray, spray, sprayProp, origin, target))
-        track.append(LerpScaleInterval(sprayScale, dScaleDown, Point3(0.01, 0.01, 0.01)))
-
-        def hideSpray(spray, sprayScale, sprayRot, sprayProp, propPool):
-            sprayProp.detachNode()
-            MovieUtil.removeProp(sprayProp)
-            sprayRot.removeNode()
-            sprayScale.removeNode()
-
-        track.append(Func(hideSpray, spray, sprayScale, sprayRot, sprayProp, MovieUtil.globalPropPool))
-        return track
-
     def checkHitObject(self):
         if not self.hitObject:
             return
@@ -1031,7 +966,7 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
         dScaleDown = 0.1
         horizScale = 0.1
         vertScale = 0.1
-        sprayTrack = self.getSprayTrack(color, origin, target, dScaleUp, dHold, dScaleDown, horizScale, vertScale)
+        sprayTrack = MovieUtil.getSprayTrack(color, origin, target, dScaleUp, dHold, dScaleDown, horizScale, vertScale)
         duration = self.squirtSfx.length()
         if sprayTrack.getDuration() < duration:
             duration = sprayTrack.getDuration()

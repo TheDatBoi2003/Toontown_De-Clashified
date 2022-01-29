@@ -1,4 +1,6 @@
 from direct.interval.IntervalGlobal import *
+
+import toontown.battle.movies.MovieUtil
 from toontown.battle.BattleBase import *
 from toontown.battle.movies.BattleProps import *
 from toontown.battle.movies.BattleSounds import *
@@ -9,7 +11,7 @@ import MovieNPCSOS
 from MovieUtil import calcAvgSuitPos
 from direct.showutil import Effects
 
-from toontown.battle.movies import BattleParticles
+from toontown.battle.movies import BattleParticles, MovieFire
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieDrop')
 hitSoundFiles = (
@@ -74,16 +76,8 @@ def doDrops(drops):
                 else:
                     suitDropsDict[suitId] = [(drop, target)]
 
-    suitDrops = suitDropsDict.values()
+    suitDrops = MovieUtil.sortAttacks(suitDropsDict)
 
-    def compFunc(a, b):
-        if len(a) > len(b):
-            return 1
-        elif len(a) < len(b):
-            return -1
-        return 0
-
-    suitDrops.sort(compFunc)
     delay = 0.0
     mainTrack = Parallel(name='toplevel-drop')
     npcDrops = {}
@@ -262,30 +256,8 @@ def __dropObject(drop, delay, objName, level, target, npcDrops, lastDrop):
     node.setBounds(OmniBoundingVolume())
     node.setFinal(1)
     soundTrack = __getSoundTrack(level, delay, hitSuit, toon, died or not lastDrop)
-    toonTrack = Sequence()
-    if repeatNPC == 0:
-        toonFace = Func(toon.headsUp, battle, suitPos)
-        toonTrack.append(Wait(delay))
-        toonTrack.append(toonFace)
-        toonTrack.append(ActorInterval(toon, 'pushbutton'))
-        toonTrack.append(Func(toon.loop, 'neutral'))
-        toonTrack.append(Func(toon.setHpr, battle, origHpr))
-    buttonTrack = Sequence()
-    if repeatNPC == 0:
-        button = globalPropPool.getProp('button')
-        button2 = MovieUtil.copyProp(button)
-        buttons = [button, button2]
-        hands = toon.getLeftHands()
-        buttonShow = Func(MovieUtil.showProps, buttons, hands)
-        buttonScaleUp = LerpScaleInterval(button, 1.0, button.getScale(), startScale=Point3(0.01, 0.01, 0.01))
-        buttonScaleDown = LerpScaleInterval(button, 1.0, Point3(0.01, 0.01, 0.01), startScale=button.getScale())
-        buttonHide = Func(MovieUtil.removeProps, buttons)
-        buttonTrack.append(Wait(delay))
-        buttonTrack.append(buttonShow)
-        buttonTrack.append(buttonScaleUp)
-        buttonTrack.append(Wait(2.5))
-        buttonTrack.append(buttonScaleDown)
-        buttonTrack.append(buttonHide)
+    if not repeatNPC:
+        toonTrack, buttonTrack = MovieUtil.createButtonInterval(battle, delay, origHpr, suitPos, toon)
     objectTrack = Sequence()
 
     def posProp(prop, miss):
@@ -442,7 +414,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
                 return suitTrack
             elif not suit.getSkelecog():
                 headless = True
-                suitGettingHit.append(headExplodeTrack(suit, battle))
+                suitGettingHit.append(MovieUtil.spawnHeadExplodeTrack(suit, battle))
         suitTrack.append(suitGettingHit)
         bonusTrack = None
         if 'hpBonus' in target:
@@ -471,46 +443,6 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
         else:
             suitTrack = MovieUtil.createSuitDodgeMultitrack(delay + tSuitDodges, suit, leftSuits, rightSuits)
     return suitTrack
-
-
-def headExplodeTrack(suit, battle):
-    headParts = suit.getHeadParts()
-    suitTrack = Sequence()
-    suitPos, suitHpr = battle.getActorPosHpr(suit)
-    suitTrack.append(Wait(0.15))
-    explodeTrack = Parallel()
-    for part in headParts:
-        explodeTrack.append(Func(part.detachNode))
-    suitTrack.append(explodeTrack)
-    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
-    deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.8))
-    BattleParticles.loadParticles()
-    gearPoint = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height + 1)
-    smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
-    smallGears.setPos(gearPoint)
-    smallGears.setDepthWrite(False)
-    gears1Track = Sequence(Wait(0.5),
-                           ParticleInterval(smallGears, battle, worldRelative=False, duration=1.0, cleanup=True),
-                           name='gears1Track')
-    explosionTrack = Sequence()
-    explosionTrack.append(MovieUtil.createKapowExplosionTrack(battle, explosionPoint=gearPoint))
-    singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
-    singleGear.setPos(gearPoint)
-    singleGear.setDepthWrite(False)
-    smallGearExplosion = BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
-    smallGearExplosion.setPos(gearPoint)
-    smallGearExplosion.setDepthWrite(False)
-    bigGearExplosion = BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
-    bigGearExplosion.setPos(gearPoint)
-    bigGearExplosion.setDepthWrite(False)
-    gears2MTrack = Track(
-        (0.1, ParticleInterval(singleGear, battle, worldRelative=False, duration=0.4, cleanup=True)),
-        (0.5, ParticleInterval(smallGearExplosion, battle, worldRelative=False, duration=0.5, cleanup=True)),
-        (0.9, ParticleInterval(bigGearExplosion, battle, worldRelative=False, duration=2.0, cleanup=True)),
-        name='gears2MTrack'
-    )
-
-    return Parallel(suitTrack, explosionTrack, deathSoundTrack, gears1Track, gears2MTrack)
 
 
 def suitCrashTrack(suit):

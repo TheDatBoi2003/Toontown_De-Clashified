@@ -16,7 +16,7 @@ class InventoryBase(DirectObject.DirectObject):
             self.inventory = []
             for track in xrange(0, len(Tracks)):
                 level = []
-                for thisLevel in xrange(0, len(Levels[track])):
+                for thisLevel in xrange(0, len(Levels)):
                     level.append(0)
 
                 self.inventory.append(level)
@@ -49,7 +49,7 @@ class InventoryBase(DirectObject.DirectObject):
         dataList = self.inventory
         datagram = PyDatagram()
         for track in xrange(0, len(Tracks)):
-            for level in xrange(0, len(Levels[track])):
+            for level in xrange(0, len(Levels)):
                 datagram.addUint8(dataList[track][level])
 
         dgi = PyDatagramIterator(datagram)
@@ -61,7 +61,7 @@ class InventoryBase(DirectObject.DirectObject):
         dgi = PyDatagramIterator(dg)
         for track in xrange(0, len(Tracks)):
             subList = []
-            for level in xrange(0, len(Levels[track])):
+            for level in xrange(0, len(Levels)):
                 if dgi.getRemainingSize() > 0:
                     value = dgi.getUint8()
                 else:
@@ -93,7 +93,7 @@ class InventoryBase(DirectObject.DirectObject):
         return self.addItems(track, level, 1)
 
     def addItems(self, track, level, amount):
-        if type(track) == type(''):
+        if isinstance(track, type('')):
             track = Tracks.index(track)
         max = self.getMax(track, level)
         if hasattr(self.toon, 'experience') and hasattr(self.toon.experience, 'getExpLevel'):
@@ -119,7 +119,7 @@ class InventoryBase(DirectObject.DirectObject):
     def numItem(self, track, level):
         if type(track) == type(''):
             track = Tracks.index(track)
-        if track > len(Tracks) - 1 or level > len(Levels[0]) - 1:
+        if track > len(Tracks) - 1 or level > len(Levels) - 1:
             self.notify.warning("%s is using a gag that doesn't exist %s %s!" % (self.toon.doId, track, level))
             return -1
         return self.inventory[track][level]
@@ -152,9 +152,9 @@ class InventoryBase(DirectObject.DirectObject):
             return 0
 
     def getMax(self, track, level):
-        if type(track) == type(''):
+        if isinstance(track, type('')):
             track = Tracks.index(track)
-        maxList = CarryLimits[track]
+        maxList = CarryLimits
         if self.toon.experience:
             return maxList[self.toon.experience.getExpLevel(track)][level]
         else:
@@ -163,27 +163,27 @@ class InventoryBase(DirectObject.DirectObject):
     def getTrackAndLevel(self, propName):
         for track in xrange(0, len(Tracks)):
             if AvProps[track].count(propName):
-                return (tracks, AvProps[track].index(propName))
+                return tracks, AvProps[track].index(propName)
 
-        return (-1, -1)
+        return -1, -1
 
     def calcTotalProps(self):
         self.totalProps = 0
         for track in xrange(0, len(Tracks)):
-            for level in xrange(0, len(Levels[track])):
+            for level in xrange(0, len(Levels)):
                 self.totalProps += self.numItem(track, level)
 
     def countPropsInList(self, invList):
         totalProps = 0
         for track in xrange(len(Tracks)):
-            for level in xrange(len(Levels[track])):
+            for level in xrange(len(Levels)):
                 totalProps += invList[track][level]
 
         return totalProps
 
     def setToMin(self, newInventory):
         for track in xrange(len(Tracks)):
-            for level in xrange(len(Levels[track])):
+            for level in xrange(len(Levels)):
                 self.inventory[track][level] = min(self.inventory[track][level], newInventory[track][level])
 
         self.calcTotalProps()
@@ -195,7 +195,7 @@ class InventoryBase(DirectObject.DirectObject):
         else:
             tempInv = newInventory
         for track in xrange(len(Tracks)):
-            for level in xrange(len(Levels[track])):
+            for level in xrange(len(Levels)):
                 if tempInv[track][level] > self.getMax(track, level):
                     return 0
                 if tempInv[track][level] > 0 and not self.toon.hasTrackAccess(track):
@@ -236,7 +236,7 @@ class InventoryBase(DirectObject.DirectObject):
     def maxOutInv(self):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     self.addItem(track, level)
 
         addedAnything = 1
@@ -245,7 +245,7 @@ class InventoryBase(DirectObject.DirectObject):
             result = 0
             for track in xrange(len(Tracks)):
                 if self.toon.hasTrackAccess(track):
-                    level = len(Levels[track]) - 1
+                    level = len(Levels) - 1
                     result = self.addItem(track, level)
                     level -= 1
                     while result <= 0 and level >= 0:

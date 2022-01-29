@@ -460,21 +460,11 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
     suit.battleTrapProp = trapProp
     result.append(Func(battle.removeTrap, suit, True))
     result.append(Func(battle.unlureSuit, suit))
-    result.append(__createSuitResetPosTrack(suit, battle))
+    result.append(MovieUtil.createSuitResetPosTrack(suit, battle))
     result.append(Func(suit.loop, 'neutral'))
     if trapName == 'traintrack':
         result.append(Func(MovieUtil.removeProp, trapProp))
     return result
-
-
-def __createSuitResetPosTrack(suit, battle):
-    resetPos, resetHpr = battle.getActorPosHpr(suit)
-    moveDuration = 0.5
-    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr),
-                         ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001),
-                         Func(suit.loop, 'neutral'))
-    moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
-    return Parallel(walkTrack, moveTrack)
 
 
 def getSplicedLerpAnimsTrack(actor, animName, origDuration, newDuration, startTime=0, fps=30):

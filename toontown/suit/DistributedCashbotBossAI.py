@@ -1,5 +1,7 @@
 from panda3d.core import *
 from direct.directnotify import DirectNotifyGlobal
+
+from toontown.building import SuitBuildingGlobals
 from toontown.toonbase import ToontownGlobals
 from toontown.coghq import DistributedCashbotBossCraneAI
 from toontown.coghq import DistributedCashbotBossSafeAI
@@ -55,25 +57,31 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         return str(self.rewardId)
 
     def makeBattleOneBattles(self):
-        self.postBattleState = 'PrepareBattleThree'
+        self.postBattleState = 'PrepareBattleTwo'
         self.initializeBattles(1, ToontownGlobals.CashbotBossBattleOnePosHpr)
 
+    # def generateSuits(self, battleNumber):
+    #     cogs = self.invokeSuitPlanner(11, 0)
+    #     skelecogs = self.invokeSuitPlanner(12, 1)
+    #     activeSuits = cogs['activeSuits'] + skelecogs['activeSuits']
+    #     reserveSuits = cogs['reserveSuits'] + skelecogs['reserveSuits']
+    #     random.shuffle(activeSuits)
+    #     while len(activeSuits) > 4:
+    #         suit = activeSuits.pop()
+    #         reserveSuits.append((suit, 100))
+    #
+    #     def compareJoinChance(a, b):
+    #         return cmp(a[1], b[1])
+    #
+    #     reserveSuits.sort(compareJoinChance)
+    #     return {'activeSuits': activeSuits,
+    #      'reserveSuits': reserveSuits}
+
     def generateSuits(self, battleNumber):
-        cogs = self.invokeSuitPlanner(11, 0)
-        skelecogs = self.invokeSuitPlanner(12, 1)
-        activeSuits = cogs['activeSuits'] + skelecogs['activeSuits']
-        reserveSuits = cogs['reserveSuits'] + skelecogs['reserveSuits']
-        random.shuffle(activeSuits)
-        while len(activeSuits) > 4:
-            suit = activeSuits.pop()
-            reserveSuits.append((suit, 100))
-
-        def compareJoinChance(a, b):
-            return cmp(a[1], b[1])
-
-        reserveSuits.sort(compareJoinChance)
-        return {'activeSuits': activeSuits,
-         'reserveSuits': reserveSuits}
+        if battleNumber == 1:
+            return self.invokeSuitPlanner(11, 0)
+        else:
+            return self.invokeSuitPlanner(12, 1)
 
     def removeToon(self, avId):
         if self.cranes:
@@ -401,6 +409,43 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def exitIntroduction(self):
         DistributedBossCogAI.DistributedBossCogAI.exitIntroduction(self)
         self.__deleteBattleThreeObjects()
+
+    def makeBattleTwoBattles(self):
+        self.postBattleState = 'PrepareBattleThree'
+        self.initializeBattles(2, ToontownGlobals.CashbotBossBattleThreePosHpr)
+
+    def enterPrepareBattleTwo(self):
+        self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 45, self.__donePrepareBattleTwo)
+        self.divideToons()
+        self.makeBattleTwoBattles()
+        self.__makeBattleThreeObjects()
+        self.__resetBattleThreeObjects()
+        self.updateBattleTier()
+
+    def __donePrepareBattleTwo(self, avIds):
+        self.b_setState('BattleTwo')
+
+    def exitPrepareBattleTwo(self):
+        self.ignoreBarrier(self.barrier)
+        self.__deleteBattleThreeObjects()
+
+    def enterRollToBattleTwo(self):
+        self.barrier = self.beginBarrier('RollToBattleTwo', self.involvedToons, 1, self.__doneRollToBattleTwo)
+
+    def __doneRollToBattleTwo(self, avIds):
+        self.b_setState('PrepareBattleTwo')
+
+    def exitRollToBattleTwo(self):
+        self.ignoreBarrier(self.barrier)
+
+    def enterBattleTwo(self):
+        if self.battleA:
+            self.battleA.startBattle(self.toonsA, self.suitsA)
+        if self.battleB:
+            self.battleB.startBattle(self.toonsB, self.suitsB)
+
+    def exitBattleTwo(self):
+        self.resetBattles()
 
     def enterPrepareBattleThree(self):
         self.resetBattles()

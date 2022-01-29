@@ -275,6 +275,14 @@ def chooseSquirtCloseShot(squirts, suitSquirtsDict, openDuration, openName, atta
     return track
 
 
+def chooseZapShot(zaps, attackDuration, enterDuration=0.0, exitDuration=0.0):
+    enterShot = chooseNPCEnterShot(zaps, enterDuration)
+    exitShot = chooseNPCExitShot(zaps, exitDuration)
+    fullShot = allGroupHighShot(None, attackDuration)
+    track = Sequence(enterShot, fullShot, exitShot)
+    return track
+
+
 def chooseDropShot(drops, suitDropsDict, attackDuration, enterDuration=0.0, exitDuration=0.0):
     enterShot = chooseNPCEnterShot(drops, enterDuration)
     exitShot = chooseNPCExitShot(drops, exitDuration)

@@ -983,12 +983,12 @@ dclass DistributedToon : DistributedPlayer {
   toonUp(uint16) broadcast ownrecv;
   takeDamage(uint16) broadcast ownrecv;
   setBattleId(uint32 = 0) required broadcast ram;
-  setExperience(blob = [0 * 14]) required ownrecv db;
+  setExperience(uint16[] = [0, 0, 0, 0, 0, 0, 0, 0]) required ownrecv db;
   setMaxCarry(uint8 = 20) required ownrecv db;
-  setTrackAccess(uint16[] = [0, 0, 0, 0, 1, 1, 0]) required broadcast ownrecv db;
+  setTrackAccess(uint16[] = [0, 0, 0, 0, 1, 1, 0, 0]) required broadcast ownrecv db;
   setTrackProgress(int8 = -1, uint32 = 0) required ownrecv db;
-  setTrackPrestige(uint8[] = [0, 0, 0, 0, 0, 0, 0]) required broadcast ownrecv db;
-  setInventory(blob = [0 * 7, 0 * 7, 0 * 7, 0 * 7, 1, 0 * 6, 1, 0 * 6, 0 * 7]) required ownrecv db;
+  setTrackPrestige(uint8[] = [0, 0, 0, 0, 0, 0, 0, 0]) required broadcast ownrecv db;
+  setInventory(blob = [0 * 7, 0 * 7, 0 * 7, 0 * 7, 1, 0 * 6, 1, 0 * 6, 0 * 7, 0 * 7]) required ownrecv db;
   setMaxNPCFriends(uint16 = 16) required ownrecv db;
   setNPCFriendsDict(Friend[] = []) required ownrecv db;
   setDefaultShard(uint32 = 0) required ownrecv db;
@@ -1342,7 +1342,6 @@ dclass DistributedSellbotBoss : DistributedBossCog {
   hitBossBonus(uint16) broadcast;
   hitBossInsides() airecv clsend;
   hitToon(uint32) airecv clsend;
-  finalPieSplat() airecv clsend;
   touchCage() airecv clsend;
   doStrafe(uint8, uint8) broadcast;
   cagedToonBattleThree(uint16, uint32) broadcast;

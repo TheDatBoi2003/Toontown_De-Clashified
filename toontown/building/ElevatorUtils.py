@@ -91,7 +91,9 @@ def getCloseInterval(distObj, leftDoor, rightDoor, closeSfx, finalCloseSfx, type
     return Parallel(sound, left, right)
 
 
-def getRideElevatorInterval(type = ELEVATOR_NORMAL):
+def getRideElevatorInterval(type = ELEVATOR_NORMAL, intervalDuration=4.0):
+    tLong = intervalDuration * 0.25
+    tShort = intervalDuration * 0.125
     if type == ELEVATOR_VP or type == ELEVATOR_CFO or type == ELEVATOR_CJ:
         yValue = 30
         zMin = 7.8
@@ -107,8 +109,8 @@ def getRideElevatorInterval(type = ELEVATOR_NORMAL):
      ELEVATOR_CJ,
      ELEVATOR_BB):
         base.camLens.setFov(ToontownGlobals.CogHQCameraFov)
-        interval = Sequence(Wait(0.5), LerpPosInterval(camera, 0.5, Point3(0, yValue, zMin), startPos=Point3(0, yValue, zMid), blendType='easeOut'), LerpPosInterval(camera, 0.5, Point3(0, yValue, zMid), startPos=Point3(0, yValue, zMin)), Wait(1.0), LerpPosInterval(camera, 0.5, Point3(0, yValue, zMax), startPos=Point3(0, yValue, zMid), blendType='easeOut'), LerpPosInterval(camera, 1.0, Point3(0, yValue, zMid), startPos=Point3(0, yValue, zMax)))
+        interval = Sequence(Wait(tShort), LerpPosInterval(camera, tShort, Point3(0, yValue, zMin), startPos=Point3(0, yValue, zMid), blendType='easeOut'), LerpPosInterval(camera, tShort, Point3(0, yValue, zMid), startPos=Point3(0, yValue, zMin)), Wait(tLong), LerpPosInterval(camera, tShort, Point3(0, yValue, zMax), startPos=Point3(0, yValue, zMid), blendType='easeOut'), LerpPosInterval(camera, tLong, Point3(0, yValue, zMid), startPos=Point3(0, yValue, zMax)))
     else:
         base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
-        interval = Sequence(Wait(0.5), LerpPosInterval(camera, 0.5, Point3(0, 14, 3.8), startPos=Point3(0, 14, 4), blendType='easeOut'), LerpPosInterval(camera, 0.5, Point3(0, 14, 4), startPos=Point3(0, 14, 3.8)), Wait(1.0), LerpPosInterval(camera, 0.5, Point3(0, 14, 4.2), startPos=Point3(0, 14, 4), blendType='easeOut'), LerpPosInterval(camera, 1.0, Point3(0, 14, 4), startPos=Point3(0, 14, 4.2)))
+        interval = Sequence(Wait(tShort), LerpPosInterval(camera, tShort, Point3(0, 14, 3.8), startPos=Point3(0, 14, 4), blendType='easeOut'), LerpPosInterval(camera, tShort, Point3(0, 14, 4), startPos=Point3(0, 14, 3.8)), Wait(tLong), LerpPosInterval(camera, tShort, Point3(0, 14, 4.2), startPos=Point3(0, 14, 4), blendType='easeOut'), LerpPosInterval(camera, tLong, Point3(0, 14, 4), startPos=Point3(0, 14, 4.2)))
     return interval

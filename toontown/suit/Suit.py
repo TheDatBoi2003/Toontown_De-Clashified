@@ -34,6 +34,7 @@ AllSuitsBattle = (('drop-react', 'anvil-drop'),
                   ('rake-react', 'rake'),
                   ('hypnotized', 'hypnotize'),
                   ('soak', 'soak'),
+                  ('shock', 'shock'),
                   ('lured', 'lured'))
 SuitsCEOBattle = (('sit', 'sit'),
                   ('sit-eat-in', 'sit-eat-in'),
@@ -453,6 +454,7 @@ class Suit(Avatar.Avatar):
         self.headColor = None
         self.headTexture = None
         self.loseActor = None
+        self.zapActor = None
         self.isSkeleton = 0
         if dna.name == 'f':
             self.scale = 4.0 / cSize
@@ -1094,7 +1096,31 @@ class Suit(Avatar.Avatar):
             self.notify.debug('cleanupLoseActor() - got one')
             self.loseActor.cleanup()
         self.loseActor = None
-        return
+
+    def getZapActor(self):
+        if not self.zapActor:
+            loseModel = 'phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero'
+            filePrefix, phase = TutorialModelDict[self.style.body]
+            shockAnim = 'phase_5' + filePrefix + 'shock'
+            self.zapActor = Actor.Actor(loseModel, {'shock': shockAnim})
+            self.generateCorporateTie(self.zapActor)
+
+        self.zapActor.setScale(self.scale)
+        self.zapActor.setPos(self.getPos())
+        self.zapActor.setHpr(self.getHpr())
+        shadowJoint = self.zapActor.find('**/joint_shadow')
+        dropShadow = loader.loadModel('phase_3/models/props/drop_shadow')
+        dropShadow.setScale(0.45)
+        dropShadow.setColor(0.0, 0.0, 0.0, 0.5)
+        dropShadow.reparentTo(shadowJoint)
+        return self.zapActor
+
+    def cleanupZapActor(self):
+        self.notify.debug('cleanupLoseActor()')
+        if self.zapActor:
+            self.notify.debug('cleanupLoseActor() - got one')
+            self.zapActor.cleanup()
+        self.zapActor = None
 
     def makeSkeleton(self):
         model = 'phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero'

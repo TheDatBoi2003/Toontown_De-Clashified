@@ -18,6 +18,7 @@ import MovieThrow
 import MovieToonVictory
 import MovieTrap
 import MovieUtil
+import MovieZap
 import toontown.battle.movies.PlayByPlayText
 import toontown.battle.movies.RewardPanel
 from toontown.battle.SuitBattleGlobals import *
@@ -327,7 +328,7 @@ class Movie(DirectObject.DirectObject):
                                                                                       0,
                                                                                       0,
                                                                                       0], noSkip=True))
-        self.track += self.rewardPanel.getTrackIntervalList(base.localAvatar, THROW_TRACK, 0, 1)
+        self.track += self.rewardPanel.getTrackIntervalList(base.localAvatar, THROW, 0, 1)
         self.track.append(Func(self.tutRewardDialog_1.show))
         self.track.start()
         return
@@ -341,7 +342,7 @@ class Movie(DirectObject.DirectObject):
         self._deleteTrack()
         self.track = Sequence(name='tutorial-reward-2')
         self.track.append(Wait(1.0))
-        self.track += self.rewardPanel.getTrackIntervalList(base.localAvatar, SQUIRT_TRACK, 0, 1)
+        self.track += self.rewardPanel.getTrackIntervalList(base.localAvatar, SQUIRT, 0, 1)
         self.track.append(Func(self.tutRewardDialog_2.show))
         self.track.start()
         return
@@ -489,6 +490,10 @@ class Movie(DirectObject.DirectObject):
                 track.append(interval)
                 camTrack.append(cameraInterval)
             interval, cameraInterval = MovieSquirt.doSquirts(self.__findToonAttack(SQUIRT))
+            if interval:
+                track.append(interval)
+                camTrack.append(cameraInterval)
+            interval, cameraInterval = MovieZap.doZaps(self.__findToonAttack(ZAP))
             if interval:
                 track.append(interval)
                 camTrack.append(cameraInterval)
@@ -653,6 +658,33 @@ class Movie(DirectObject.DirectObject):
                             targets.append(suitDict)
 
                     attackDict['target'] = targets
+                elif track == ZAP:
+                    targets = []
+                    zapOrder = [-1 for _ in xrange(len(AvZapJumps[0]))]
+                    for suit in suits:
+                        if suit != -1:
+                            target = self.battle.findSuit(suit)
+                            targetIndex = suits.index(suit)
+                            suitDict = {}
+                            suitDict['suit'] = target
+                            suitDict['hp'] = hps[targetIndex]
+                            zapIndex = toonAttack[TOON_HPBONUS_COL][targetIndex]
+                            if len(AvZapJumps[0]) > zapIndex >= 0:
+                                zapOrder[zapIndex] = targetIndex
+                            else:
+                                self.notify.warning('Unexpected zap index value: %d' % zapIndex)
+                            suitDict['hpBonus'] = 0
+                            suitDict['kbBonus'] = 0
+                            suitDict['died'] = toonAttack[SUIT_DIED_COL] & 1 << targetIndex
+                            suitDict['revived'] = toonAttack[SUIT_REVIVE_COL] & 1 << targetIndex
+                            if suitDict['died'] != 0:
+                                pass
+                            suitDict['leftSuits'] = []
+                            suitDict['rightSuits'] = []
+                            targets.append(suitDict)
+
+                    attackDict['target'] = targets
+                    attackDict['order'] = zapOrder
                 else:
                     targetIndex = toonAttack[TOON_TGT_COL]
                     if targetIndex < 0:
@@ -695,7 +727,7 @@ class Movie(DirectObject.DirectObject):
                             attackDict['target'] = [suitDict]
                         else:
                             attackDict['target'] = suitDict
-                attackDict['sidestep'] = toonAttack[TOON_ACCBONUS_COL]
+                attackDict['sidestep'] = toonAttack[TOON_MISSED_COL]
                 if 'npcId' in attackDict:
                     attackDict['sidestep'] = 0
                 attackDict['battle'] = self.battle

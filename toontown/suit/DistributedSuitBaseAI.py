@@ -160,9 +160,6 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
     def getStatus(self, name):
         return SuitBase.SuitBase.getStatus(self, name)
 
-    def getLureStatus(self):
-        return SuitBase.SuitBase.getLureRounds(self)
-
     def addStatus(self, status):
         if not status['name'] in self.statuses.keys():
             self.notify.info("Cog's status updated: " + status['name'])

@@ -30,13 +30,14 @@ NPCSOSfn_dict = {ToontownBattleGlobals.NPC_COGS_MISS: __cogsMiss,
  ToontownBattleGlobals.NPC_TOONS_HIT: __toonsHit,
  ToontownBattleGlobals.NPC_RESTOCK_GAGS: __restockGags}
 
+
 def doNPCSOSs(NPCSOSs):
     if len(NPCSOSs) == 0:
-        return (None, None)
+        return None, None
     track = Sequence()
     textTrack = Sequence()
-    for n in NPCSOSs:
-        interval, textIval = __doNPCSOS(n)
+    for npcSos in NPCSOSs:
+        interval, textIval = __doNPCSOS(npcSos)
         if interval:
             track.append(interval)
             textTrack.append(textIval)
@@ -56,7 +57,6 @@ def __doNPCSOS(sos):
         return NPCSOSfn_dict[track](sos, level, hp)
     else:
         return __cogsMiss(sos, 0, 0)
-    return
 
 
 def __healToon(toon, hp, ineffective = 0):

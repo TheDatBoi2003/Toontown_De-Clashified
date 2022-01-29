@@ -138,7 +138,7 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
     def touchCage(self):
         avId = self.air.getAvatarIdFromSender()
         currState = self.getCurrentOrNextState()
-        if currState != 'BattleThree' and currState != 'NearVictory':
+        if currState != 'BattleThree':
             return
         if not self.validate(avId, avId in self.involvedToons, 'touchCage from unknown avatar'):
             return
@@ -149,12 +149,6 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
 
     def touchWitnessStand(self):
         self.touchCage()
-
-    def finalPieSplat(self):
-        self.notify.debug('finalPieSplat')
-        if self.state != 'NearVictory':
-            return
-        self.b_setState('Victory')
 
     def doTaunt(self):
         if not self.state == 'BattleThree':
@@ -609,12 +603,6 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
         taskMgr.remove(taskName)
         self.__resetLawyers()
         self.__deleteBattleThreeObjects()
-
-    def enterNearVictory(self):
-        self.resetBattles()
-
-    def exitNearVictory(self):
-        pass
 
     def enterVictory(self):
         self.resetBattles()

@@ -258,7 +258,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                                                 text='', text_scale=0.16, text_fg=(0, 0, 0, 0.8),
                                                 text_align=TextNode.ACenter, text_pos=(0, -0.05)))
             self.buttons.append([])
-            for item in xrange(0, len(Levels[track])):
+            for item in xrange(0, len(Levels)):
                 button = DirectButton(parent=self.trackRows[track],
                                       image=(self.upButton, self.downButton, self.rolloverButton, self.flatButton),
                                       geom=self.invModels[track][item],
@@ -368,15 +368,15 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         accString = ('%s%% (%s)' % (accuracy, AvTrackAccStrings[accKey]))
         if track is TRAP_TRACK:
             if self.toon.checkTrackPrestige(track):
-                healthyDamage = getTrapPropDamage(level, self.toon, healthBonus=1)
-                execDamage = getTrapPropDamage(level, self.toon, execBonus=1, healthBonus=1)
+                healthyDamage = getTrapDamage(level, self.toon, healthBonus=1)
+                execDamage = getTrapDamage(level, self.toon, execBonus=1, healthBonus=1)
                 healthyStr = 'Healthy Cog: %d|%d' % (healthyDamage, execDamage)
             else:
                 healthyStr = ''
             self.detailDataLabel.configure(text=TTLocalizer.InventoryTrapDetailData %
                                                 {'accuracy': accString,
                                                  'damage': damage,
-                                                 'damageExe': getTrapPropDamage(level, self.toon, execBonus=1),
+                                                 'damageExe': getTrapDamage(level, self.toon, execBonus=1),
                                                  'healthy': healthyStr,
                                                  'singleOrGroup': self.getSingleGroupStr(track, level)})
         elif track is LURE_TRACK:
@@ -388,10 +388,23 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                                                 {'accuracy': accString,
                                                  'bonus': knockback,
                                                  'singleOrGroup': self.getSingleGroupStr(track, level)})
+        elif track is ZAP_TRACK:
+            if self.toon.checkTrackPrestige(track):
+                zapMultipliers = AvZapJumps[1]
+            else:
+                zapMultipliers = AvZapJumps[0]
+            self.detailDataLabel.configure(text=TTLocalizer.InventoryZapDetailData %
+                                                {'accuracy': accString,
+                                                 'damageString': TTLocalizer.InventoryDamageString,
+                                                 'damage': damage,
+                                                 'jump1': damage * zapMultipliers[0],
+                                                 'jump2': damage * zapMultipliers[1],
+                                                 'jump3': damage * zapMultipliers[2],
+                                                 'bonus': damageBonusStr})
         else:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData %
                                                 {'accuracy': accString,
-                                                 'damageString': self.getToonupDmgStr(track, level),
+                                                 'damageString': self.getDamageStr(track, level),
                                                  'damage': damage,
                                                  'bonus': damageBonusStr,
                                                  'singleOrGroup': self.getSingleGroupStr(track, level)})
@@ -542,7 +555,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
                 self.showTrack(track)
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
@@ -578,7 +591,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
                 self.showTrack(track)
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
@@ -620,7 +633,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
                 self.showTrack(track)
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
@@ -643,7 +656,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
                 self.showTrack(track)
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
@@ -680,7 +693,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
                 self.showTrack(track)
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
@@ -722,7 +735,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
                 self.showTrack(track)
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
@@ -750,7 +763,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
                 self.showTrack(track)
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
@@ -797,7 +810,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
                 self.showTrack(track)
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
@@ -843,7 +856,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
                 self.showTrack(track)
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
@@ -887,7 +900,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
                 self.showTrack(track)
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
@@ -927,7 +940,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
                 self.showTrack(track)
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
@@ -983,7 +996,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
                 self.showTrack(track)
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         unpaid = not base.cr.isPaid()
@@ -1033,7 +1046,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         for track in xrange(len(Tracks)):
             if self.toon.hasTrackAccess(track):
                 self.showTrack(track)
-                for level in xrange(len(Levels[track])):
+                for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level) and (level == 0 or self.toon.doIHaveRequiredTrees(track, level)):
                         button.show()
@@ -1059,7 +1072,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
             trackAccess = self.toon.getTrackAccess()
             return trackAccess[track] >= level + 1
         curSkill = self.toon.experience.getExp(track)
-        if curSkill < Levels[track][level]:
+        if curSkill < Levels[level]:
             return 0
         else:
             return 1
@@ -1082,7 +1095,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     def getCurAndNextExpValues(self, track):
         curSkill = self.toon.experience.getExp(track)
         retVal = MaxSkill
-        for amount in Levels[track]:
+        for amount in Levels:
             if curSkill < amount:
                 retVal = amount
                 return (curSkill, retVal)
@@ -1172,13 +1185,13 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     def hideTrack(self, trackIndex):
         self.trackNameLabels[trackIndex].show()
         self.trackBars[trackIndex].hide()
-        for levelIndex in xrange(0, len(Levels[trackIndex])):
+        for levelIndex in xrange(0, len(Levels)):
             self.buttons[trackIndex][levelIndex].hide()
 
     def showTrack(self, trackIndex):
         self.trackNameLabels[trackIndex].show()
         self.trackBars[trackIndex].show()
-        for levelIndex in xrange(0, len(Levels[trackIndex])):
+        for levelIndex in xrange(0, len(Levels)):
             self.buttons[trackIndex][levelIndex].show()
 
         curExp, nextExp = self.getCurAndNextExpValues(trackIndex)
@@ -1226,10 +1239,10 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                 else:
                     # self.trackBars[track]['text'] = TTLocalizer.InventoryTrackExp % {'curExp': curExp, 'nextExp': nextExp}
                     self.trackBars[track]['value'] = curExp
-                for level in xrange(0, len(Levels[track])):
+                for level in xrange(0, len(Levels)):
                     self.updateButton(track, level)
 
-        elif track and level:
+        elif (0 <= track <= MAX_TRACK_INDEX) and (0 <= level <= MAX_LEVEL_INDEX):
             self.updateButton(track, level)
         else:
             self.notify.error('Invalid use of updateGUI')
@@ -1247,7 +1260,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         else:
             return TTLocalizer.InventoryAffectsOneCog
 
-    def getToonupDmgStr(self, track, level):
+    def getDamageStr(self, track, level):
         if track == HEAL_TRACK:
             return TTLocalizer.InventoryHealString
         else:

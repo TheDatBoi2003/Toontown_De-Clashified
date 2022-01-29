@@ -223,7 +223,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         taskMgr.remove(taskName)
         if self.bossDamageMovie:
             if self.bossDamage >= self.bossMaxDamage:
-                self.notify.debug('finish the movie then transition to NearVictory')
                 self.bossDamageMovie.resumeUntil(self.bossDamageMovie.getDuration())
             else:
                 self.bossDamageMovie.resumeUntil(self.bossDamage * self.bossDamageToMovie)
@@ -339,7 +338,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def __makeBossDamageMovie(self):
         self.notify.debug('---- __makeBossDamageMovie')
         startPos = Point3(ToontownGlobals.LawbotBossBattleThreePosHpr[0], ToontownGlobals.LawbotBossBattleThreePosHpr[1], ToontownGlobals.LawbotBossBattleThreePosHpr[2])
-        startHpr = Point3(*ToontownGlobals.LawbotBossBattleThreeHpr)
+        startHpr = Point3(ToontownGlobals.LawbotBossBattleThreePosHpr[3], ToontownGlobals.LawbotBossBattleThreePosHpr[4], ToontownGlobals.LawbotBossBattleThreePosHpr[5])
         bottomPos = Point3(*ToontownGlobals.LawbotBossBottomPos)
         deathPos = Point3(*ToontownGlobals.LawbotBossDeathPos)
         self.setPosHpr(startPos, startHpr)
@@ -956,7 +955,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def __doneBattleThree(self):
         self.notify.debug('----- __doneBattleThree')
-        self.setState('NearVictory')
+        self.setState('Victory')
         self.unstickBoss()
 
     def exitBattleThree(self):
@@ -985,36 +984,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.battleThreeMusicTime = self.battleThreeMusic.getTime()
         self.battleThreeMusic.stop()
         return
-
-    def enterNearVictory(self):
-        self.cleanupIntervals()
-        self.reparentTo(render)
-        self.setPos(*ToontownGlobals.LawbotBossDeathPos)
-        self.setHpr(*ToontownGlobals.LawbotBossBattleThreeHpr)
-        self.clearChat()
-        self.releaseToons(finalBattle=1)
-        self.accept('pieSplat', self.__finalPieSplat)
-        self.accept('localPieSplat', self.__localPieSplat)
-        self.accept('outOfPies', self.__outOfPies)
-        localAvatar.setCameraFov(ToontownGlobals.BossBattleCameraFov)
-        self.happy = 0
-        self.raised = 0
-        self.forward = 1
-        self.doAnimate()
-        self.setDizzy(1)
-        base.playMusic(self.battleThreeMusic, looping=1, volume=0.9, time=self.battleThreeMusicTime)
-
-    def exitNearVictory(self):
-        self.notify.debug('----- exitNearVictory')
-        self.ignore('pieSplat')
-        self.ignore('localPieSplat')
-        self.ignore('outOfPies')
-        self.__clearOnscreenMessage()
-        taskMgr.remove(self.uniqueName('PieAdvice'))
-        localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov)
-        self.setDizzy(0)
-        self.battleThreeMusicTime = self.battleThreeMusic.getTime()
-        self.battleThreeMusic.stop()
 
     def enterVictory(self):
         self.notify.debug('----- enterVictory')
@@ -1254,12 +1223,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         for lawyer in self.lawyers:
             if lawyerDoId == lawyer.doId:
                 lawyer.sendUpdate('hitByToon', [])
-
-    def __finalPieSplat(self, toon, pieCode):
-        if pieCode != ToontownGlobals.PieCodeDefensePan:
-            return
-        self.sendUpdate('finalPieSplat', [])
-        self.ignore('pieSplat')
 
     def cleanupAttacks(self):
         self.notify.debug('----- cleanupAttacks')

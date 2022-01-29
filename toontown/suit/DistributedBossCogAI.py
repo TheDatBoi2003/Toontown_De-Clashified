@@ -34,8 +34,7 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
         self.activeSuitsB = []
         self.reserveSuits = []
         self.barrier = None
-        self.keyStates = [
-         'BattleOne', 'BattleTwo', 'BattleThree', 'Victory']
+        self.keyStates = ['BattleOne', 'BattleTwo', 'BattleThree', 'Victory']
         self.bossDamage = 0
         self.battleThreeStart = 0
         self.battleThreeDuration = 1800

@@ -36,9 +36,9 @@ TrackColors = ((211 / 255.0, 148 / 255.0, 255 / 255.0),
                (93 / 255.0, 108 / 255.0, 239 / 255.0),
                (255 / 255.0, 145 / 255.0, 66 / 255.0),
                (255 / 255.0, 65 / 255.0, 199 / 255.0),
+               (249 / 255.0, 255 / 255.0, 93 / 255.0),
                (67 / 255.0, 243 / 255.0, 255 / 255.0),
                )
-# Zap: (249 / 255.0, 255 / 255.0, 93 / 255.0),
 
 # try:
 #    wantAllProps = base.config.GetBool('want-all-props', 0)
@@ -54,14 +54,15 @@ LURE_TRACK = 2
 SOUND_TRACK = 3
 THROW_TRACK = 4
 SQUIRT_TRACK = 5
-DROP_TRACK = 6
+ZAP_TRACK = 6
+DROP_TRACK = 7
 # Special NPC Toon actions
-NPC_RESTOCK_GAGS = 7
-NPC_TOONS_HIT = 8
-NPC_COGS_MISS = 9
+NPC_RESTOCK_GAGS = 10
+NPC_TOONS_HIT = 11
+NPC_COGS_MISS = 12
 
 MIN_TRACK_INDEX = 0
-MAX_TRACK_INDEX = 6
+MAX_TRACK_INDEX = 7
 
 MIN_LEVEL_INDEX = 0
 MAX_LEVEL_INDEX = 7
@@ -88,14 +89,7 @@ PropTypeToTrackBonus = {
 }
 
 # avatar skill levels (totalled)
-Levels = [[0, 20, 100, 500, 2000, 6000, 10000, 15000],  # heal
-          [0, 20, 100, 500, 2000, 6000, 10000, 15000],  # trap
-          [0, 20, 100, 500, 2000, 6000, 10000, 15000],  # lure
-          [0, 20, 100, 500, 2000, 6000, 10000, 15000],  # sound
-          [0, 20, 100, 500, 2000, 6000, 10000, 15000],  # throw
-          [0, 20, 100, 500, 2000, 6000, 10000, 15000],  # squirt
-          [0, 20, 100, 500, 2000, 6000, 10000, 15000],  # drop
-          ]
+Levels = [0, 20, 100, 500, 2000, 6000, 10000, 15000]
 # MaxSkill = 10000
 MaxSkill = 20000
 # This is the maximum amount of experience per track that may be
@@ -108,74 +102,18 @@ MaxToonAcc = 95
 # avatar starting skill level
 StartingLevel = 0
 
-CarryLimits = (
-    # Heal
-    ((10, 0, 0, 0, 0, 0, 0, 0),  # lvl 1
-     (10, 5, 0, 0, 0, 0, 0, 0),  # lvl 2
-     (15, 10, 5, 0, 0, 0, 0, 0),  # lvl 3
-     (20, 15, 10, 5, 0, 0, 0, 0),  # lvl 4
-     (25, 20, 15, 10, 3, 0, 0, 0),  # lvl 5
-     (30, 25, 20, 15, 7, 3, 0, 0),  # lvl 6
-     (30, 25, 20, 15, 7, 3, 2, 0),  # lvl 7
-     (30, 25, 20, 15, 7, 3, 2, 1)),  # lvl 8
-    # Trap
-    ((10, 0, 0, 0, 0, 0, 0, 0),  # lvl 1
-     (10, 5, 0, 0, 0, 0, 0, 0),  # lvl 2
-     (15, 10, 5, 0, 0, 0, 0, 0),  # lvl 3
-     (20, 15, 10, 5, 0, 0, 0, 0),  # lvl 4
-     (25, 20, 15, 10, 3, 0, 0, 0),  # lvl 5
-     (30, 25, 20, 15, 7, 3, 0, 0),  # lvl 6
-     (30, 25, 20, 15, 7, 3, 2, 0),  # lvl 7
-     (30, 25, 20, 15, 7, 3, 2, 1)),  # lvl 8
-    # Lure
-    ((10, 0, 0, 0, 0, 0, 0, 0),  # lvl 1
-     (10, 5, 0, 0, 0, 0, 0, 0),  # lvl 2
-     (15, 10, 5, 0, 0, 0, 0, 0),  # lvl 3
-     (20, 15, 10, 5, 0, 0, 0, 0),  # lvl 4
-     (25, 20, 15, 10, 3, 0, 0, 0),  # lvl 5
-     (30, 25, 20, 15, 7, 3, 0, 0),  # lvl 6
-     (30, 25, 20, 15, 7, 3, 2, 0),  # lvl 7
-     (30, 25, 20, 15, 7, 3, 2, 1)),  # lvl 8
-    # Sound
-    ((10, 0, 0, 0, 0, 0, 0, 0),  # lvl 1
-     (10, 5, 0, 0, 0, 0, 0, 0),  # lvl 2
-     (15, 10, 5, 0, 0, 0, 0, 0),  # lvl 3
-     (20, 15, 10, 5, 0, 0, 0, 0),  # lvl 4
-     (25, 20, 15, 10, 3, 0, 0, 0),  # lvl 5
-     (30, 25, 20, 15, 7, 3, 0, 0),  # lvl 6
-     (30, 25, 20, 15, 7, 3, 2, 0),  # lvl 7
-     (30, 25, 20, 15, 7, 3, 2, 1)),  # lvl 8
-    # Throw
-    ((10, 0, 0, 0, 0, 0, 0, 0),  # lvl 1
-     (10, 5, 0, 0, 0, 0, 0, 0),  # lvl 2
-     (15, 10, 5, 0, 0, 0, 0, 0),  # lvl 3
-     (20, 15, 10, 5, 0, 0, 0, 0),  # lvl 4
-     (25, 20, 15, 10, 3, 0, 0, 0),  # lvl 5
-     (30, 25, 20, 15, 7, 3, 0, 0),  # lvl 6
-     (30, 25, 20, 15, 7, 3, 2, 0),  # lvl 7
-     (30, 25, 20, 15, 7, 3, 2, 1)),  # lvl 8
-    # Squirt
-    ((10, 0, 0, 0, 0, 0, 0, 0),  # lvl 1
-     (10, 5, 0, 0, 0, 0, 0, 0),  # lvl 2
-     (15, 10, 5, 0, 0, 0, 0, 0),  # lvl 3
-     (20, 15, 10, 5, 0, 0, 0, 0),  # lvl 4
-     (25, 20, 15, 10, 3, 0, 0, 0),  # lvl 5
-     (30, 25, 20, 15, 7, 3, 0, 0),  # lvl 6
-     (30, 25, 20, 15, 7, 3, 2, 0),  # lvl 7
-     (30, 25, 20, 15, 7, 3, 2, 1)),  # lvl 8
-    # Drop
-    ((10, 0, 0, 0, 0, 0, 0, 0),  # lvl 1
-     (10, 5, 0, 0, 0, 0, 0, 0),  # lvl 2
-     (15, 10, 5, 0, 0, 0, 0, 0),  # lvl 3
-     (20, 15, 10, 5, 0, 0, 0, 0),  # lvl 4
-     (25, 20, 15, 10, 3, 0, 0, 0),  # lvl 5
-     (30, 25, 20, 15, 7, 3, 0, 0),  # lvl 6
-     (30, 25, 20, 15, 7, 3, 2, 0),  # lvl 7
-     (30, 25, 20, 15, 7, 3, 2, 1)),  # lvl 8
-)
+CarryLimits = ((10, 0, 0, 0, 0, 0, 0, 0),  # lvl 1
+               (10, 5, 0, 0, 0, 0, 0, 0),  # lvl 2
+               (15, 10, 5, 0, 0, 0, 0, 0),  # lvl 3
+               (20, 15, 10, 5, 0, 0, 0, 0),  # lvl 4
+               (25, 20, 15, 10, 3, 0, 0, 0),  # lvl 5
+               (30, 25, 20, 15, 7, 3, 0, 0),  # lvl 6
+               (30, 25, 20, 15, 7, 3, 2, 0),  # lvl 7
+               (30, 25, 20, 15, 7, 3, 2, 1))  # lvl 8
+
 
 # avatar prop maxes
-MaxProps = ((20, 40), (30, 60), (75, 80))
+MaxProps = ((20, 40), (30, 60), (80, 100))
 
 # death-list flag masks for BattleExperience
 DLF_SKELECOG = 0x01
@@ -213,6 +151,8 @@ AvProps = (('feather', 'bullhorn', 'lipstick', 'bamboocane',
             'fruitpie', 'creampie', 'cake', 'cake'),
            ('flower', 'waterglass', 'waterballoon', 'waterballoon',
             'bottle', 'firehose', 'stormcloud', 'stormcloud'),
+           ('flower', 'waterglass', 'waterballoon', 'waterballoon',
+            'bottle', 'firehose', 'stormcloud', 'stormcloud'),
            ('flowerpot', 'sandbag', 'sandbag', 'anvil',
             'weight', 'safe', 'piano', 'piano'))
 
@@ -229,6 +169,8 @@ AvPropsNew = (
      'inventory_fruitpie', 'inventory_creampie', 'inventory_cake', 'inventory_wedding'),
     ('inventory_squirt_flower', 'inventory_glass_of_water', 'inventory_water_gun', 'inventory_waterballoon',
      'inventory_seltzer_bottle', 'inventory_firehose', 'inventory_storm_cloud', 'inventory_geyser'),
+    ('inventory_joybuzzer', 'inventory_carpet', 'inventory_balloon', 'inventory_battery',
+     'inventory_tazer', 'inventory_television', 'inventory_tesla', 'inventory_lightning'),
     ('inventory_flower_pot', 'inventory_sandbag', 'inventory_bowlingball', 'inventory_anvil',
      'inventory_weight', 'inventory_safe_box', 'inventory_boulder', 'inventory_piano')
 )
@@ -249,6 +191,7 @@ AvPropAccuracy = ((95, 95, 95, 95, 95, 95, 95, 95),  # Heal
                   (95, 95, 95, 95, 95, 95, 95, 95),  # Sound
                   (75, 75, 75, 75, 75, 75, 75, 75),  # Throw
                   (95, 95, 95, 95, 95, 95, 95, 95),  # Squirt
+                  (30, 30, 30, 30, 30, 30, 30, 30),  # Zap
                   (50, 50, 50, 50, 50, 50, 50, 50, 95)  # Drop
                   )
 AvBonusAccuracy = ((95, 95, 95, 95, 95, 95, 95, 95),  # Heal
@@ -257,9 +200,15 @@ AvBonusAccuracy = ((95, 95, 95, 95, 95, 95, 95, 95),  # Heal
                    (95, 95, 95, 95, 95, 95, 95, 95),  # Sound
                    (75, 75, 75, 75, 75, 75, 75, 75),  # Throw
                    (95, 95, 95, 95, 95, 95, 95, 95),  # Squirt
+                   (30, 30, 30, 30, 30, 30, 30, 30),  # Zap
                    (65, 65, 65, 65, 65, 65, 65, 65, 95))  # Drop
+
 AvLureRounds = (2, 2, 3, 3, 4, 4, 5, 5)
 AvSoakRounds = (1, 1, 2, 2, 3, 3, 4, 4)
+
+AvZapJumps = ((3, 2.25, 1.5),
+              (3, 2.5, 2),
+              (3, 2.75, 2.5))
 
 AvTrackAccStrings = TTLocalizer.BattleGlobalAvTrackAccStrings
 
@@ -272,23 +221,23 @@ AvTrackAccStrings = TTLocalizer.BattleGlobalAvTrackAccStrings
 #
 AvPropDamage = (
     # Heal
-    (((6, 8), (Levels[0][0], Levels[0][1])),  # tickle
-     ((12, 15), (Levels[0][1], Levels[0][2])),  # group Joke
-     ((22, 26), (Levels[0][2], Levels[0][3])),  # kiss
-     ((33, 39), (Levels[0][3], Levels[0][4])),  # group Dance
-     ((45, 50), (Levels[0][4], Levels[0][5])),  # dust
-     ((63, 78), (Levels[0][5], Levels[0][6])),  # group Juggle
-     ((85, 95), (Levels[0][6], Levels[0][7])),  # cannon
-     ((105, 135), (Levels[0][7], MaxSkill))),  # group Dive
+    (((6, 8), (Levels[0], Levels[1])),  # tickle
+     ((12, 15), (Levels[1], Levels[2])),  # group Joke
+     ((22, 26), (Levels[2], Levels[3])),  # kiss
+     ((33, 39), (Levels[3], Levels[4])),  # group Dance
+     ((45, 50), (Levels[4], Levels[5])),  # dust
+     ((63, 78), (Levels[5], Levels[6])),  # group Juggle
+     ((85, 95), (Levels[6], Levels[7])),  # cannon
+     ((105, 135), (Levels[7], MaxSkill))),  # group Dive
     # Trap
-    (((18, 20), (Levels[1][0], Levels[1][1])),
-     ((27, 35), (Levels[1][1], Levels[1][2])),
-     ((42, 50), (Levels[1][2], Levels[1][3])),
-     ((65, 75), (Levels[1][3], Levels[1][4])),
-     ((90, 115), (Levels[1][4], Levels[1][5])),
-     ((130, 160), (Levels[1][5], Levels[1][6])),
-     ((180, 220), (Levels[1][6], Levels[1][7])),
-     ((235, 280), (Levels[1][7], MaxSkill)),
+    (((18, 20), (Levels[0], Levels[1])),
+     ((27, 35), (Levels[1], Levels[2])),
+     ((42, 50), (Levels[2], Levels[3])),
+     ((65, 75), (Levels[3], Levels[4])),
+     ((90, 115), (Levels[4], Levels[5])),
+     ((130, 160), (Levels[5], Levels[6])),
+     ((180, 220), (Levels[6], Levels[7])),
+     ((235, 280), (Levels[7], MaxSkill)),
      ((280, 280), (-1, -1))),
     # Lure
     (((0, 0), (0, 0)),
@@ -300,41 +249,50 @@ AvPropDamage = (
      ((0, 0), (0, 0)),
      ((0, 0), (0, 0))),
     # Sound
-    (((3, 4), (Levels[3][0], Levels[3][1])),
-     ((5, 7), (Levels[3][1], Levels[3][2])),
-     ((9, 11), (Levels[3][2], Levels[3][3])),
-     ((14, 16), (Levels[3][3], Levels[3][4])),
-     ((19, 21), (Levels[3][4], Levels[3][5])),
-     ((26, 32), (Levels[3][5], Levels[3][6])),
-     ((35, 50), (Levels[3][6], Levels[3][7])),
-     ((55, 65), (Levels[3][7], MaxSkill))),
+    (((3, 4), (Levels[0], Levels[1])),
+     ((5, 7), (Levels[1], Levels[2])),
+     ((9, 11), (Levels[2], Levels[3])),
+     ((14, 16), (Levels[3], Levels[4])),
+     ((19, 21), (Levels[4], Levels[5])),
+     ((26, 32), (Levels[5], Levels[6])),
+     ((35, 50), (Levels[6], Levels[7])),
+     ((55, 65), (Levels[7], MaxSkill))),
     # Throw
-    (((6, 8), (Levels[4][0], Levels[4][1])),
-     ((10, 13), (Levels[4][1], Levels[4][2])),
-     ((18, 21), (Levels[4][2], Levels[4][3])),
-     ((30, 35), (Levels[4][3], Levels[4][4])),
-     ((45, 50), (Levels[4][4], Levels[4][5])),
-     ((65, 90), (Levels[4][5], Levels[4][6])),
-     ((100, 130), (Levels[4][6], Levels[4][7])),
-     ((140, 170), (Levels[4][7], MaxSkill))),
+    (((6, 8), (Levels[0], Levels[1])),
+     ((10, 13), (Levels[1], Levels[2])),
+     ((18, 21), (Levels[2], Levels[3])),
+     ((30, 35), (Levels[3], Levels[4])),
+     ((45, 50), (Levels[4], Levels[5])),
+     ((65, 90), (Levels[5], Levels[6])),
+     ((100, 130), (Levels[6], Levels[7])),
+     ((140, 170), (Levels[7], MaxSkill))),
     # Squirt
-    (((3, 4), (Levels[5][0], Levels[5][1])),
-     ((6, 8), (Levels[5][1], Levels[5][2])),
-     ((10, 12), (Levels[5][2], Levels[5][3])),
-     ((18, 21), (Levels[5][3], Levels[5][4])),
-     ((27, 30), (Levels[5][4], Levels[5][5])),
-     ((45, 56), (Levels[5][5], Levels[5][6])),
-     ((60, 80), (Levels[5][6], Levels[5][7])),
-     ((90, 115), (Levels[5][7], MaxSkill))),
+    (((3, 4), (Levels[0], Levels[1])),
+     ((6, 8), (Levels[1], Levels[2])),
+     ((10, 12), (Levels[2], Levels[3])),
+     ((18, 21), (Levels[3], Levels[4])),
+     ((27, 30), (Levels[4], Levels[5])),
+     ((45, 56), (Levels[5], Levels[6])),
+     ((60, 80), (Levels[6], Levels[7])),
+     ((90, 115), (Levels[7], MaxSkill))),
+    # Zap
+    (((3, 4), (Levels[0], Levels[1])),
+     ((5, 6), (Levels[1], Levels[2])),
+     ((8, 10), (Levels[2], Levels[3])),
+     ((14, 16), (Levels[3], Levels[4])),
+     ((21, 24), (Levels[4], Levels[5])),
+     ((35, 40), (Levels[5], Levels[6])),
+     ((50, 66), (Levels[6], Levels[7])),
+     ((70, 80), (Levels[7], MaxSkill))),
     # Drop
-    (((10, 12), (Levels[6][0], Levels[6][1])),
-     ((18, 20), (Levels[6][1], Levels[6][2])),
-     ((30, 35), (Levels[6][2], Levels[6][3])),
-     ((45, 55), (Levels[6][3], Levels[6][4])),
-     ((65, 80), (Levels[6][4], Levels[6][5])),
-     ((90, 125), (Levels[6][5], Levels[6][6])),
-     ((145, 180), (Levels[6][6], Levels[6][7])),
-     ((200, 220), (Levels[6][7], MaxSkill)),
+    (((10, 12), (Levels[0], Levels[1])),
+     ((18, 20), (Levels[1], Levels[2])),
+     ((30, 35), (Levels[2], Levels[3])),
+     ((45, 55), (Levels[3], Levels[4])),
+     ((65, 80), (Levels[4], Levels[5])),
+     ((90, 125), (Levels[5], Levels[6])),
+     ((145, 180), (Levels[6], Levels[7])),
+     ((200, 220), (Levels[7], MaxSkill)),
      ((220, 220), (-1, -1))),
 )
 
@@ -384,10 +342,10 @@ AvPropTargetCat = ((ATK_SINGLE_TARGET,
                     ATK_GROUP_TARGET),
                    )
 
-AvPropTarget = (0, 1, 0, 2, 1, 1, 1)
+AvPropTarget = (0, 1, 0, 2, 1, 1, 1, 1)
 
 
-def getTrapPropDamage(trapLevel, toon, suit=None, execBonus=0, healthBonus=0):
+def getTrapDamage(trapLevel, toon, suit=None, execBonus=0, healthBonus=0):
     if suit:
         execBonus = suit.isExecutive
         healthBonus = toon.checkTrackPrestige(TRAP_TRACK) and suit.currHP >= suit.maxHP / 2

@@ -527,7 +527,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.experience = Experience.Experience(experience, self)
 
     def getExperience(self):
-        return self.experience.makeNetString()
+        return self.experience.experience
 
     def b_setInventory(self, inventory):
         self.setInventory(inventory)
@@ -2004,7 +2004,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         carry = self.maxCarry
         for track in xrange(len(ToontownBattleGlobals.Tracks)):
             if not self.hasTrackAccess(track):
-                for level in xrange(len(ToontownBattleGlobals.Levels[track])):
+                for level in xrange(len(ToontownBattleGlobals.Levels)):
                     count = self.inventory.inventory[track][level]
                     if count != 0:
                         self.notify.info('Changed avatar %d to throw away %d items in track %d level %d; no access to track.' % (self.doId,
@@ -2016,9 +2016,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
             else:
                 curSkill = self.experience.getExp(track)
-                for level in xrange(len(ToontownBattleGlobals.Levels[track])):
+                for level in xrange(len(ToontownBattleGlobals.Levels)):
                     count = self.inventory.inventory[track][level]
-                    if curSkill < ToontownBattleGlobals.Levels[track][level]:
+                    if curSkill < ToontownBattleGlobals.Levels[level]:
                         if count != 0:
                             self.notify.info('Changed avatar %d to throw away %d items in track %d level %d; no access to level.' % (self.doId,
                              count,
