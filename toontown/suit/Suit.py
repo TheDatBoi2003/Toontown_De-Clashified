@@ -120,7 +120,7 @@ tr = (('smile', 'smile', 5),
       ('finger-wag', 'fingerwag', 5),
       ('magic2', 'magic2', 5))
 gk = (('speak', 'speak', 5),
-      ('throw-paper', 'throw-paper', 5),
+      ('throw-paper', 'throw-paper', 3.5),
       ('magic1', 'magic1', 5))
 fm = (('effort', 'effort', 5),
       ('throw-paper', 'throw-paper', 5),

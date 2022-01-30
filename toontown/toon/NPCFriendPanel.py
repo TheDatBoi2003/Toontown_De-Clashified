@@ -70,7 +70,14 @@ class NPCFriendPanel(DirectFrame):
 class NPCFriendCard(DirectFrame):
     normalTextColor = (0.3, 0.25, 0.2, 1)
     maxRarity = 5
-    sosTracks = ToontownBattleGlobals.Tracks + ToontownBattleGlobals.NPCTracks
+    sosTracks = ['toon-up',
+                      'trap',
+                      'lure',
+                      'sound',
+                      'throw',
+                      'squirt',
+                      'zap',
+                      'drop'] + ToontownBattleGlobals.NPCTracks
 
     def __init__(self, parent = aspect2dp, rotateCard = False, **kw):
         optiondefs = (('NPCID', 'Uninitialized', None), ('relief', None, None), ('doneEvent', None, None))

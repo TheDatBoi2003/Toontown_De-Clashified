@@ -1992,12 +1992,12 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
     def startSprintTask(self):
         self.setSprinting(True)
-        if not self.controlManager.getIsAirborne():
+        if self.ghostMode or not self.controlManager.getIsAirborne():
             self.b_setAnimState('Sprinting', 1.0)
 
     def endSprintTask(self):
         self.setSprinting(False)
-        if not self.controlManager.getIsAirborne():
+        if self.ghostMode or not self.controlManager.getIsAirborne():
             self.b_setAnimState('Happy', 1.0)
 
     def returnToWalk(self, task):

@@ -267,8 +267,9 @@ class BattleCalculatorAI(DirectObject):
         currAtk = self.toonAtkOrder.index(attackIndex)
         if atkTrack == DROP and currAtk == 0:
             singleDrop = 1
-            for attackId in self.toonAtkOrder:
-                if attackId in self.battle.toonAttacks and self.battle.toonAttacks[attackId][TOON_TRACK_COL] == DROP:
+            for toonAttack in self.toonAtkOrder:
+                if toonAttack in self.battle.toonAttacks and \
+                        self.battle.toonAttacks[toonAttack][TOON_TRACK_COL] == DROP:
                     singleDrop = 0
                     break
             if singleDrop:

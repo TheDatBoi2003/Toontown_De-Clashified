@@ -88,10 +88,10 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
         camera.reparentTo(self)
         camera.setPos(self.camOffset[0], self.camOffset[1], 0)
         camera.setHpr(0, 0, 0)
-        self._startCollisionCheck()
         base.camLens.setMinFov(ToontownGlobals.DefaultCameraFov / (4. / 3.))
         base.camLens.setFov(ToontownGlobals.DefaultCameraFov)
         self._zoomToDistance(self._lastZoomLevel)
+        self._startCollisionCheck()
 
     def exitActive(self):
         if self.camIval:
@@ -113,7 +113,7 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
         except:
             self._defaultZ = DEFAULT_Z
         self._defaultDistance = -INIT_DIST * self._defaultZ
-        self._minDistance = self._defaultDistance * 0.3
+        self._minDistance = -self._defaultZ
         self._zoomIncrement = self._defaultZ * INC_RATE
         self._maxDistance = self._minDistance - self._zoomIncrement * NUM_ZOOMS
         self._defaultOffset = Vec3(0, self._defaultDistance, self._defaultZ)
@@ -211,7 +211,8 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
         else:
             y = clamp(yDist, self._minDistance, self._maxDistance)
         self.camOffset.setY(y)
-        self._collSolid.setPointB(0, self._getCollPointY(), 0)
+        if hasattr(self, '_collSolid'):
+            self._collSolid.setPointB(0, self._getCollPointY(), 0)
 
     def _beginFPSMode(self):
         self.enableMouseControl()
@@ -282,7 +283,7 @@ class FPSCamera(CameraMode.CameraMode, NodePath, ParamObj):
             if self.forceMaxDistance:
                 camera.setPos(self.camOffset)
                 camera.setZ(0)
-        else:
+        elif collEntry.hasSurfacePoint():
             cPoint = collEntry.getSurfacePoint(self)
             offset = 0.9
             camera.setPos(cPoint + cNormal * offset)
