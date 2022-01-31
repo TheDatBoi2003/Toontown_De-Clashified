@@ -36,14 +36,15 @@ class SuitPlannerInteriorAI:
         joinChances.sort(cmp)
         return joinChances
 
-    def _genSuitInfos(self, numFloors, bldgLevel, bldgTrack, maxLvlMod=0):
+    def _genSuitInfos(self, numFloors, bldgLevel, bldgTrack, maxLvlMod=0, maxSuits=SuitBattleGlobals.MAX_SUIT_CAPACITY):
         self.suitInfos = []
+        self.bossSpot = -1
         self.notify.debug('\n\ngenerating suitsInfos with numFloors (' + str(numFloors) + ') bldgLevel (' + str(bldgLevel) + '+1) and bldgTrack (' + str(bldgTrack) + ')')
         for currFloor in xrange(numFloors):
             infoDict = {}
             lvls = self.__genLevelList(bldgLevel, currFloor, numFloors, maxLvlMod)
             activeDicts = []
-            maxActive = min(4, len(lvls))
+            maxActive = min(maxSuits, len(lvls))
             if self.dbg_nSuits1stRound:
                 numActive = min(self.dbg_nSuits1stRound, maxActive)
             else:
@@ -51,12 +52,13 @@ class SuitPlannerInteriorAI:
             if currFloor + 1 == numFloors and len(lvls) > 1:
                 origBossSpot = len(lvls) - 1
                 if numActive == 1:
-                    newBossSpot = numActive - 1
+                    newBossSpot = 0
                 else:
-                    newBossSpot = numActive - 2
+                    newBossSpot = 1
                 tmp = lvls[newBossSpot]
                 lvls[newBossSpot] = lvls[origBossSpot]
                 lvls[origBossSpot] = tmp
+                self.bossSpot = newBossSpot
             bldgInfo = SuitBuildingGlobals.SuitBuildingInfo[bldgLevel]
             if len(bldgInfo) > SuitBuildingGlobals.SUIT_BLDG_INFO_REVIVES:
                 revives = bldgInfo[SuitBuildingGlobals.SUIT_BLDG_INFO_REVIVES][0]
@@ -123,7 +125,7 @@ class SuitPlannerInteriorAI:
         self.notify.debug('LevelList: ' + repr(lvlList))
         return lvlList
 
-    def __setupSuitInfo(self, suit, bldgTrack, suitLevel, suitType, exeChance):
+    def __setupSuitInfo(self, suit, bldgTrack, suitLevel, exeChance):
         suitName, skeleton = simbase.air.suitInvasionManager.getInvadingCog()
         dna = SuitDNA.SuitDNA()
         if suitName and self.respectInvasions:
@@ -138,12 +140,12 @@ class SuitPlannerInteriorAI:
         suit.dna = dna
         self.notify.debug('Creating suit type ' + suit.dna.name + ' of level ' + str(suitLevel) + ' from type ' + str(suitType) + ' and track ' + str(bldgTrack))
         suit.setLevel(suitLevel)
-        suit.setExecutive(random.random() <= exeChance)
+        suit.b_setExecutive(random.random() <= exeChance)
         return skeleton
 
     def __genSuitObject(self, suitZone, suitType, bldgTrack, suitLevel, exeChance, revives=0):
         newSuit = DistributedSuitAI.DistributedSuitAI(simbase.air, None)
-        skel = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, suitType, exeChance)
+        skel = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, exeChance)
         if skel:
             newSuit.setSkelecog(1)
         newSuit.setSkeleRevives(revives)

@@ -241,8 +241,12 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
         suitHandles = self.bldg.planner.genFloorSuits(self.currentFloor)
         self.suits = suitHandles['activeSuits']
         self.activeSuits = []
+        bossSpot = self.bldg.planner.bossSpot
         for suit in self.suits:
             self.activeSuits.append(suit)
+
+        if self.currentFloor == self.topFloor and bossSpot != -1:
+            self.activeSuits[bossSpot].b_setExecutive(1)
 
         self.reserveSuits = suitHandles['reserveSuits']
         self.d_setToons()

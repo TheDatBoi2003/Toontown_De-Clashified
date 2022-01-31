@@ -333,6 +333,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.disableBattleDetect()
         self.corpMedallion.hide()
         self.healthBar.show()
+        self.updateHealthBar()
 
     def exitBattle(self):
         self.healthBar.hide()
