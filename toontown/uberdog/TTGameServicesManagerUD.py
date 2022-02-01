@@ -161,6 +161,7 @@ class SetNameTypedOperation(AvatarOperation):
         self.demand('Off')
 
 
+
 class CreateAvatarOperation(GameOperation):
     notify = DirectNotifyGlobal.directNotify.newCategory('CreateAvatarOperation')
 
@@ -168,8 +169,10 @@ class CreateAvatarOperation(GameOperation):
         GameOperation.__init__(self, gameServicesManager, target)
         self.index = None
         self.dna = None
+        from toontown.toonbase.ToontownBattleGlobals import MAX_TRACK_INDEX
+        self.trackAccess = [0 for _ in xrange(MAX_TRACK_INDEX + 1)]
 
-    def enterStart(self, dna, index):
+    def enterStart(self, dna, index, choices):
         # First, perform some basic sanity checking.
         if index >= 6:
             # This index is invalid! Kill the connection.
@@ -184,6 +187,9 @@ class CreateAvatarOperation(GameOperation):
         # Store these values.
         self.index = index
         self.dna = dna
+        for i in xrange(len(self.trackAccess)):
+            if i in choices:
+                self.trackAccess[i] = 1
 
         # Now we can query their account.
         self.demand('RetrieveAccount')
@@ -228,7 +234,8 @@ class CreateAvatarOperation(GameOperation):
                       'WishNameState': ('OPEN',),
                       'WishName': ('',),
                       'setDNAString': (self.dna,),
-                      'setDISLid': (self.target,)}
+                      'setDISLid': (self.target,),
+                      'setTrackAccess': (self.trackAccess,)}
 
         # Create this new Toon object in the database. self.__handleCreate is the
         # callback that will be called upon the completion of createObject.
@@ -359,10 +366,10 @@ class TTGameServicesManagerUD(GameServicesManagerUD):
         # Someone has typed a name; run a SetNameTypedOperation.
         self.runOperation(SetNameTypedOperation, avId, name)
 
-    def createAvatar(self, dna, index):
+    def createAvatar(self, dna, index, choices):
         # Someone wants to create a new avatar;
         # run a CreateAvatarOperation.
-        self.runOperation(CreateAvatarOperation, dna, index)
+        self.runOperation(CreateAvatarOperation, dna, index, choices)
 
     def acknowledgeAvatarName(self, avId):
         # Someone has acknowledged their name; run an AcknowledgeNameOperation.

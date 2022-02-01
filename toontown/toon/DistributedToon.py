@@ -1227,17 +1227,17 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def hasTrackAccess(self, track):
         return self.trackArray[track]
 
-    def setTrackProgress(self, trackId, progress):
-        self.trackProgressId = trackId
-        self.trackProgress = progress
+    def setTrainingFrames(self, trackIds, progress):
+        self.trainingFramesIds = trackIds
+        self.trainingFrames = progress
         if hasattr(self, 'trackPage'):
             self.trackPage.updatePage()
 
     def getTrackProgress(self):
-        return [self.trackProgressId, self.trackProgress]
+        return [self.trainingFramesIds, self.trainingFrames]
 
     def getTrackProgressAsArray(self, maxLength = 15):
-        shifts = map(operator.rshift, maxLength * [self.trackProgress], xrange(maxLength - 1, -1, -1))
+        shifts = map(operator.rshift, maxLength * [self.trainingFrames], xrange(maxLength - 1, -1, -1))
         digits = map(operator.mod, shifts, maxLength * [2])
         digits.reverse()
         return digits

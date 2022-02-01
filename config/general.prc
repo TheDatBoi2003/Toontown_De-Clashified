@@ -2,7 +2,7 @@
 # used by both developer & production instances of Toontown Online.
 
 # Window settings
-win-origin -2 -2
+win-origin -1 -1
 
 # Notify settings
 notify-level-collide warning

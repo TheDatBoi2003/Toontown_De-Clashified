@@ -276,8 +276,7 @@ class QuestPoster(DirectFrame):
             self.chooseButton['extraArgs'] = [questId]
         self.unbind(DGG.WITHIN)
         self.unbind(DGG.WITHOUT)
-        if not quest.getType() == Quests.TrackChoiceQuest:
-            self.questInfo.setZ(-0.0625)
+        self.questInfo.setZ(-0.0625)
         return
 
     def update(self, questDesc):
@@ -413,15 +412,11 @@ class QuestPoster(DirectFrame):
             lIconGeomScale = IMAGE_SCALE_SMALL
             if not fComplete:
                 infoText = TTLocalizer.QuestPageDestination % (toNpcBuildingName, toNpcStreetName, toNpcLocationName)
-        elif quest.getType() == Quests.TrackChoiceQuest:
+        elif quest.getType() == Quests.RefundQuest:
             frameBgColor = 'green'
             invModel = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-            track1, track2 = quest.getChoices()
-            lIconGeom = invModel.find('**/' + AvPropsNew[track1][1])
+            lIconGeom = self.createNpcToonHead(toNpcId)
             if not fComplete:
-                auxText = TTLocalizer.QuestPosterAuxOr
-                lPos.setX(-0.18)
-                rIconGeom = invModel.find('**/' + AvPropsNew[track2][1])
                 infoText = TTLocalizer.QuestPageNameAndDestination % (toNpcName,
                  toNpcBuildingName,
                  toNpcStreetName,
@@ -941,8 +936,7 @@ class QuestPoster(DirectFrame):
         numQuestItems = quest.getNumQuestItems()
         if fComplete or numQuestItems <= 1:
             self.questProgress.hide()
-            if not quest.getType() == Quests.TrackChoiceQuest:
-                infoZ = -0.075
+            infoZ = -0.075
         else:
             self.questProgress.show()
             self.questProgress['value'] = toonProgress & pow(2, 16) - 1

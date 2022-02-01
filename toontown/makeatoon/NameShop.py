@@ -955,12 +955,10 @@ class NameShop(StateData.StateData):
         self.notify.debug('serverCreateAvatar')
         style = self.toon.getStyle()
         self.newDNA = style.makeNetString()
-        if skipTutorial:
-            self.requestingSkipTutorial = True
-        else:
-            self.requestingSkipTutorial = False
+        self.requestingSkipTutorial = skipTutorial
+        trackChoices = self.toon.choices
         if not self.avExists or self.avExists and self.avId == 'deleteMe':
-            base.cr.gameServicesManager.sendCreateAvatar(style, '', self.index)
+            base.cr.gameServicesManager.sendCreateAvatar(style, '', self.index, trackChoices)
             self.accept('nameShopCreateAvatarDone', self.handleCreateAvatarResponse)
         else:
             self.checkNameTyped()
@@ -1013,10 +1011,11 @@ class NameShop(StateData.StateData):
         base.cr.skipTutorialRequest = self.requestingSkipTutorial
 
     def __isFirstTime(self):
-        if self.makeAToon.warp:
-            self.__createAvatar()
-        else:
-            self.promptTutorial()
+        self.__handleSkipTutorial()
+        # if self.makeAToon.warp:
+        #     self.__createAvatar()
+        # else:
+        #     self.promptTutorial()
 
     def promptTutorial(self):
         self.promptTutorialDialog = TTDialog.TTDialog(parent=aspect2dp, text=TTLocalizer.PromptTutorial, text_scale=0.06, text_align=TextNode.ACenter, text_wordwrap=22, command=self.__openTutorialDialog, fadeScreen=0.5, style=TTDialog.TwoChoice, buttonTextList=[TTLocalizer.MakeAToonEnterTutorial, TTLocalizer.MakeAToonSkipTutorial], button_text_scale=0.06, buttonPadSF=5.5, sortOrder=DGG.NO_FADE_SORT_INDEX)

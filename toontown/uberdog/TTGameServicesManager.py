@@ -20,8 +20,8 @@ class TTGameServicesManager(GameServicesManager):
     def nameTypedResponse(self, avId, status):
         self._callback(avId, status)
 
-    def sendCreateAvatar(self, avDNA, _, index):
-        self.sendUpdate('createAvatar', [avDNA.makeNetString(), index])
+    def sendCreateAvatar(self, avDNA, _, index, choices):
+        self.sendUpdate('createAvatar', [avDNA.makeNetString(), index, choices])
 
     def createAvatarResponse(self, avId):
         messenger.send('nameShopCreateAvatarDone', [avId])

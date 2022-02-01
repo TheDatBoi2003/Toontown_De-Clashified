@@ -20,34 +20,29 @@ class QuestRewardCounter:
         self.maxMoney = 40
         self.questCarryLimit = 1
         self.teleportAccess = []
-        self.trackAccess = [0,
-         0,
-         0,
-         0,
-         1,
-         1,
-         0]
-        self.trackProgressId = -1
-        self.trackProgress = 0
+        self.trackAccess = [0, 0, 0, 0, 1, 1, 0, 0]
+        self.refundPoints = 0
+        self.trainingFrames = 0
 
     def addTeleportAccess(self, zoneId):
         if zoneId not in self.teleportAccess:
             self.teleportAccess.append(zoneId)
 
-    def addTrackAccess(self, track):
-        self.trackAccess[track] = 1
+    def addTrainingFrame(self, progressIndex):
+        self.trainingFrames = self.trainingFrames | 1 << progressIndex
 
-    def addTrackProgress(self, trackId, progressIndex):
-        if self.trackProgressId != trackId:
-            self.notify.warning('tried to update progress on a track toon is not training')
-        self.trackProgress = self.trackProgress | 1 << progressIndex
+    def getTrainingFrames(self):
+        return self.trainingFrames
 
-    def getTrackProgress(self):
-        return (self.trackProgressId, self.trackProgress)
+    def setRefundPoints(self, points):
+        self.refundPoints = points
+
+    def getRefundPoints(self):
+        return self.refundPoints
 
     def clearTrackProgress(self):
-        self.trackProgressId = -1
-        self.trackProgress = 0
+        self.trainingFramesId = -1
+        self.trainingFrames = 0
 
     def setFromAvatar(self, av):
         rewardIds = []

@@ -13,23 +13,25 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     PressableTextColor = Vec4(1, 1, 1, 1)
     PressableGeomColor = Vec4(1, 1, 1, 1)
     PressableImageColor = Vec4(0, 0.6, 1, 1)
+    PressableImageBuffedColor = Vec4(0, 0.4, 0.9, 1)
     PropBonusPressableImageColor = Vec4(1.0, 0.6, 0.0, 1)
     NoncreditPressableImageColor = Vec4(0.3, 0.6, 0.6, 1)
+    NoncreditPressableImageBuffedColor = Vec4(0.1, 0.4, 0.56, 1)
     PropBonusNoncreditPressableImageColor = Vec4(0.6, 0.6, 0.3, 1)
     DeletePressableImageColor = Vec4(0.7, 0.1, 0.1, 1)
     UnpressableTextColor = Vec4(1, 1, 1, 0.3)
     UnpressableGeomColor = Vec4(1, 1, 1, 0.3)
     UnpressableImageColor = Vec4(0.3, 0.3, 0.3, 0.8)
+    UnpressableImageBuffedColor = Vec4(0.2, 0.2, 0.28, 0.8)
     BookUnpressableTextColor = Vec4(1, 1, 1, 1)
     BookUnpressableGeomColor = Vec4(1, 1, 1, 1)
     BookUnpressableImage0Color = Vec4(0, 0.6, 1, 1)
+    BookUnpressableImage0BuffedColor = Vec4(0, 0.4, 0.9, 1)
     BookUnpressableImage2Color = Vec4(0.1, 0.7, 1, 1)
     ShadowColor = Vec4(0, 0, 0, 0)
-    ShadowBuffedColor = Vec4(1, 1, 1, 1)
-    UnpressableShadowBuffedColor = Vec4(1, 1, 1, 0.3)
-    TrackBarScale = Vec3(1.0, 1.0, 1.0)
+    TrackBarScale = Vec3(1.0, 1.0, 0.875)
     TrackYOffset = 0.0
-    TrackYSpacing = -0.12
+    TrackYSpacing = -0.105
     ButtonXOffset = -0.42
     ButtonXSpacing = 0.17
 
@@ -90,21 +92,6 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
             self.tutText.show()
             self.tutText.reparentTo(self.battleFrame, 1)
         DirectFrame.show(self)
-
-    def uberGagToggle(self):
-        for itemList in self.invModels:
-            for itemIndex in xrange(MAX_LEVEL_INDEX + 1):
-                if itemIndex <= MAX_LEVEL_INDEX:
-                    itemList[itemIndex].show()
-                else:
-                    itemList[itemIndex].hide()
-
-        for buttonList in self.buttons:
-            for buttonIndex in xrange(MAX_LEVEL_INDEX + 1):
-                if buttonIndex <= MAX_LEVEL_INDEX:
-                    buttonList[buttonIndex].show()
-                else:
-                    buttonList[buttonIndex].hide()
 
     def hide(self):
         if self.tutorialFlag:
@@ -1107,54 +1094,50 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
         if bonus:
-            shadowColor = self.ShadowBuffedColor
+            imageColor = self.PressableImageBuffedColor
         else:
-            shadowColor = self.ShadowColor
-        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor,
+            imageColor = self.PressableImageColor
+        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=self.ShadowColor,
                          geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
         if self._interactivePropTrackBonus == track:
             button.configure(image_color=self.PropBonusPressableImageColor)
             self.addToPropBonusIval(button)
         else:
-            button.configure(image_color=self.PressableImageColor)
+            button.configure(image_color=imageColor)
 
     def makeDisabledPressable(self, button, track, level):
         prestige = self.toon.checkTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
         if bonus:
-            shadowColor = self.UnpressableShadowBuffedColor
+            imageColor = self.UnpressableImageBuffedColor
         else:
-            shadowColor = self.ShadowColor
-        button.configure(text_shadow=shadowColor, geom_color=self.UnpressableGeomColor, image_image=self.flatButton,
+            imageColor = self.UnpressableImageColor
+        button.configure(text_shadow=self.ShadowColor, geom_color=self.UnpressableGeomColor, image_image=self.flatButton,
                          commandButtons=(DGG.LMB,))
-        button.configure(image_color=self.UnpressableImageColor)
+        button.configure(image_color=imageColor)
 
     def makeNoncreditPressable(self, button, track, level):
         prestige = self.toon.checkTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
         if bonus:
-            shadowColor = self.ShadowBuffedColor
+            imageColor = self.NoncreditPressableImageBuffedColor
         else:
-            shadowColor = self.ShadowColor
-        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor,
+            imageColor = self.NoncreditPressableImageColor
+        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=self.ShadowColor,
                          geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
         if self._interactivePropTrackBonus == track:
             button.configure(image_color=self.PropBonusNoncreditPressableImageColor)
             self.addToPropBonusIval(button)
         else:
-            button.configure(image_color=self.NoncreditPressableImageColor)
+            button.configure(image_color=imageColor)
 
     def makeDeletePressable(self, button, track, level):
         prestige = self.toon.checkTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
-        if bonus:
-            shadowColor = self.ShadowBuffedColor
-        else:
-            shadowColor = self.ShadowColor
-        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor,
+        button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=self.ShadowColor,
                          geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
         button.configure(image_color=self.DeletePressableImageColor)
 
@@ -1163,24 +1146,24 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
         if bonus:
-            shadowColor = self.UnpressableShadowBuffedColor
+            imageColor = self.UnpressableImageBuffedColor
         else:
-            shadowColor = self.ShadowColor
-        button.configure(text_shadow=shadowColor, geom_color=self.UnpressableGeomColor, image_image=self.flatButton,
-                         commandButtons=())
-        button.configure(image_color=self.UnpressableImageColor)
+            imageColor = self.UnpressableImageColor
+        button.configure(text_shadow=self.ShadowColor, geom_color=self.UnpressableGeomColor,
+                         image_image=self.flatButton, commandButtons=())
+        button.configure(image_color=imageColor)
 
     def makeBookUnpressable(self, button, track, level):
         prestige = self.toon.checkTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
         if bonus:
-            shadowColor = self.ShadowBuffedColor
+            image0Color = self.BookUnpressableImage0BuffedColor
         else:
-            shadowColor = self.ShadowColor
-        button.configure(text_shadow=shadowColor, geom_color=self.BookUnpressableGeomColor, image_image=self.flatButton,
-                         commandButtons=())
-        button.configure(image0_color=self.BookUnpressableImage0Color, image2_color=self.BookUnpressableImage2Color)
+            image0Color = self.BookUnpressableImage0Color
+        button.configure(text_shadow=self.ShadowColor, geom_color=self.BookUnpressableGeomColor,
+                         image_image=self.flatButton, commandButtons=())
+        button.configure(image0_color=image0Color, image2_color=self.BookUnpressableImage2Color)
 
     def hideTrack(self, trackIndex):
         self.trackNameLabels[trackIndex].show()

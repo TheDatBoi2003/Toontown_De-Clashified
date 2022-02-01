@@ -131,10 +131,6 @@ class QuestManagerAI:
 
             nextQuest = Quests.getNextQuest(questId, npc, av)
             if nextQuest == (Quests.NA, Quests.NA):
-                if isinstance(quest, Quests.TrackChoiceQuest):
-                    npc.presentTrackChoice(avId, questId, quest.getChoices())
-                    return
-
                 rewardId = Quests.getAvatarRewardId(av, questId)
                 npc.completeQuest(avId, questId, rewardId)
                 self.completeQuest(av, questId)

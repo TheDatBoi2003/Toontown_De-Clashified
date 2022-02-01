@@ -46,7 +46,7 @@ class DistributedToonUD(DistributedObjectUD):
     def setTrackAccess(self, todo0):
         pass
 
-    def setTrackProgress(self, todo0, todo1):
+    def setTrainingFrames(self, todo0, todo1):
         pass
 
     def setTrackPrestige(self, todo0):

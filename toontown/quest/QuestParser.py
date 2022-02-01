@@ -19,6 +19,7 @@ from otp.speedchat import SpeedChatGlobals
 from toontown.ai import DistributedBlackCatMgr
 from direct.showbase import PythonUtil
 from direct.interval.IntervalGlobal import *
+
 notify = DirectNotifyGlobal.directNotify.newCategory('QuestParser')
 lineDict = {}
 globalVarDict = {}
@@ -428,7 +429,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
                         self.notify.error('SHOW_THROW_SQUIRT_PREVIEW not allowed in an UPON_TIMEOUT')
                     nextEvent = 'doneThrowSquirtPreview'
                     iList.append(Func(self.acceptOnce, nextEvent, self.playNextChapter, [nextEvent]))
-                    iList.append(self.parseThrowSquirtPreview(line))
+                    iList.append(self.parsePreview(line))
                     self.closePreviousChapter(iList)
                     chapterList = []
                     self.currentEvent = nextEvent
@@ -1008,13 +1009,18 @@ class NPCMoviePlayer(DirectObject.DirectObject):
 
             return Func(disableBlackCatListen)
 
-    def parseThrowSquirtPreview(self, line):
+    def parsePreview(self, line):
         oldTrackAccess = [None]
+        maxTracks = ToontownBattleGlobals.MAX_TRACK_INDEX + 1
+        trackAccess = []
 
-        def grabCurTrackAccess(oldTrackAccess = oldTrackAccess):
+        def grabCurTrackAccess():
             oldTrackAccess[0] = copy.deepcopy(base.localAvatar.getTrackAccess())
+            for i in xrange(maxTracks):
+                if oldTrackAccess[i]:
+                    trackAccess.append(i)
 
-        def restoreTrackAccess(oldTrackAccess = oldTrackAccess):
+        def restoreTrackAccess():
             base.localAvatar.setTrackAccess(oldTrackAccess[0])
 
         minGagLevel = ToontownBattleGlobals.MIN_LEVEL_INDEX + 1
@@ -1026,15 +1032,12 @@ class NPCMoviePlayer(DirectObject.DirectObject):
             if newGagLevel == curGagLevel:
                 return
             curGagLevel = newGagLevel
-            base.localAvatar.setTrackAccess([0,
-             0,
-             0,
-             0,
-             curGagLevel,
-             curGagLevel,
-             0])
+            tracks = [0 for _ in xrange(maxTracks)]
+            for i in trackAccess:
+                tracks[i] = curGagLevel
+            base.localAvatar.setTrackAccess(tracks)
 
-        return Sequence(Func(grabCurTrackAccess), LerpFunctionInterval(updateGagLevel, fromData=1, toData=7, duration=0.3), WaitInterval(3.5), LerpFunctionInterval(updateGagLevel, fromData=7, toData=1, duration=0.3), Func(restoreTrackAccess), Func(messenger.send, 'doneThrowSquirtPreview'))
+        return Sequence(Func(grabCurTrackAccess), LerpFunctionInterval(updateGagLevel, fromData=1, toData=maxGagLevel, duration=0.3), WaitInterval(3.5), LerpFunctionInterval(updateGagLevel, fromData=maxGagLevel, toData=1, duration=0.3), Func(restoreTrackAccess), Func(messenger.send, 'doneThrowSquirtPreview'))
 
     def parseSetMusicVolume(self, line):
         if base.config.GetString('language', 'english') == 'japanese':

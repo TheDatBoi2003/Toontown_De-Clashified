@@ -6,14 +6,13 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.toon import Toon
-MAX_FRAMES = 18
-Track2Anim = {ToontownBattleGlobals.HEAL_TRACK: 'juggle',
- ToontownBattleGlobals.TRAP_TRACK: 'toss',
- ToontownBattleGlobals.LURE_TRACK: 'hypnotize',
- ToontownBattleGlobals.SOUND_TRACK: 'sound',
- ToontownBattleGlobals.THROW_TRACK: 'throw',
- ToontownBattleGlobals.SQUIRT_TRACK: 'firehose',
- ToontownBattleGlobals.DROP_TRACK: 'pushbutton'}
+from toontown.toonbase.ToontownBattleGlobals import TrackIcons, AvPropsNew
+
+BASE_FRAMES = ToontownBattleGlobals.MIN_TRACK_FRAMES
+MAX_FRAMES = ToontownBattleGlobals.MAX_TRACK_FRAMES + 2
+COLS = 6
+ROWS = 3
+
 
 class TrackFrame(DirectFrame):
 
@@ -21,68 +20,43 @@ class TrackFrame(DirectFrame):
         DirectFrame.__init__(self, relief=None)
         self.initialiseoptions(TrackFrame)
         filmstrip = loader.loadModel('phase_3.5/models/gui/filmstrip')
+        self.gags = loader.loadModel('phase_3.5/models/gui/inventory_icons')
         self.index = index
-        self.frame = DirectFrame(parent=self, relief=None, image=filmstrip, image_scale=1, text=str(self.index - 1), text_pos=(0.26, -0.22), text_fg=(1, 1, 1, 1), text_scale=0.1)
+        self.frame = DirectFrame(parent=self, relief=None,
+                                 image=filmstrip, image_scale=(6 / float(COLS), 6 / float(COLS), 3 / float(ROWS)),
+                                 text=str(self.index - 1),
+                                 text_pos=(0.26, -0.22), text_fg=(1, 1, 1, 1), text_scale=0.1)
         self.question = DirectLabel(parent=self.frame, relief=None, pos=(0, 0, -0.15), text='?', text_scale=0.4, text_pos=(0, 0.04), text_fg=(0.72, 0.72, 0.72, 1))
-        self.toon = None
+        self.icon = DirectFrame(parent=self.frame, relief=None,
+                                image=None, image_scale=1,
+                                text='', text_pos=(0, -0.2), text_fg=(1, 1, 1, 1), text_scale=0.3)
         filmstrip.removeNode()
         return
 
-    def makeToon(self):
-        if not self.toon:
-            self.toon = Toon.Toon()
-            self.toon.setDNA(base.localAvatar.getStyle())
-            self.toon.getGeomNode().setDepthWrite(1)
-            self.toon.getGeomNode().setDepthTest(1)
-            self.toon.useLOD(500)
-            self.toon.reparentTo(self.frame)
-            self.toon.setPosHprScale(0, 10, -0.25, 210, 0, 0, 0.12, 0.12, 0.12)
-            self.ignore('nametagAmbientLightChanged')
-
     def play(self, trackId):
-        if not base.launcher or base.launcher and base.launcher.getPhaseComplete(5):
-            anim = Track2Anim[trackId]
-        else:
-            anim = 'neutral'
-        if self.toon:
-            numFrames = self.toon.getNumFrames(anim) - 1
-            fromFrame = 0
-            toFrame = (self.toon.getNumFrames(anim) - 1) / MAX_FRAMES * self.index
-            self.toon.play(anim, None, fromFrame, toFrame - 1)
-        return
+        pass
 
     def setTrained(self, trackId):
-        if self.toon is None:
-            self.makeToon()
-        if not base.launcher or base.launcher and base.launcher.getPhaseComplete(5):
-            anim = Track2Anim[trackId]
-            frame = (self.toon.getNumFrames(anim) - 1) / MAX_FRAMES * self.index
-        else:
-            anim = 'neutral'
-            frame = 0
-        self.toon.pose(anim, frame)
-        self.toon.show()
         self.question.hide()
         trackColorR, trackColorG, trackColorB = ToontownBattleGlobals.TrackColors[trackId]
         self.frame['image_color'] = Vec4(trackColorR, trackColorG, trackColorB, 1)
         self.frame['text_fg'] = Vec4(trackColorR * 0.3, trackColorG * 0.3, trackColorB * 0.3, 1)
+        self.icon['image'] = self.gags.find('**/' + AvPropsNew[trackId][TrackIcons[trackId]])
+        self.icon['text'] = ToontownBattleGlobals.Tracks[trackId].capitalize()
         return
 
-    def setUntrained(self, trackId):
-        if self.toon:
-            self.toon.delete()
-            self.toon = None
+    def setUntrained(self, available):
         self.question.show()
-        if trackId == -1:
+        if available:
+            self.frame['image_color'] = Vec4(0.1, 0.5, 0.9, 1)
+            self.frame['text_fg'] = Vec4(0.3, 0.3, 0.3, 1)
+            self.question['text_fg'] = Vec4(0.06, 0.2, 0.6, 1)
+        else:
             self.frame['image_color'] = Vec4(0.7, 0.7, 0.7, 1)
             self.frame['text_fg'] = Vec4(0.5, 0.5, 0.5, 1)
             self.question['text_fg'] = Vec4(0.6, 0.6, 0.6, 1)
-        else:
-            trackColorR, trackColorG, trackColorB = ToontownBattleGlobals.TrackColors[trackId]
-            self.frame['image_color'] = Vec4(trackColorR * 0.7, trackColorG * 0.7, trackColorB * 0.7, 1)
-            self.frame['text_fg'] = Vec4(trackColorR * 0.3, trackColorG * 0.3, trackColorB * 0.3, 1)
-            self.question['text_fg'] = Vec4(trackColorR * 0.6, trackColorG * 0.6, trackColorB * 0.6, 1)
-        return
+        self.icon['image'] = None
+        self.icon['text'] = ''
 
 
 class TrackPage(ShtikerPage.ShtikerPage):
@@ -93,23 +67,23 @@ class TrackPage(ShtikerPage.ShtikerPage):
 
     def placeFrames(self):
         rowY = 0.38
-        rowSpace = -0.32
+        rowSpace = -0.96 / ROWS
         rowPos = []
-        for i in xrange(3):
+        for i in xrange(ROWS):
             rowPos.append(rowY)
             rowY += rowSpace
 
         colX = -0.7
-        colSpace = 0.276
+        colSpace = 1.656 / COLS
         colPos = []
-        for i in xrange(6):
+        for i in xrange(COLS):
             colPos.append(colX)
             colX += colSpace
 
         for index in xrange(1, MAX_FRAMES + 1):
             frame = self.trackFrames[index - 1]
-            col = (index - 1) % 6
-            row = (index - 1) / 6
+            col = (index - 1) % COLS
+            row = (index - 1) / COLS
             frame.setPos(colPos[col], 0, rowPos[row])
             frame.setScale(0.39)
 
@@ -148,27 +122,24 @@ class TrackPage(ShtikerPage.ShtikerPage):
 
     def clearPage(self):
         for index in xrange(1, MAX_FRAMES - 1):
-            self.trackFrames[index].setUntrained(-1)
+            self.trackFrames[index].setUntrained(0)
 
         self.startFrame.frame['text'] = ''
-        self.trackText['text'] = TTLocalizer.TrackPageClear
+        self.trackText['text'] = TTLocalizer.TrackPageFull
 
     def updatePage(self):
-        trackId, trackProgress = base.localAvatar.getTrackProgress()
-        if trackId == -1:
+        trackIds, trainingFrames = base.localAvatar.getTrainingFrames()
+        if trainingFrames <= BASE_FRAMES:
             self.clearPage()
         else:
-            trackName = ToontownBattleGlobals.Tracks[trackId].capitalize()
-            self.trackText['text'] = TTLocalizer.TrackPageTraining % (trackName, trackName)
-            trackProgressArray = base.localAvatar.getTrackProgressAsArray()
-            for index in xrange(1, MAX_FRAMES - 2):
-                if trackProgressArray[index - 1]:
-                    self.trackFrames[index].setTrained(trackId)
+            self.trackText['text'] = TTLocalizer.TrackPageAvailable % trainingFrames
+            trainingFramesArray = base.localAvatar.getTrackProgressAsArray()
+            for index in xrange(1, MAX_FRAMES):
+                if trainingFramesArray[index - 1]:
+                    self.trackFrames[index].setTrained(trackIds[index])
                 else:
-                    self.trackFrames[index].setUntrained(trackId)
-
-            self.trackFrames[MAX_FRAMES - 2].setUntrained(trackId)
-            self.startFrame.frame['text'] = TTLocalizer.TrackPageFilmTitle % trackName
+                    self.trackFrames[index].setUntrained(trackIds[index] != -1)
+            self.startFrame.frame['text'] = TTLocalizer.TrackPageFilmTitle % trainingFrames
 
     def enter(self):
         self.updatePage()

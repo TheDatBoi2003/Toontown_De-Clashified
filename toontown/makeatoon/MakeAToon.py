@@ -2,6 +2,7 @@ from panda3d.core import *
 from toontown.distributed.ToontownMsgTypes import *
 from toontown.char import Char
 from otp.avatar import Avatar
+from toontown.makeatoon import StartingTrackShop
 from toontown.toon import Toon
 from toontown.toon import LocalToon
 from toontown.toon import ToonDNA
@@ -57,8 +58,9 @@ class MakeAToon(StateData.StateData):
          State.State('GenderShop', self.enterGenderShop, self.exitGenderShop, ['BodyShop']),
          State.State('BodyShop', self.enterBodyShop, self.exitBodyShop, ['GenderShop', 'ColorShop']),
          State.State('ColorShop', self.enterColorShop, self.exitColorShop, ['BodyShop', 'ClothesShop']),
-         State.State('ClothesShop', self.enterClothesShop, self.exitClothesShop, ['ColorShop', 'NameShop']),
-         State.State('NameShop', self.enterNameShop, self.exitNameShop, ['ClothesShop']),
+         State.State('ClothesShop', self.enterClothesShop, self.exitClothesShop, ['ColorShop', 'StartingTrackShop', 'NameShop']),
+         State.State('StartingTrackShop', self.enterStartingTrackShop, self.exitStartingTrackShop, ['ClothesShop', 'NameShop']),
+         State.State('NameShop', self.enterNameShop, self.exitNameShop, ['StartingTrackShop', 'ClothesShop']),
          State.State('Done', self.enterDone, self.exitDone, [])], 'Init', 'Done')
         self.parentFSM = parentFSM
         self.parentFSM.getStateNamed('createAvatar').addChild(self.fsm)
@@ -66,6 +68,7 @@ class MakeAToon(StateData.StateData):
         self.bs = BodyShop.BodyShop('BodyShop-done')
         self.cos = ColorShop.ColorShop('ColorShop-done')
         self.cls = MakeClothesGUI.MakeClothesGUI('ClothesShop-done')
+        self.sts = StartingTrackShop.StartingTrackShop('StartingTrackShop-done')
         self.ns = NameShop.NameShop(self, 'NameShop-done', avList, index, self.isPaid)
         self.shop = GENDERSHOP
         self.shopsVisited = []
@@ -218,6 +221,8 @@ class MakeAToon(StateData.StateData):
         self.colorProps = self.room.find('**/colorProps')
         self.clothesWalls = self.room.find('**/clothWalls')
         self.clothesProps = self.room.find('**/clothProps')
+        self.startWalls = self.room.find('**/bodyWalls')
+        self.startProps = self.room.find('**/bodyProps')
         self.nameWalls = self.room.find('**/nameWalls')
         self.nameProps = self.room.find('**/nameProps')
         self.background = self.room.find('**/background')
@@ -254,6 +259,7 @@ class MakeAToon(StateData.StateData):
         self.bs.load()
         self.cos.load()
         self.cls.load()
+        self.sts.load()
         self.ns.load()
         self.music = base.loader.loadMusic('phase_3/audio/bgm/create_a_toon.ogg')
         self.musicVolume = base.config.GetFloat('makeatoon-music-volume', 1)
@@ -276,6 +282,7 @@ class MakeAToon(StateData.StateData):
         self.bs.unload()
         self.cos.unload()
         self.cls.unload()
+        self.sts.unload()
         self.ns.unload()
         del self.gs
         del self.bs
@@ -387,6 +394,8 @@ class MakeAToon(StateData.StateData):
             self.fsm.request('ColorShop')
         elif self.shop == COLORSHOP:
             self.fsm.request('ClothesShop')
+        elif self.shop == CLOTHESSHOP:
+            self.fsm.request('StartingTrackShop')
         else:
             self.fsm.request('NameShop')
 
@@ -398,6 +407,8 @@ class MakeAToon(StateData.StateData):
             self.fsm.request('BodyShop')
         elif self.shop == CLOTHESSHOP:
             self.fsm.request('ColorShop')
+        elif self.shop == NAMESHOP:
+            self.fsm.request('StartingTrackShop')
         else:
             self.fsm.request('ClothesShop')
 
@@ -557,6 +568,44 @@ class MakeAToon(StateData.StateData):
             self.goToNextShop()
         else:
             self.cls.hideButtons()
+            self.goToLastShop()
+
+    def startingTrackShopOpening(self):
+        self.guiLastButton.show()
+        self.sts.showButtons(self.guiNextButton)
+        self.rotateLeftButton.show()
+        self.rotateRightButton.show()
+
+    def enterStartingTrackShop(self):
+        self.shop = STARTINGTRACKSHOP
+        self.guiTopBar['text'] = TTLocalizer.PickStartingGags
+        self.guiTopBar['text_fg'] = (1, 0.92, 0.2, 1)
+        self.guiTopBar['text_scale'] = TTLocalizer.MATenterClothesShop
+        self.accept('StartingTrackShop-done', self.__handleStartingTrackShopDone)
+        self.dropRoom(self.startWalls, self.startProps)
+        self.toon.setScale(self.toonScale)
+        self.toon.setPos(self.toonPosition)
+        if not self.progressing:
+            self.toon.setHpr(self.toonHpr)
+        self.startingTrackShopOpening()
+        self.sts.enter(self.toon)
+        if STARTINGTRACKSHOP not in self.shopsVisited:
+            self.shopsVisited.append(STARTINGTRACKSHOP)
+
+    def exitStartingTrackShop(self):
+        self.squishRoom(self.startWalls)
+        self.squishProp(self.startProps)
+        self.sts.exit()
+        self.ignore('StartingTrackShop-done')
+
+    def __handleStartingTrackShopDone(self):
+        self.guiNextButton.hide()
+        self.guiLastButton.hide()
+        if self.sts.doneStatus == 'next':
+            self.sts.hideButtons()
+            self.goToNextShop()
+        else:
+            self.sts.hideButtons()
             self.goToLastShop()
 
     def nameShopOpening(self, task):

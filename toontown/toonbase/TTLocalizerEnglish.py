@@ -391,10 +391,10 @@ QuestsRecoverItemQuestWhereIsBuildingSCString = 'Where is %s%s?'
 QuestsRecoverItemQuestRecoverFromSCString = 'I need to recover %(item)s from %(holder)s%(loc)s.'
 QuestsRecoverItemQuestString = 'Recover %(item)s from %(holder)s'
 QuestsRecoverItemQuestHolderString = '%(level)s %(holder)d+ %(cogs)s'
-QuestsTrackChoiceQuestHeadline = 'CHOOSE'
-QuestsTrackChoiceQuestSCString = 'I need to choose between %(trackA)s and %(trackB)s.'
-QuestsTrackChoiceQuestMaybeSCString = 'Maybe I should choose %s.'
-QuestsTrackChoiceQuestString = 'Choose between %(trackA)s and %(trackB)s'
+QuestsRefundQuestHeadline = 'CLAIM'
+QuestsRefundQuestSCString = 'I need to claim a refund point.'
+QuestsRefundQuestMaybeSCString = 'Maybe I should use my refund point.'
+QuestsRefundQuestString = 'Claim your refund point'
 QuestsFriendQuestHeadline = 'FRIEND'
 QuestsFriendQuestSCString = 'I need to make a friend.'
 QuestsFriendQuestString = 'Make a friend'
@@ -427,18 +427,18 @@ QuestsMaxMoneyRewardSingular = 'You can now carry 1 jellybean.'
 QuestsMaxMoneyRewardPlural = 'You can now carry %s jellybeans.'
 QuestsMaxMoneyRewardPosterSingular = 'Reward: Carry 1 jellybean'
 QuestsMaxMoneyRewardPosterPlural = 'Reward: Carry %s jellybeans'
-QuestsMaxGagCarryReward = 'You get a %(name)s. You can now carry %(num)s gags.'
-QuestsMaxGagCarryRewardPoster = 'Reward: %(name)s (%(num)s)'
+QuestsMaxGagCarryReward = 'You can now carry %(num)s gags.'
+QuestsMaxGagCarryRewardPoster = 'Reward: Carry %(num)s gags'
 QuestsMaxQuestCarryReward = 'You can now have %s ToonTasks.'
 QuestsMaxQuestCarryRewardPoster = 'Reward: Carry %s ToonTasks'
 QuestsTeleportReward = 'You now have teleport access to %s.'
 QuestsTeleportRewardPoster = 'Reward: Teleport access to %s'
-QuestsTrackTrainingReward = 'You can now train for "%s" gags.'
-QuestsTrackTrainingRewardPoster = 'Reward: Gag training'
-QuestsTrackProgressReward = 'You now have frame %(frameNum)s of the %(trackName)s track animation.'
-QuestsTrackProgressRewardPoster = 'Reward: "%(trackName)s" track animation frame %(frameNum)s'
-QuestsTrackCompleteReward = 'You may now carry and use "%s" gags.'
-QuestsTrackCompleteRewardPoster = 'Reward: Final %s track training'
+QuestsFrameRefundReward = 'You can now refund one training frame.'
+QuestsFrameRefundRewardPoster = 'Reward: One Frame Refund Point'
+QuestsTrainingFrameReward = 'You have earned your %dth training frame.'
+QuestsTrainingFrameRewardPoster = 'Reward: "Training Frame #%d'
+QuestsTrainingCompleteReward = 'Congratulations, you have earned your last training frame!'
+QuestsTrainingCompleteRewardPoster = 'Reward: Final training frame'
 QuestsClothingTicketReward = 'You can change your clothes'
 QuestsClothingTicketRewardPoster = 'Reward: Clothing Ticket'
 TIPQuestsClothingTicketReward = 'You can change your shirt for a TIP shirt'
@@ -455,14 +455,6 @@ QuestsLocationBuilding = "%s's building is called"
 QuestsLocationBuildingVerb = 'which is'
 QuestsLocationParagraph = '\x07%(building)s "%(buildingName)s"...\x07...%(buildingVerb)s %(street)s.'
 QuestsGenericFinishSCString = 'I need to finish a ToonTask.'
-QuestsMediumPouch = 'Medium Pouch'
-QuestsLargePouch = 'Large Pouch'
-QuestsSmallBag = 'Small Bag'
-QuestsMediumBag = 'Medium Bag'
-QuestsLargeBag = 'Large Bag'
-QuestsSmallBackpack = 'Small Backpack'
-QuestsMediumBackpack = 'Medium Backpack'
-QuestsLargeBackpack = 'Large Backpack'
 QuestsItemDict = {1: ['Pair of Glasses', 'Pairs of Glasses', 'a '],
                   2: ['Key', 'Keys', 'a '],
                   3: ['Blackboard', 'Blackboards', 'a '],
@@ -483,8 +475,11 @@ QuestsItemDict = {1: ['Pair of Glasses', 'Pairs of Glasses', 'a '],
                   18: ['Water', 'Waters', 'some '],
                   19: ['Gear report', 'Gear reports', 'a '],
                   20: ['Blackboard Eraser', 'Blackboard Erasers', 'a '],
+                  21: ['Lead Battery', 'Lead Batteries', 'a '],
                   110: ['TIP Clothing Ticket', 'Clothing Tickets', 'a '],
                   1000: ['Clothing Ticket', 'Clothing Tickets', 'a '],
+                  1100: ['Research Paper', 'Research Papers', 'a '],
+                  1101: ['Package', 'Packages', 'a '],
                   2001: ['Inner Tube', 'Inner Tubes', 'an '],
                   2002: ['Monocle Prescription', 'Monocle Prescriptions', 'a '],
                   2003: ['Eyeglass Frames', 'Eyeglass Frames', 'some '],
@@ -645,21 +640,32 @@ QuestDialogDict = {160: {GREETING: '',
                    169: {
                        QUEST: 'Nice work defeating those Cogs.\x07You know, the Cogs come in four different types.\x07They are Lawbots, Cashbots, Sellbots, and Bossbots.\x07You can tell them apart by their coloring and their name labels.\x07For practice go defeat 4 Cashbots.'},
                    170: {
-                       QUEST: 'Nice work, now you know the difference between the 4 types of Cogs.\x07I think you are ready to start training for your third gag track.\x07Go talk to _toNpcName_ to choose your next gag track - he can give you some expert advice._where_'},
+                       QUEST: 'Nice work, now you know the difference between the 4 types of Cogs.\x07'
+                              'I think you are ready to start training for more gag tracks.\x07'
+                              'Go talk to _toNpcName_ about training frames - he will teach you the ropes._where_'},
                    171: {
-                       QUEST: 'Nice work, now you know the difference between the 4 types of Cogs.\x07I think you are ready to start training for your third gag track.\x07Go talk to _toNpcName_ to choose your next gag track - he can give you some expert advice._where_'},
+                       QUEST: 'Nice work, now you know the difference between the 4 types of Cogs.\x07'
+                              'I think you are ready to start training for more gag tracks.\x07'
+                              'Go talk to _toNpcName_ about training frames - he will teach you the ropes._where_'},
                    172: {
-                       QUEST: 'Nice work, now you know the difference between the 4 types of Cogs.\x07I think you are ready to start training for your third gag track.\x07Go talk to _toNpcName_ to choose your next gag track - she can give you some expert advice._where_'},
+                       QUEST: 'Nice work, now you know the difference between the 4 types of Cogs.\x07'
+                              'I think you are ready to start training for more gag tracks.\x07'
+                              'Go talk to _toNpcName_ about training frames - she will teach you the ropes._where_'},
                    175: {GREETING: '',
                          QUEST: "Did you know you have your very own Toon house?\x07Clarabelle Cow runs a phone catalog where you can order furniture to decorate your house.\x07You can also buy SpeedChat phrases, clothing, and other fun things!\x07I'll tell Clarabelle to send you your first catalog now.\x07You get a catalog with new items every week!\x07Go to your home and use your phone to call Clarabelle.",
                          INCOMPLETE_PROGRESS: 'Go home and use your phone to call Clarabelle.',
                          COMPLETE: 'Hope you have fun ordering things from Clarabelle!\x07I just finished redecorating my house. It looks Toontastic!\x07Keep doing ToonTasks to get more rewards!',
                          LEAVING: QuestsDefaultLeaving},
                    400: {GREETING: '',
-                         QUEST: 'Throw and Squirt are great, but you will need more gags to fight higher level Cogs.\x07When you team up with other Toons against the Cogs, you can combine attacks for even more damage.\x07Try different combinations of gags to see what works best.\x07For your next track, choose between Sound and Toonup.\x07Sound is special because when it hits, it damages all Cogs.\x07Toonup lets you heal other Toons in battle.\x07When you are ready to decide, come back here and choose.',
-                         INCOMPLETE_PROGRESS: 'Back so soon?  Okay, are you ready to choose?',
-                         INCOMPLETE_WRONG_NPC: 'Think about your decision before choosing.',
-                         COMPLETE: 'Good decision.  Now before you can use those gags, you must train for them.\x07You must complete a series of ToonTasks for training.\x07Each task will give you a single frame of your gag attack animation.\x07When you collect all 15, you can get the Final Gag Training task that will allow you to use your new gags.\x07You can check your progress in the Shticker Book.',
+                         QUEST: 'Your gags are great, but you should consider collecting some training frames.\x07'
+                                'Training frames will allow you to unlock even more tracks!\x07'
+                                'If you wanted to, you could even spend a frame to prestige a track you own.\x07'
+                                "Pick carefully.  Once you redeem a training frame, it's expensive to refund.\x07"
+                                'Talk to an HQ Officer to obtain your first training frame.',
+                         COMPLETE: 'Here is your first training frame!\x07'
+                                   'You will have to earn another training frame before unlocking a track.\x07'
+                                   'As you complete tasks, more training frames will become available.\x07'
+                                   'You can see your current amount of training frames in the Shticker Book.',
                          LEAVING: QuestsDefaultLeaving},
                    1039: {QUEST: 'Visit _toNpcName_ if you want to get around town more easily._where_'},
                    1040: {QUEST: 'Visit _toNpcName_ if you want to get around town more easily._where_'},
@@ -822,11 +828,50 @@ QuestDialogDict = {160: {GREETING: '',
                        QUEST: 'I hear that Toon Headquarters is working on a sort of Cog Radar.\x07It will let you see where the Cogs are so that it will be easier to find them.\x07That Cog Page in your Shticker Book is the key.\x07By defeating enough Cogs, you can tune in to their signals and actually track where they are.\x07Keep defeating Cogs, so you will be ready.',
                        COMPLETE: 'Good work!  You could probably use this...',
                        LEAVING: ''},
+                   1090: {QUEST: '_toNpcName_ has some useful information for you._where_'},
+                   1091: {
+                       QUEST: 'I hear that Toon Headquarters is working on a sort of Cog Radar.\x07It will let you see where the Cogs are so that it will be easier to find them.\x07That Cog Page in your Shticker Book is the key.\x07By defeating enough Cogs, you can tune in to their signals and actually track where they are.\x07Keep defeating Cogs, so you will be ready.',
+                       COMPLETE: 'Good work!  You could probably use this...',
+                       LEAVING: ''},
+                   1093: {QUEST: '_toNpcName_ will be putting on a performance and needs to \"shock\" the audience!_where_'},
+                   1094: {QUEST: '.So you heard about my performance?  I could use some help.\x07'
+                                 '.I will be putting on a show for our electricians, and I have something special in mind!\x07'
+                                 ".Do you think you could grab a seltzer bottle from _toNpcName_?_where_",
+                          LEAVING: ''},
+                   1095: {QUEST: 'Welcome to my Seltzer Shop, how can I help?\x07'
+                                 'Silent Simone needs me to soak up a metal plate?\x07'
+                                 'I guess it will conduct electricity a lot better, but you should ask a professional first.\x07'
+                                 'Go speak to _toNpcName_, they will know what Simone needs._where_',
+                          LEAVING: ''},
+                   1096: {QUEST: "You look tired out.  Did you run a mile?\x07"
+                                 '...I see, but it would take more than just some wet metal to make a powerful shock.\x07'
+                                 'A big battery would do the trick--lead, preferably.\x07'
+                                 'Go obtain one from a level 2+ cog and then take it back to Simone.',
+                          COMPLETE: '.Thank you, _avName_, This is perfect!\x07'
+                                    '.A big battery and some soaking wet metal. this will surely cause a big SHOCK!\x07'
+                                    'Since you helped me obtain',
+                          LEAVING: ''},
+                   1100: {QUEST: '_toNpcName_ is writing an important research paper and wants your help.\x07_where_'},
+                   1101: {QUEST: 'Good to see you again, _avName_. I heard you were about to leave for Barnacle Boatyard!\x07'
+                                 'Before you go, I would like help researching some of the tougher cogs in Toontown Central.\x07'
+                                 'Defeat about 5 or so of the level 4 ones, and then come back to me.',
+                          INCOMPLETE_PROGRESS: 'I will need a few more cogs, please.',
+                          LEAVING: ''},
+                   1102: {GREETING: '',
+                          QUEST: "Excellent! Toon HQ would like to see this report.\x07"
+                                 "I'm sure they will give you something nice in return.",
+                          COMPLETE: "Did you obtain the Professor's report?\x07"
+                                    '...\"When fighting a bigger cog, be sure to carry more gags.\"\x07'
+                                    "Insightful as always. Go return to _toNpcName_ with this bonus.",
+                          LEAVING: ''},
+                   1103: {QUEST: "What's this, a bonus?\x07"
+                                 'An apple, oh how thoughtful of them!\x07'
+                                 "It looks like they've also thrown in an extra pouch. Here you go!"},
                    401: {GREETING: '',
-                         QUEST: 'Now you get to choose the next gag track you want to learn.\x07Take your time deciding, and come back here when you are ready to choose.',
-                         INCOMPLETE_PROGRESS: 'Think about your decision before choosing.',
-                         INCOMPLETE_WRONG_NPC: 'Think about your decision before choosing.',
-                         COMPLETE: 'A wise decision...',
+                         QUEST: "You have earned a refund point as a reward for your efforts.\x07"
+                                "You can use this refund point to undo one choice you've previously made.\x07"
+                                "If you refund a track, you will temporarily be unable to access that track.\x07",
+                         COMPLETE: 'Think carefully when you choose your gags!',
                          LEAVING: QuestsDefaultLeaving},
                    2201: {
                        QUEST: 'Those sneaky Cogs are at it again.\x07_toNpcName_ has reported another missing item. Stop by and see if you can straighten it out._where_'},
@@ -5108,10 +5153,11 @@ CdrResultTooManyFails = "We're sorry. You've tried to enter an incorrect code to
 CdrResultServiceUnavailable = "We're sorry. This feature is temporarily unavailable. Please try again during your next login."
 TrackPageTitle = 'Gag Track Training'
 TrackPageShortTitle = 'Gag Training'
-TrackPageSubtitle = 'Complete ToonTasks to learn how to use new gags!'
-TrackPageTraining = 'You are training to use %s gags.\nWhen you complete all 16 tasks you\nwill be able to use %s gags in battle.'
-TrackPageClear = 'You are not training any Gag Tracks now.'
-TrackPageFilmTitle = '%s\nTraining\nFilm'
+TrackPageSubtitle = 'Complete ToonTasks to earn more track frames!'
+TrackPageAvailable = 'You have %d %s available.'
+TrackPageFrame = ['frame', 'frames']
+TrackPageFull = 'You have no open frames.'
+TrackPageFilmTitle = 'Training Frames Collected: %d'
 TrackPageDone = 'FIN'
 QuestPageToonTasks = 'ToonTasks'
 QuestPageChoose = 'Choose'
@@ -5846,7 +5892,18 @@ CreateYourToonTitle = 'Choose  Boy  or  Girl'
 ShapeYourToonTitle = 'Choose  Your  Type'
 PaintYourToonTitle = 'Choose  Your  Color'
 PickClothesTitle = 'Choose  Your  Clothes'
+PickStartingGags = 'Choose  Your\nStarting  Gags'
 NameToonTitle = 'Choose  Your  Name'
+TrackTitles = ['Toon-Up', 'Trap', 'Lure', 'Sound', 'Squirt', 'Zap', 'Throw', 'Drop']
+TrackAvailable = ['You want this track?', 'You can only select 2 tracks.']
+TrackInfos = ['Restore the laff points of other toons!',
+              'Set up a powerful attack, then Lure a cog onto it!',
+              'Stuns enemies, making them easier targets, but has low accuracy!',
+              'Deals a small amount of damage to all the enemies!',
+              'An average damage, high accuracy attack that will soak its target!',
+              'High damage potential, and hits up to three, but only on soaked targets!',
+              'A high damage, average accuracy attack, reliable for defeating strong enemies!',
+              'A powerful attack with stronger combos, but low accuracy!']
 CreateYourToonHead = "Click the 'head' arrows to pick different animals."
 MakeAToonClickForNextScreen = 'Click the arrow below to go to the next screen.'
 PickClothes = 'Click the arrows to pick clothes!'

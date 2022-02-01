@@ -986,7 +986,9 @@ dclass DistributedToon : DistributedPlayer {
   setExperience(uint16[] = [0, 0, 0, 0, 0, 0, 0, 0]) required ownrecv db;
   setMaxCarry(uint8 = 20) required ownrecv db;
   setTrackAccess(uint16[] = [0, 0, 0, 0, 1, 1, 0, 0]) required broadcast ownrecv db;
-  setTrackProgress(int8 = -1, uint32 = 0) required ownrecv db;
+  setTrainingFrames(uint32 = 0) required ownrecv db;
+  setFrameTrack(uint32, int8 = -1) ownrecv;
+  setTrackRefundPoints(uint8) required ownrecv db;
   setTrackPrestige(uint8[] = [0, 0, 0, 0, 0, 0, 0, 0]) required broadcast ownrecv db;
   setInventory(blob = [0 * 7, 0 * 7, 0 * 7, 0 * 7, 1, 0 * 6, 1, 0 * 6, 0 * 7, 0 * 7]) required ownrecv db;
   setMaxNPCFriends(uint16 = 16) required ownrecv db;
@@ -3859,7 +3861,7 @@ dclass TTGameServicesManager : GameServicesManager {
   namePatternResponse(uint32, uint8);
   setNameTyped(uint32, string) clsend;
   nameTypedResponse(uint32, uint8);
-  createAvatar(blob, uint8) clsend;
+  createAvatar(blob, uint8, uint8[] = [4, 6]) clsend;
   createAvatarResponse(uint32);
   acknowledgeAvatarName(uint32) clsend;
   acknowledgeAvatarNameResponse();

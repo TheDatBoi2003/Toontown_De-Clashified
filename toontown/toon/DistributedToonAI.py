@@ -1877,28 +1877,35 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.notify.info('fixed tracks: %s' % self.trackArray)
         return fixed
 
-    def b_setTrackProgress(self, trackId, progress):
-        self.setTrackProgress(trackId, progress)
-        self.d_setTrackProgress(trackId, progress)
+    def b_setTrainingFrames(self, progress):
+        self.setTrainingFrames(progress)
+        self.d_setTrainingFrames(progress)
 
-    def d_setTrackProgress(self, trackId, progress):
-        self.sendUpdate('setTrackProgress', [trackId, progress])
+    def d_setTrainingFrames(self, progress):
+        self.sendUpdate('setTrainingFrames', [progress])
 
-    def setTrackProgress(self, trackId, progress):
-        self.trackProgressId = trackId
-        self.trackProgress = progress
+    def setTrainingFrames(self, progress):
+        self.trainingFrames = progress
 
-    def addTrackProgress(self, trackId, progressIndex):
-        if self.trackProgressId != trackId:
-            self.notify.warning('tried to update progress on a track toon is not training')
-        newProgress = self.trackProgress | 1 << progressIndex - 1
-        self.b_setTrackProgress(self.trackProgressId, newProgress)
+    def addTrainingFrame(self, progressIndex):
+        newFrames = self.trainingFrames | 1 << progressIndex - 1
+        self.b_setTrainingFrames(newFrames)
 
-    def clearTrackProgress(self):
-        self.b_setTrackProgress(-1, 0)
+    def getTrainingFrames(self):
+        return [self.trainingFramesId, self.trainingFrames]
 
-    def getTrackProgress(self):
-        return [self.trackProgressId, self.trackProgress]
+    def b_setRefundPoints(self, points):
+        self.setRefundPoints(points)
+        self.d_setRefundPoints(points)
+
+    def d_setRefundPoints(self, points):
+        self.sendUpdate('setRefundPoints', [points])
+
+    def setRefundPoints(self, points):
+        self.refundPoints = points
+
+    def getRefundPoints(self):
+        return self.refundPoints
 
     def b_setHoodsVisited(self, hoodsVisitedArray):
         self.hoodsVisited = hoodsVisitedArray

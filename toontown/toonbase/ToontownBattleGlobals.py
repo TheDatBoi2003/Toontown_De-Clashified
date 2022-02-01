@@ -68,6 +68,9 @@ NPC_COGS_MISS = MAX_TRACK_INDEX + 3
 MIN_LEVEL_INDEX = 0
 MAX_LEVEL_INDEX = 7
 
+MIN_TRACK_FRAMES = 4
+MAX_TRACK_FRAMES = 16
+
 DMG_UP_TRACKS = [SOUND_TRACK]
 
 ACC_UP_TRACKS = [DROP_TRACK]
@@ -81,6 +84,9 @@ ANVIL_LEVEL_INDEX = 3
 SHIP_LEVEL_INDEX = MAX_LEVEL_INDEX + 1
 
 WEDDING_LEVEL_INDEX = MAX_LEVEL_INDEX
+
+# Track icons used for various UI
+TrackIcons = [1, 0, 2, 1, 2, 3, 0, 3]
 
 # which props buffs which track
 PropTypeToTrackBonus = {

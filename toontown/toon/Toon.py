@@ -515,6 +515,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.shoes = (0, 0, 0)
         self.isStunned = 0
         self.isDisguised = 0
+        self.choices = [2, 3]
         self.defaultColorScale = None
         self.jar = None
         self.bobSwim = None
