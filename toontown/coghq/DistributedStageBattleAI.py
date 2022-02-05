@@ -39,13 +39,17 @@ class DistributedStageBattleAI(DistributedLevelBattleAI.DistributedLevelBattleAI
         amount = ToontownGlobals.StageNoticeRewards[self.level.stageId]
         index = ToontownGlobals.cogHQZoneId2deptIndex(self.level.stageId)
         extraMerits[index] = amount
+        creditMult = getStageCreditMultiplier(self.getTaskZoneId())
         for toon in toons:
-            mult = 1.0
-            meritArray = self.air.promotionMgr.recoverMerits(toon, [], self.getTaskZoneId(), mult, extraMerits=extraMerits)
+            meritArray = self.air.promotionMgr.recoverMerits(toon, [], self.getTaskZoneId(), 1.0, extraMerits=extraMerits)
             if toon.doId in self.helpfulToons:
                 self.toonMerits[toon.doId] = addListsByValue(self.toonMerits[toon.doId], meritArray)
             else:
                 self.notify.debug('toon %d not helpful list, skipping merits' % toon.doId)
+            if self.bossBattle:
+                self.toonParts[toon.doId] = self.air.cogSuitMgr.recoverPart(toon, self.level.stageType,
+                                                                            self.suitTrack, self.getTaskZoneId(), toons)
+                self.notify.debug('toonParts = %s' % self.toonParts)
 
         for floorNum, cogsThisFloor in enumerate(self.suitsKilledPerFloor):
             self.notify.info('merits for floor %s' % floorNum)
@@ -53,7 +57,7 @@ class DistributedStageBattleAI(DistributedLevelBattleAI.DistributedLevelBattleAI
                 recovered, notRecovered = self.air.questManager.recoverItems(toon, cogsThisFloor, self.getTaskZoneId())
                 self.toonItems[toon.doId][0].extend(recovered)
                 self.toonItems[toon.doId][1].extend(notRecovered)
-                meritArray = self.air.promotionMgr.recoverMerits(toon, cogsThisFloor, self.getTaskZoneId(), getStageCreditMultiplier(floorNum))
+                meritArray = self.air.promotionMgr.recoverMerits(toon, cogsThisFloor, self.getTaskZoneId(), creditMult)
                 self.notify.info('toon %s: %s' % (toon.doId, meritArray))
                 if toon.doId in self.helpfulToons:
                     self.toonMerits[toon.doId] = addListsByValue(self.toonMerits[toon.doId], meritArray)

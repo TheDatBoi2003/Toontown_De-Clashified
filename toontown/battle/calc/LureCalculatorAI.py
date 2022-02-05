@@ -118,7 +118,7 @@ class LureCalculatorAI(DirectObject):
             if statusRemoved:
                 self.statusCalculator.removeStatus(suit, statusRemoved)
             else:
-                self.statusCalculator.removeStatus(suit, name=LURED_STATUS)
+                self.statusCalculator.removeStatus(suit, statusName=LURED_STATUS)
 
     @staticmethod
     def getLureRounds(suit):

@@ -1,17 +1,34 @@
+from direct.showbase.MessengerGlobal import messenger
 from panda3d.core import *
 import ShtikerPage
 from direct.gui.DirectGui import *
 from toontown.quest import Quests
+from toontown.shtiker import TrackSetDialog
 from toontown.toonbase import ToontownGlobals
-from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.toon import Toon
-from toontown.toonbase.ToontownBattleGlobals import TrackIcons, AvPropsNew
+from toontown.toonbase.ToontownBattleGlobals import TrackColors, TrackIcons, Tracks, AvPropsNew
+from toontown.toonbase.ToontownGlobals import MinTrainingFrames, MaxTrainingFrames
 
-BASE_FRAMES = ToontownBattleGlobals.MIN_TRACK_FRAMES
-MAX_FRAMES = ToontownBattleGlobals.MAX_TRACK_FRAMES + 2
+BASE_FRAMES = MinTrainingFrames
+TOTAL_FRAMES = MaxTrainingFrames + 2
 COLS = 6
 ROWS = 3
+
+
+def calcAvailableFrames(frames):
+    count = 0
+    for frame in frames:
+        if frame == -1:
+            count += 1
+    return count
+
+def calcUnlockedFrames(frames):
+    count = 0
+    for frame in frames:
+        if frame != -2:
+            count += 1
+    return count
 
 
 class TrackFrame(DirectFrame):
@@ -20,16 +37,32 @@ class TrackFrame(DirectFrame):
         DirectFrame.__init__(self, relief=None)
         self.initialiseoptions(TrackFrame)
         filmstrip = loader.loadModel('phase_3.5/models/gui/filmstrip')
+        guiButton = loader.loadModel('phase_3/models/gui/quit_button')
         self.gags = loader.loadModel('phase_3.5/models/gui/inventory_icons')
         self.index = index
         self.frame = DirectFrame(parent=self, relief=None,
                                  image=filmstrip, image_scale=(6 / float(COLS), 6 / float(COLS), 3 / float(ROWS)),
-                                 text=str(self.index - 1),
+                                 text=str(self.index + 1),
                                  text_pos=(0.26, -0.22), text_fg=(1, 1, 1, 1), text_scale=0.1)
-        self.question = DirectLabel(parent=self.frame, relief=None, pos=(0, 0, -0.15), text='?', text_scale=0.4, text_pos=(0, 0.04), text_fg=(0.72, 0.72, 0.72, 1))
+        self.question = DirectLabel(parent=self.frame, relief=None, pos=(0, 0, -0.15), text='?', text_scale=0.4,
+                                    text_pos=(0, 0.04), text_fg=(0.72, 0.72, 0.72, 1))
         self.icon = DirectFrame(parent=self.frame, relief=None,
-                                image=None, image_scale=1,
-                                text='', text_pos=(0, -0.2), text_fg=(1, 1, 1, 1), text_scale=0.3)
+                                text='', text_pos=(0, 0.15), text_fg=(1, 1, 1, 1), text_scale=0.1)
+        self.trackSetButton = DirectButton(parent=self.frame, relief=None,
+                                           pos=(0.0, 0.0, 0.05),
+                                           scale=2,
+                                           image=(guiButton.find('**/QuitBtn_UP'),
+                                                  guiButton.find('**/QuitBtn_DN'),
+                                                  guiButton.find('**/QuitBtn_RLVR')),
+                                           image3_color=Vec4(0.5, 0.5, 0.5, 0.5), image_scale=(0.7, 1, 1),
+                                           text=TTLocalizer.TrackPageBtn,
+                                           text3_fg=(0.5, 0.5, 0.5, 0.75),
+                                           text_scale=0.06,
+                                           text_pos=(0, -0.02),
+                                           text_wordwrap=TTLocalizer.DSDintroTextWordwrap,
+                                           text_align=TextNode.ACenter,
+                                           command=self.__trackSet)
+        self.trackSetButton.hide()
         filmstrip.removeNode()
         return
 
@@ -38,25 +71,40 @@ class TrackFrame(DirectFrame):
 
     def setTrained(self, trackId):
         self.question.hide()
-        trackColorR, trackColorG, trackColorB = ToontownBattleGlobals.TrackColors[trackId]
-        self.frame['image_color'] = Vec4(trackColorR, trackColorG, trackColorB, 1)
-        self.frame['text_fg'] = Vec4(trackColorR * 0.3, trackColorG * 0.3, trackColorB * 0.3, 1)
-        self.icon['image'] = self.gags.find('**/' + AvPropsNew[trackId][TrackIcons[trackId]])
-        self.icon['text'] = ToontownBattleGlobals.Tracks[trackId].capitalize()
+        self.trackSetButton.hide()
+        trackColorR, trackColorG, trackColorB = TrackColors[trackId]
+        self.frame['image_color'] = Vec4(trackColorR * 0.75, trackColorG * 0.75, trackColorB * 0.75, 1)
+        self.frame['text_fg'] = Vec4(1, 1, 1, 1)
+        self.frame['text_shadow'] = Vec4(0, 0, 0, 1)
+        self.icon.setImage(self.gags.find('**/' + AvPropsNew[trackId][TrackIcons[trackId]]))
+        self.icon['image_scale'] = 2
+        self.icon['image_pos'] = (0, 0, -0.05)
+        self.icon['text'] = Tracks[trackId].upper()
+        self.icon['text_fg'] = Vec4(trackColorR * 0.2, trackColorG * 0.2, trackColorB * 0.2, 1)
         return
 
-    def setUntrained(self, available):
-        self.question.show()
-        if available:
-            self.frame['image_color'] = Vec4(0.1, 0.5, 0.9, 1)
+    def setUntrained(self, unlocked):
+        if unlocked:
+            self.question.hide()
+            self.trackSetButton.show()
+            self.frame['image_color'] = Vec4(0.3, 0.5, 0.9, 1)
             self.frame['text_fg'] = Vec4(0.3, 0.3, 0.3, 1)
+            self.frame['text_shadow'] = Vec4(0.3, 0.3, 0.3, 0)
+            self.icon.clearImage()
             self.question['text_fg'] = Vec4(0.06, 0.2, 0.6, 1)
         else:
+            self.question.show()
+            self.trackSetButton.hide()
             self.frame['image_color'] = Vec4(0.7, 0.7, 0.7, 1)
             self.frame['text_fg'] = Vec4(0.5, 0.5, 0.5, 1)
+            self.frame['text_shadow'] = Vec4(0.3, 0.3, 0.3, 0)
+            self.icon.clearImage()
             self.question['text_fg'] = Vec4(0.6, 0.6, 0.6, 1)
         self.icon['image'] = None
         self.icon['text'] = ''
+
+    def __trackSet(self):
+        messenger.send('track-set', [self.index])
 
 
 class TrackPage(ShtikerPage.ShtikerPage):
@@ -66,7 +114,7 @@ class TrackPage(ShtikerPage.ShtikerPage):
         self.trackFrames = []
 
     def placeFrames(self):
-        rowY = 0.38
+        rowY = 0.32
         rowSpace = -0.96 / ROWS
         rowPos = []
         for i in xrange(ROWS):
@@ -80,7 +128,7 @@ class TrackPage(ShtikerPage.ShtikerPage):
             colPos.append(colX)
             colX += colSpace
 
-        for index in xrange(1, MAX_FRAMES + 1):
+        for index in xrange(1, TOTAL_FRAMES + 1):
             frame = self.trackFrames[index - 1]
             col = (index - 1) % COLS
             row = (index - 1) / COLS
@@ -88,11 +136,15 @@ class TrackPage(ShtikerPage.ShtikerPage):
             frame.setScale(0.39)
 
     def load(self):
-        self.title = DirectLabel(parent=self, relief=None, text=TTLocalizer.TrackPageTitle, text_scale=0.1, pos=(0, 0, 0.65))
-        self.subtitle = DirectLabel(parent=self, relief=None, text=TTLocalizer.TrackPageSubtitle, text_scale=0.05, text_fg=(0.5, 0.1, 0.1, 1), pos=(0, 0, 0.56))
-        self.trackText = DirectLabel(parent=self, relief=None, text='', text_scale=0.05, text_fg=(0.5, 0.1, 0.1, 1), pos=(0, 0, -0.5))
-        for index in xrange(1, MAX_FRAMES + 1):
-            frame = TrackFrame(index)
+        self.title = DirectLabel(parent=self, relief=None, text=TTLocalizer.TrackPageTitle, text_scale=0.1,
+                                 pos=(0, 0, 0.6))
+        self.subtitle = DirectLabel(parent=self, relief=None, text=TTLocalizer.TrackPageSubtitle, text_scale=0.05,
+                                    text_fg=(0.5, 0.1, 0.1, 1), pos=(0, 0, 0.5))
+        self.trackText = DirectLabel(parent=self, relief=None, text='', text_scale=0.05, text_fg=(0.5, 0.1, 0.1, 1),
+                                     pos=(0, 0, -0.6))
+        self.trackSetMenu = None
+        for index in xrange(TOTAL_FRAMES):
+            frame = TrackFrame(index - 1)
             frame.reparentTo(self)
             self.trackFrames.append(frame)
 
@@ -103,17 +155,22 @@ class TrackPage(ShtikerPage.ShtikerPage):
         self.startFrame.frame['text_scale'] = TTLocalizer.TPstartFrame
         self.startFrame.frame['image_color'] = Vec4(0.2, 0.2, 0.2, 1)
         self.startFrame.frame['text_fg'] = (1, 1, 1, 1)
-        self.startFrame.frame['text_pos'] = (0, 0.08)
+        self.startFrame.frame['text_pos'] = (0, 0.025)
+        self.startFrame.frame['text_align'] = TextNode.ACenter
+        self.startFrame.icon['image'] = None
         self.startFrame.question.hide()
         self.endFrame.frame['text'] = TTLocalizer.TrackPageDone
         self.endFrame.frame['text_scale'] = TTLocalizer.TPendFrame
         self.endFrame.frame['image_color'] = Vec4(0.2, 0.2, 0.2, 1)
         self.endFrame.frame['text_fg'] = (1, 1, 1, 1)
         self.endFrame.frame['text_pos'] = (0, 0)
+        self.endFrame.icon['image'] = None
         self.endFrame.question.hide()
+        self.accept('track-set', self.__openTrackSelection)
         return
 
     def unload(self):
+        self.__closeTrackSelection()
         del self.title
         del self.subtitle
         del self.trackText
@@ -121,25 +178,35 @@ class TrackPage(ShtikerPage.ShtikerPage):
         ShtikerPage.ShtikerPage.unload(self)
 
     def clearPage(self):
-        for index in xrange(1, MAX_FRAMES - 1):
+        for index in xrange(1, TOTAL_FRAMES - 1):
             self.trackFrames[index].setUntrained(0)
 
+        self.subtitle.show()
         self.startFrame.frame['text'] = ''
         self.trackText['text'] = TTLocalizer.TrackPageFull
 
     def updatePage(self):
-        trackIds, trainingFrames = base.localAvatar.getTrainingFrames()
-        if trainingFrames <= BASE_FRAMES:
-            self.clearPage()
-        else:
-            self.trackText['text'] = TTLocalizer.TrackPageAvailable % trainingFrames
-            trainingFramesArray = base.localAvatar.getTrackProgressAsArray()
-            for index in xrange(1, MAX_FRAMES):
-                if trainingFramesArray[index - 1]:
-                    self.trackFrames[index].setTrained(trackIds[index])
+        trainingFrames = base.localAvatar.getTrainingFrames()
+        if len(trainingFrames) >= BASE_FRAMES:
+            availableFrames = calcAvailableFrames(trainingFrames)
+            unlockedFrames = calcUnlockedFrames(trainingFrames)
+            if unlockedFrames == MaxTrainingFrames:
+                self.subtitle.hide()
+            else:
+                self.subtitle.show()
+            if not availableFrames:
+                self.trackText['text'] = TTLocalizer.TrackPageFull
+            else:
+                self.trackText['text'] = TTLocalizer.TrackPageAvailable % \
+                                     (availableFrames, TTLocalizer.TrackPageFrame[availableFrames != 1])
+            self.startFrame.frame['text'] = TTLocalizer.TrackPageFilmTitle % unlockedFrames
+            for index in xrange(0, MaxTrainingFrames):
+                if trainingFrames[index] > -1:
+                    self.trackFrames[index + 1].setTrained(trainingFrames[index])
                 else:
-                    self.trackFrames[index].setUntrained(trackIds[index] != -1)
-            self.startFrame.frame['text'] = TTLocalizer.TrackPageFilmTitle % trainingFrames
+                    self.trackFrames[index + 1].setUntrained(trainingFrames[index] != -2)
+        else:
+            self.clearPage()
 
     def enter(self):
         self.updatePage()
@@ -148,3 +215,22 @@ class TrackPage(ShtikerPage.ShtikerPage):
     def exit(self):
         self.clearPage()
         ShtikerPage.ShtikerPage.exit(self)
+
+    def __openTrackSelection(self, index):
+        if self.trackSetMenu is None:
+            self.trackSetMenu = TrackSetDialog.TrackSetDialog()
+            self.trackSetMenu.load()
+        self.trackSetMenu.enter(index)
+        self.accept('chosen-track', self.__choseTrackFrame)
+        self.accept('close-track-selection', self.__closeTrackSelection)
+
+    def __choseTrackFrame(self, chosenTrack, frameNum):
+        base.localAvatar.d_validateTrackChoice(chosenTrack, frameNum)
+        self.ignore('chose-track-frame')
+        self.__closeTrackSelection()
+        self.updatePage()
+
+    def __closeTrackSelection(self):
+        if self.trackSetMenu:
+            self.ignore('close-track-selection')
+            self.trackSetMenu.unload()

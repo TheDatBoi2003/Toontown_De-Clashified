@@ -1023,21 +1023,20 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         def restoreTrackAccess():
             base.localAvatar.setTrackAccess(oldTrackAccess[0])
 
-        minGagLevel = ToontownBattleGlobals.MIN_LEVEL_INDEX + 1
-        maxGagLevel = ToontownBattleGlobals.MAX_LEVEL_INDEX + 1
-        curGagLevel = minGagLevel
+        firstGagExp = base.localAvatar.getExperience()
+        maxGagExp = ToontownBattleGlobals.MaxSkill
 
-        def updateGagLevel(t, curGagLevel = curGagLevel):
-            newGagLevel = int(round(t))
-            if newGagLevel == curGagLevel:
+        def updateGagLevel(t, curGagExp):
+            newGagExp = int(round(t))
+            if newGagExp == curGagExp:
                 return
-            curGagLevel = newGagLevel
+            curGagExp = newGagExp
             tracks = [0 for _ in xrange(maxTracks)]
             for i in trackAccess:
-                tracks[i] = curGagLevel
-            base.localAvatar.setTrackAccess(tracks)
+                tracks[i] = curGagExp
+            base.localAvatar.setExperience(tracks)
 
-        return Sequence(Func(grabCurTrackAccess), LerpFunctionInterval(updateGagLevel, fromData=1, toData=maxGagLevel, duration=0.3), WaitInterval(3.5), LerpFunctionInterval(updateGagLevel, fromData=maxGagLevel, toData=1, duration=0.3), Func(restoreTrackAccess), Func(messenger.send, 'doneThrowSquirtPreview'))
+        return Sequence(Func(grabCurTrackAccess), LerpFunctionInterval(updateGagLevel, fromData=firstGagExp, toData=maxGagExp, duration=0.3), WaitInterval(3.5), LerpFunctionInterval(updateGagLevel, fromData=maxGagExp, toData=firstGagExp, duration=0.3), Func(restoreTrackAccess), Func(messenger.send, 'doneThrowSquirtPreview'))
 
     def parseSetMusicVolume(self, line):
         if base.config.GetString('language', 'english') == 'japanese':

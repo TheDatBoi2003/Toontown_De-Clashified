@@ -98,11 +98,9 @@ class NewsPageButtonManager(FSM.FSM):
     def hideNewIssueButton(self):
         if hasattr(self, 'newIssueButton') and self.newIssueButton:
             self.newIssueButton.hide()
-            localAvatar.clarabelleNewsPageCollision(False)
 
     def __showNewIssueButton(self):
         self.newIssueButton.show()
-        localAvatar.clarabelleNewsPageCollision(True)
 
     def hideAllButtons(self):
         if not self.buttonsLoaded:

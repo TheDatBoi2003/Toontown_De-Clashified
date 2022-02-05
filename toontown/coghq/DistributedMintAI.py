@@ -11,6 +11,7 @@ class DistributedMintAI(DistributedObjectAI.DistributedObjectAI):
     def __init__(self, air, mintId, zoneId, floorNum, avIds):
         DistributedObjectAI.DistributedObjectAI.__init__(self, air)
         self.mintId = mintId
+        self.mintType = ToontownGlobals.facilityIdToType[mintId]
         self.zoneId = zoneId
         self.floorNum = floorNum
         self.avIds = avIds

@@ -485,15 +485,15 @@ class Movie(DirectObject.DirectObject):
             if interval:
                 track.append(interval)
                 camTrack.append(cameraInterval)
-            interval, cameraInterval = MovieThrow.doThrows(self.__findToonAttack(THROW))
-            if interval:
-                track.append(interval)
-                camTrack.append(cameraInterval)
             interval, cameraInterval = MovieSquirt.doSquirts(self.__findToonAttack(SQUIRT))
             if interval:
                 track.append(interval)
                 camTrack.append(cameraInterval)
             interval, cameraInterval = MovieZap.doZaps(self.__findToonAttack(ZAP))
+            if interval:
+                track.append(interval)
+                camTrack.append(cameraInterval)
+            interval, cameraInterval = MovieThrow.doThrows(self.__findToonAttack(THROW))
             if interval:
                 track.append(interval)
                 camTrack.append(cameraInterval)

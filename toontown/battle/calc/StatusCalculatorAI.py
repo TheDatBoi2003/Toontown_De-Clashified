@@ -9,29 +9,32 @@ class StatusCalculatorAI(DirectObject):
 
     def __init__(self, battle):
         DirectObject.__init__(self)
-        self.lostStatusesDict = {}
+        self.lostStatusesDict = {}              # Updated when a suit loses a status for a round
         self.battle = battle
         self.accept('post-suit', self.postSuitStatusRounds)
+        self.accept('init-round', self.__resetFields)
 
     def cleanup(self):
         self.ignoreAll()
 
-    def removeStatus(self, suit, status=None, name=None):
-        if name:
-            status = suit.getStatus(name)
+    def removeStatus(self, suit, status=None, statusName=None):
+        if statusName:
+            status = suit.getStatus(statusName)
         elif status:
-            name = status['name']
+            statusName = status['name']
 
         if not status:
+            self.notify.debug('No status to remove!')
             return
 
-        if name not in self.lostStatusesDict:
-            self.lostStatusesDict[status['name']] = {}
-        self.lostStatusesDict[status['name']][suit] = status
-        suit.b_removeStatus(name)
-        self.notify.info('%s just lost its %s status.' % (suit.doId, name))
+        lostStatuses = self.getLostStatuses(statusName)
+        lostStatuses[suit] = status
+        suit.b_removeStatus(statusName)
+        self.notify.debug('%s just lost its %s status.' % (suit.doId, statusName))
 
     def getLostStatuses(self, statusName):
+        if statusName not in self.lostStatusesDict:
+            self.lostStatusesDict[statusName] = {}
         return self.lostStatusesDict[statusName]
 
     def postSuitStatusRounds(self):
@@ -39,3 +42,6 @@ class StatusCalculatorAI(DirectObject):
             removedStatus = activeSuit.decStatusRounds(DMG_DOWN_STATUS)
             if removedStatus:
                 self.removeStatus(activeSuit, removedStatus)
+
+    def __resetFields(self):
+        self.lostStatusesDict = {}

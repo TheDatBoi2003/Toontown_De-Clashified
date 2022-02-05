@@ -124,6 +124,13 @@ class InventoryBase(DirectObject.DirectObject):
             return -1
         return self.inventory[track][level]
 
+    def numItemLevel(self, level):
+        total = 0
+        for track in Tracks:
+            if self.toon.hasTrackAccess[track]:
+                total += self.inventory[track][level]
+        return total
+
     def useItem(self, track, level):
         if type(track) == type(''):
             track = Tracks.index(track)
@@ -287,6 +294,13 @@ class InventoryBase(DirectObject.DirectObject):
         for track in xrange(len(Tracks)):
             for level in xrange(MAX_LEVEL_INDEX + 1):
                 self.inventory[track][level] = 0
+
+        self.calcTotalProps()
+        return None
+
+    def zeroTrack(self, track):
+        for level in xrange(MAX_LEVEL_INDEX + 1):
+            self.inventory[track][level] = 0
 
         self.calcTotalProps()
         return None

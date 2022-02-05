@@ -60,14 +60,6 @@ class Experience:
         for track in xrange(0, len(Tracks)):
             self.experience[track] = MaxSkill
 
-    def maxOutExpMinusOne(self):
-        for track in xrange(0, len(Tracks)):
-            self.experience[track] = MaxSkill - 1
-
-    def makeExpHigh(self):
-        for track in xrange(0, len(Tracks)):
-            self.experience[track] = Levels[len(Levels) - 1] - 1
-
     def makeExpRegular(self):
         import random
         for track in xrange(0, len(Tracks)):

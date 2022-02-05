@@ -34,9 +34,9 @@ TrackColors = ((211 / 255.0, 148 / 255.0, 255 / 255.0),
                (249 / 255.0, 93 / 255.0, 93 / 255.0),
                (79 / 255.0, 190 / 255.0, 76 / 255.0),
                (93 / 255.0, 108 / 255.0, 239 / 255.0),
-               (255 / 255.0, 145 / 255.0, 66 / 255.0),
                (255 / 255.0, 65 / 255.0, 199 / 255.0),
                (249 / 255.0, 255 / 255.0, 93 / 255.0),
+               (255 / 255.0, 145 / 255.0, 66 / 255.0),
                (67 / 255.0, 243 / 255.0, 255 / 255.0),
                )
 
@@ -52,9 +52,9 @@ HEAL_TRACK = 0
 TRAP_TRACK = 1
 LURE_TRACK = 2
 SOUND_TRACK = 3
-THROW_TRACK = 4
-SQUIRT_TRACK = 5
-ZAP_TRACK = 6
+SQUIRT_TRACK = 4
+ZAP_TRACK = 5
+THROW_TRACK = 6
 DROP_TRACK = 7
 
 MIN_TRACK_INDEX = 0
@@ -67,9 +67,6 @@ NPC_COGS_MISS = MAX_TRACK_INDEX + 3
 
 MIN_LEVEL_INDEX = 0
 MAX_LEVEL_INDEX = 7
-
-MIN_TRACK_FRAMES = 4
-MAX_TRACK_FRAMES = 16
 
 DMG_UP_TRACKS = [SOUND_TRACK]
 
@@ -86,7 +83,7 @@ SHIP_LEVEL_INDEX = MAX_LEVEL_INDEX + 1
 WEDDING_LEVEL_INDEX = MAX_LEVEL_INDEX
 
 # Track icons used for various UI
-TrackIcons = [1, 0, 2, 1, 2, 3, 0, 3]
+TrackIcons = [1, 5, 2, 1, 4, 0, 4, 3]
 
 # which props buffs which track
 PropTypeToTrackBonus = {
@@ -97,6 +94,10 @@ PropTypeToTrackBonus = {
 
 # avatar skill levels (totalled)
 Levels = [0, 20, 100, 500, 2000, 6000, 10000, 15000]
+NewLevels = [0, 20, 100, 500, 1700, 4200, 8500, 14000]
+NewLevelsAlt = [0, 20, 100, 500, 2000, 5000, 10000, 17500]
+# See my suggestion for details ~ DTM1218
+
 # MaxSkill = 10000
 MaxSkill = 20000
 # This is the maximum amount of experience per track that may be
@@ -125,11 +126,15 @@ MaxProps = ((20, 40), (30, 60), (80, 100))
 # death-list flag masks for BattleExperience
 DLF_SKELECOG = 0x01
 DLF_FOREMAN = 0x02
-DLF_VP = 0x04
-DLF_CFO = 0x08
-DLF_SUPERVISOR = 0x10
-DLF_VIRTUAL = 0x20
-DLF_REVIVES = 0x40
+DLF_SUPERVISOR = 0x04
+DLF_CLERK = 0x08
+DLF_CLUB_PRES = 0x10
+DLF_VP = 0x20
+DLF_CFO = 0x40
+DLF_CJ = 0x80
+DLF_CEO = 0x100
+DLF_VIRTUAL = 0x2000
+DLF_REVIVES = 0x4000
 
 # Pie names.  These map to props in BattleProps, but it must be
 # defined here beccause BattleProps cannot be included on the AI.
@@ -172,12 +177,12 @@ AvPropsNew = (
      'inventory_10dollarbill', 'inventory_hypno_goggles', 'inventory_50dollarbill', 'inventory_screen'),
     ('inventory_kazoo', 'inventory_bikehorn', 'inventory_whistle', 'inventory_bugle',
      'inventory_aoogah', 'inventory_elephant', 'inventory_fog_horn', 'inventory_opera_singer'),
-    ('inventory_cup_cake', 'inventory_fruit_pie_slice', 'inventory_cream_pie_slice', 'inventory_cake_slice',
-     'inventory_fruitpie', 'inventory_creampie', 'inventory_cake', 'inventory_wedding'),
     ('inventory_squirt_flower', 'inventory_glass_of_water', 'inventory_water_gun', 'inventory_waterballoon',
      'inventory_seltzer_bottle', 'inventory_firehose', 'inventory_storm_cloud', 'inventory_geyser'),
     ('inventory_joybuzzer', 'inventory_carpet', 'inventory_balloon', 'inventory_battery',
      'inventory_tazer', 'inventory_television', 'inventory_tesla', 'inventory_lightning'),
+    ('inventory_cup_cake', 'inventory_fruit_pie_slice', 'inventory_cream_pie_slice', 'inventory_cake_slice',
+     'inventory_fruitpie', 'inventory_creampie', 'inventory_cake', 'inventory_wedding'),
     ('inventory_flower_pot', 'inventory_sandbag', 'inventory_bowlingball', 'inventory_anvil',
      'inventory_weight', 'inventory_safe_box', 'inventory_boulder', 'inventory_piano')
 )
@@ -196,18 +201,18 @@ AvPropAccuracy = ((95, 95, 95, 95, 95, 95, 95, 95),  # Heal
                   (0, 0, 0, 0, 0, 0, 0, 0, 0),  # Trap (always hits)
                   (65, 65, 70, 70, 75, 75, 80, 80),  # Lure
                   (95, 95, 95, 95, 95, 95, 95, 95),  # Sound
-                  (75, 75, 75, 75, 75, 75, 75, 75),  # Throw
                   (95, 95, 95, 95, 95, 95, 95, 95),  # Squirt
                   (30, 30, 30, 30, 30, 30, 30, 30),  # Zap
+                  (75, 75, 75, 75, 75, 75, 75, 75),  # Throw
                   (50, 50, 50, 50, 50, 50, 50, 50, 95)  # Drop
                   )
 AvBonusAccuracy = ((95, 95, 95, 95, 95, 95, 95, 95),  # Heal
                    (0, 0, 0, 0, 0, 0, 0, 0, 0),  # Trap (always hits)
                    (70, 70, 75, 75, 80, 80, 85, 95),  # Lure
                    (95, 95, 95, 95, 95, 95, 95, 95),  # Sound
-                   (75, 75, 75, 75, 75, 75, 75, 75),  # Throw
                    (95, 95, 95, 95, 95, 95, 95, 95),  # Squirt
                    (30, 30, 30, 30, 30, 30, 30, 30),  # Zap
+                   (75, 75, 75, 75, 75, 75, 75, 75),  # Throw
                    (65, 65, 65, 65, 65, 65, 65, 65, 95))  # Drop
 
 AvLureRounds = (2, 2, 3, 3, 4, 4, 5, 5)
@@ -264,15 +269,6 @@ AvPropDamage = (
      ((26, 32), (Levels[5], Levels[6])),
      ((35, 50), (Levels[6], Levels[7])),
      ((55, 65), (Levels[7], MaxSkill))),
-    # Throw
-    (((6, 8), (Levels[0], Levels[1])),
-     ((10, 13), (Levels[1], Levels[2])),
-     ((18, 21), (Levels[2], Levels[3])),
-     ((30, 35), (Levels[3], Levels[4])),
-     ((45, 50), (Levels[4], Levels[5])),
-     ((65, 90), (Levels[5], Levels[6])),
-     ((100, 130), (Levels[6], Levels[7])),
-     ((140, 170), (Levels[7], MaxSkill))),
     # Squirt
     (((3, 4), (Levels[0], Levels[1])),
      ((6, 8), (Levels[1], Levels[2])),
@@ -291,6 +287,15 @@ AvPropDamage = (
      ((35, 40), (Levels[5], Levels[6])),
      ((50, 66), (Levels[6], Levels[7])),
      ((70, 80), (Levels[7], MaxSkill))),
+    # Throw
+    (((6, 8), (Levels[0], Levels[1])),
+     ((10, 13), (Levels[1], Levels[2])),
+     ((18, 21), (Levels[2], Levels[3])),
+     ((30, 35), (Levels[3], Levels[4])),
+     ((45, 50), (Levels[4], Levels[5])),
+     ((65, 90), (Levels[5], Levels[6])),
+     ((100, 130), (Levels[6], Levels[7])),
+     ((140, 170), (Levels[7], MaxSkill))),
     # Drop
     (((10, 12), (Levels[0], Levels[1])),
      ((18, 20), (Levels[1], Levels[2])),
@@ -464,12 +469,12 @@ def getMintCreditMultiplier(mintId):
     return {CashbotMintIntA: 4., CashbotMintIntB: 5, CashbotMintIntC: 6.}.get(mintId, 1)
 
 
-def getStageCreditMultiplier(floor):
+def getStageCreditMultiplier(stageId):
     """
     Returns the skill credit multiplier for a particular mint.
     stageId is the stage-interior zone defined in ToontownGlobals.py.
     """
-    return getCreditMultiplier(floor + 1)
+    return {LawbotStageIntA: 4., LawbotStageIntB: 5., LawbotStageIntC: 6., LawbotStageIntD: 7.,}.get(stageId, 1.)
 
 
 def getCountryClubCreditMultiplier(countryClubId):

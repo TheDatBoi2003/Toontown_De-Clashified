@@ -9,7 +9,7 @@ class FactoryBase:
 
     def setFactoryId(self, factoryId):
         self.factoryId = factoryId
-        self.factoryType = ToontownGlobals.factoryId2factoryType[factoryId]
+        self.factoryType = ToontownGlobals.facilityIdToType[factoryId]
         self.cogTrack = ToontownGlobals.cogHQZoneId2dept(factoryId)
 
     def getCogTrack(self):

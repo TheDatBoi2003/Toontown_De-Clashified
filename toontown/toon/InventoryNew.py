@@ -31,9 +31,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     ShadowColor = Vec4(0, 0, 0, 0)
     TrackBarScale = Vec3(1.0, 1.0, 0.875)
     TrackYOffset = 0.0
-    TrackYSpacing = -0.105
-    ButtonXOffset = -0.42
-    ButtonXSpacing = 0.17
+    TrackYSpacing = -0.1
+    ButtonXOffset = -0.445
+    ButtonXSpacing = 0.175
 
     def __init__(self, toon, invStr=None):
         InventoryBase.InventoryBase.__init__(self, toon, invStr)
@@ -184,8 +184,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                                              text_pos=(0, -0.1), text_font=getInterfaceFont(), textMayChange=0,
                                              relief=None, pos=(-1, 0, -0.35), scale=1.0)
         trashcanGui.removeNode()
-        self.deleteHelpText = DirectLabel(parent=self.invFrame, relief=None, pos=(0.272, 0.3, -0.907),
-                                          text=TTLocalizer.InventoryDeleteHelp, text_fg=(0, 0, 0, 1), text_scale=0.08,
+        self.deleteHelpText = DirectLabel(parent=self.invFrame, relief=None, pos=(0.0, 0.0, 0.1),
+                                          text=TTLocalizer.InventoryDeleteHelp, text_font=getSignFont(),
+                                          text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1), text_scale=0.08,
                                           textMayChange=0)
         self.deleteHelpText.hide()
         self.detailFrame = DirectFrame(parent=self.invFrame, relief=None, pos=(1.05, 0, -0.08))
@@ -226,18 +227,18 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
             adjustLeft = -0.065
             self.trackNameLabels.append(DirectLabel(text=TextEncoder.upper(Tracks[track]),
                                                     parent=self.trackRows[track],
-                                                    pos=(-0.72 + adjustLeft, -0.1, 0.01),
+                                                    pos=(-0.63 + adjustLeft, -0.1, 0.01),
                                                     scale=TTLocalizer.INtrackNameLabels,
                                                     relief=None,
                                                     text_fg=(0.2, 0.2, 0.2, 1),
                                                     text_font=getInterfaceFont(),
-                                                    text_align=TextNode.ALeft,
+                                                    text_align=TextNode.ACenter,
                                                     textMayChange=0))
             self.trackBars.append(DirectWaitBar(parent=self.trackRows[track],
-                                                pos=(-0.625 + adjustLeft, -0.1, -0.025),
+                                                pos=(-0.63 + adjustLeft, -0.1, -0.025),
                                                 relief=DGG.SUNKEN, frameSize=(-0.6, 0.6, -0.1, 0.1),
                                                 borderWidth=(0.02, 0.02),
-                                                scale=(0.15, 0.25, 0.25),
+                                                scale=(0.13, 0.13, 0.25),
                                                 frameColor=(TrackColors[track][0] * 0.6, TrackColors[track][1] * 0.6,
                                                             TrackColors[track][2] * 0.6, 1),
                                                 barColor=(TrackColors[track][0] * 0.9, TrackColors[track][1] * 0.9,
@@ -249,7 +250,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                 button = DirectButton(parent=self.trackRows[track],
                                       image=(self.upButton, self.downButton, self.rolloverButton, self.flatButton),
                                       geom=self.invModels[track][item],
-                                      scale=(1 / InventoryNew.TrackBarScale[0], 1.0, 1.1),
+                                      scale=(0.91 / InventoryNew.TrackBarScale[0], 1.0, 1.0),
                                       text='50', text_scale=0.04,
                                       text_align=TextNode.ARight,
                                       geom_scale=0.7,
@@ -526,14 +527,14 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     def bookActivateButtons(self):
         self.setPos(0, 0, 0.52)
         self.setScale(1.0)
-        self.detailFrame.setPos(0.1, 0, -0.855)
+        self.detailFrame.setPos(0.2, 0, -0.855)
         self.detailFrame.setScale(0.75)
-        self.deleteEnterButton.hide()
-        self.deleteEnterButton.setPos(1.029, 0, -0.639)
-        self.deleteEnterButton.setScale(0.75)
+        self.deleteEnterButton.show()
+        self.deleteEnterButton.setPos(-0.7, 0, -0.855)
+        self.deleteEnterButton.setScale(0.5)
         self.deleteExitButton.hide()
-        self.deleteExitButton.setPos(1.029, 0, -0.639)
-        self.deleteExitButton.setScale(0.75)
+        self.deleteExitButton.setPos(-0.7, 0, -0.855)
+        self.deleteExitButton.setScale(0.5)
         self.invFrame.reparentTo(self)
         self.invFrame.setPos(0, 0, 0)
         self.invFrame.setScale(1)
@@ -561,14 +562,16 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
 
     def bookDeleteActivateButtons(self):
         messenger.send('enterBookDelete')
-        self.setPos(-0.2, 0, 0.4)
-        self.setScale(0.8)
+        self.setPos(0, 0, 0.52)
+        self.setScale(1.0)
+        self.detailFrame.setPos(0.2, 0, -0.855)
+        self.detailFrame.setScale(0.75)
         self.deleteEnterButton.hide()
-        self.deleteEnterButton.setPos(1.029, 0, -0.639)
-        self.deleteEnterButton.setScale(0.75)
+        self.deleteEnterButton.setPos(-0.7, 0, -0.855)
+        self.deleteEnterButton.setScale(0.5)
         self.deleteExitButton.show()
-        self.deleteExitButton.setPos(1.029, 0, -0.639)
-        self.deleteExitButton.setScale(0.75)
+        self.deleteExitButton.setPos(-0.7, 0, -0.855)
+        self.deleteExitButton.setScale(0.5)
         self.deleteHelpText.show()
         self.invFrame.reparentTo(self)
         self.invFrame.setPos(0, 0, 0)

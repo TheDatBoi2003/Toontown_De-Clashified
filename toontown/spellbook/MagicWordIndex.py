@@ -4,6 +4,7 @@ from direct.distributed.ClockDelta import *
 from direct.showbase.InputStateGlobal import inputState
 from direct.interval.IntervalGlobal import *
 
+import toontown.toonbase.ToontownGlobals
 from libotp import NametagGroup, WhisperPopup
 
 from otp.otpbase import OTPLocalizer
@@ -271,34 +272,25 @@ class SetSpeed(MagicWord):
 
 class MaxToon(MagicWord):
     aliases = ["max", "idkfa"]
-    desc = "Maxes out the target's stats. You can provide a gag track to exclude from the target's unlocked tracks."
+    desc = "Maxes out the target's stats."
     execLocation = MagicWordConfig.EXEC_LOC_SERVER
-    arguments = [("missingTrack", str, False, '')]
 
     def handleWord(self, invoker, avId, toon, *args):
-        missingTrack = args[0]
-
-        gagTracks = [1] * (ToontownBattleGlobals.MAX_TRACK_INDEX + 1)
-        if missingTrack != '':
-            try:
-                index = ToontownBattleGlobals.Tracks.index(missingTrack)
-            except:
-                return 'Missing Gag track is invalid!'
-            gagTracks[index] = 0
-        toon.b_setTrackAccess(gagTracks)
+        trainingFrames = toon.getTrainingFrames()
+        for i in xrange(ToontownGlobals.MaxTrainingFrames):
+            if trainingFrames[i] == -2:
+                toon.addTrainingFrame(i)
         toon.b_setMaxCarry(ToontownGlobals.MaxCarryLimit)
 
         experience = Experience.Experience(toon.getExperience(), toon)
-        for _, track in enumerate(toon.getTrackAccess()):
-            if track:
-                experience.maxOutExp()
+        experience.maxOutExp()
         toon.b_setExperience(experience.experience)
 
         toon.inventory.zeroInv()
         toon.inventory.maxOutInv()
         toon.b_setInventory(toon.inventory.makeNetString())
 
-        toon.b_setMaxMoney(Quests.RewardDict[707][1])
+        toon.b_setMaxMoney(ToontownGlobals.DefaultMaxMoney)
         toon.b_setMoney(toon.getMaxMoney())
         toon.b_setBankMoney(ToontownGlobals.DefaultMaxBankMoney)
 
@@ -397,8 +389,9 @@ class SetMaxBeans(MagicWord):
     def handleWord(self, invoker, avId, toon, *args):
         maxBeans = args[0]
 
-        if not 0 <= maxBeans <= ToontownGlobals.MaxJarMoney:
-            return "Can't set {}'s jellybean jar size to {}! Specify a value between 0 and 9999.".format(toon.getName(), maxBeans)
+        if not 0 <= maxBeans <= ToontownGlobals.DefaultMaxMoney:
+            return "Can't set %s's jellybean jar size to %d! Specify a value between 0 and %d." %\
+                   (toon.getName(), maxBeans, ToontownGlobals.DefaultMaxMoney)
 
         toon.b_setMaxMoney(maxBeans)
         return "{}'s jellybean jar size has been set to {}.".format(toon.getName(), maxBeans)
@@ -564,41 +557,41 @@ class Teleport(MagicWord):
         return "Teleporting {0} to {1}!".format(toon.getName(), ToontownGlobals.hoodNameMap[hoodId][-1])
 
 
-class SetTrackAccess(MagicWord):
-    aliases = ["trackaccess"]
-    desc = "Set the tracks a toon has."
-    execLocation = MagicWordConfig.EXEC_LOC_SERVER
-    arguments = [("wantTrack", int, True)]*7
+# class SetTrackAccess(MagicWord):
+#     aliases = ["trackaccess"]
+#     desc = "Set the tracks a toon has."
+#     execLocation = MagicWordConfig.EXEC_LOC_SERVER
+#     arguments = [("wantTrack", int, True)]*7
+#
+#     def handleWord(self, invoker, avId, toon, *args):
+#         # args = toonup, trap, lure, sound, throw, squirt, drop
+#         if len(args) == 7:
+#             toon.b_setTrackAccess(list(args))
+#         else:
+#             return "Invalid amount of arguments! There must be 7..."
 
-    def handleWord(self, invoker, avId, toon, *args):
-        # args = toonup, trap, lure, sound, throw, squirt, drop
-        if len(args) == 7:
-            toon.b_setTrackAccess(list(args))
-        else:
-            return "Invalid amount of arguments! There must be 7..."
 
-
-class SetTracks(MagicWord):
-    aliases = ["tracks"]
-    desc = "Grants all the gag tracks, with the option of leaving one out."
-    execLocation = MagicWordConfig.EXEC_LOC_SERVER
-    arguments = [("leftOutTrack", str, False, '')]
-
-    def handleWord(self, invoker, avId, toon, *args):
-        leftOutTrack = args[0]
-
-        tracks = [("toonup", 1), ("trap", 1), ("lure", 1), ("sound", 1), ("throw", 1), ("squirt", 1), ("drop", 1)]
-        tracks = collections.OrderedDict(tracks)
-        if leftOutTrack in tracks.keys():
-            tracks[leftOutTrack] = 0
-
-        toon.b_setTrackAccess(tracks.values())
-        if leftOutTrack:
-            msg = "Set your gag tracks, %sless Toon!" % (leftOutTrack)
-        else:
-            msg = "Set your gag tracks, Toon!"
-
-        return msg
+# class SetTracks(MagicWord):
+#     aliases = ["tracks"]
+#     desc = "Grants all the gag tracks, with the option of leaving one out."
+#     execLocation = MagicWordConfig.EXEC_LOC_SERVER
+#     arguments = [("leftOutTrack", str, False, '')]
+#
+#     def handleWord(self, invoker, avId, toon, *args):
+#         leftOutTrack = args[0]
+#
+#         tracks = [("toonup", 1), ("trap", 1), ("lure", 1), ("sound", 1), ("squirt", 1), ("zap", 1),  ("throw", 1), ("drop", 1)]
+#         tracks = collections.OrderedDict(tracks)
+#         if leftOutTrack in tracks.keys():
+#             tracks[leftOutTrack] = 0
+#
+#         toon.b_setTrackAccess(tracks.values())
+#         if leftOutTrack:
+#             msg = "Set your gag tracks, %sless Toon!" % (leftOutTrack)
+#         else:
+#             msg = "Set your gag tracks, Toon!"
+#
+#         return msg
 
 
 class Catalog(MagicWord):
@@ -1201,180 +1194,180 @@ class SetTickets(MagicWord):
         return "%s's tickets were set to %s." % (toon.getName(), tixVal)
 
 
-class GrowFlowers(MagicWord):
-    desc = "Grow a target's flowers."
-    execLocation = MagicWordConfig.EXEC_LOC_SERVER
-
-    def handleWord(self, invoker, avId, toon, *args):
-        estate = toon.air.estateMgr._lookupEstate(toon)
-
-        if not estate:
-            return "Estate not found!"
-
-        house = estate.getAvHouse(avId)
-        garden = house.gardenManager.gardens.get(toon.doId)
-        if not garden:
-            return "Garden not found!"
-
-        now = int(time.time())
-        i = 0
-        for flower in garden.flowers:
-            flower.b_setWaterLevel(5)
-            flower.b_setGrowthLevel(2)
-            flower.update()
-            i += 1
-
-        return "%d flowers grown." % i
-
-
-class PickAllFlowers(MagicWord):
-    aliases = ["pickflowers"]
-    desc = "Picks all of the target's flowers."
-    execLocation = MagicWordConfig.EXEC_LOC_SERVER
-
-    def handleWord(self, invoker, avId, toon, *args):
-        estate = toon.air.estateMgr._lookupEstate(toon)
-
-        if not estate:
-            return "Estate not found!"
-
-        house = estate.getAvHouse(avId)
-        garden = house.gardenManager.gardens.get(toon.doId)
-        if not garden:
-            return "Garden not found!"
-
-        i = 0
-        for flower in garden.flowers.copy():
-            if flower.getGrowthLevel() >= flower.growthThresholds[2]:
-                flower.removeItem(1)
-                i += 1
-
-        return "%d flowers picked." % i
-
-
-class GrowTrees(MagicWord):
-    desc = "Grows the target's trees."
-    execLocation = MagicWordConfig.EXEC_LOC_SERVER
-    arguments = [("track", str, True), ("index", int, True), ("amount", int, False, 21)]
-
-    def handleWord(self, invoker, avId, toon, *args):
-        track = args[0]
-        index = args[1]
-        grown = args[2]
-
-        estate = toon.air.estateMgr._lookupEstate(toon)
-
-        if not estate:
-            return "Estate not found!"
-
-        house = estate.getAvHouse(avId)
-        garden = house.gardenManager.gardens.get(toon.doId)
-        if not garden:
-            return "Garden not found!"
-
-        try:
-            trackIndex = ('toonup', 'trap', 'lure', 'sound', 'throw',
-                     'squirt', 'drop').index(track)
-        except ValueError:
-            # Backwards compatibility
-            try:
-                trackIndex = int(track)
-            except ValueError:
-                return 'Gag track is invalid.'
-
-        if trackIndex > 6:
-            return 'Gag track is invalid.'
-
-        tree = garden.getTree(trackIndex, index)
-        if not tree:
-            return "Tree not found!"
-
-        result = tree.doGrow(grown)
-        return '%d trees grown.' % result
-
-
-class PickTrees(MagicWord):
-    desc = "Picks the target's trees."
-    execLocation = MagicWordConfig.EXEC_LOC_SERVER
-    arguments = [("track", str, True), ("index", int, True)]
-
-    def handleWord(self, invoker, avId, toon, *args):
-        track = args[0]
-        index = args[1]
-        estate = toon.air.estateMgr._lookupEstate(toon)
-
-        if not estate:
-            return "Estate not found!"
-
-        house = estate.getAvHouse(avId)
-        garden = house.gardenManager.gardens.get(toon.doId)
-        if not garden:
-            return "Garden not found!"
-
-        try:
-            trackIndex = ('toonup', 'trap', 'lure', 'sound', 'throw',
-                     'squirt', 'drop').index(track)
-        except ValueError:
-            # Backwards compatibility
-            try:
-                trackIndex = int(track)
-            except ValueError:
-                return 'Gag track is invalid.'
-
-        if trackIndex > 6:
-            return 'Gag track is invalid.'
-
-        tree = garden.getTree(trackIndex, index)
-        if not tree:
-            return "Tree not found!"
-
-        tree.calculate(0, tree.lastCheck)
-        tree.sendUpdate('setFruiting', [tree.getFruiting()])
-        return "Trees picked."
-
-
-class FlowerAll(MagicWord):
-    desc = "Flowers the target's flowers."
-    execLocation = MagicWordConfig.EXEC_LOC_SERVER
-    arguments = [("species", int, False, 49), ("variety", int, False, 0)]
-
-    def handleWord(self, invoker, avId, toon, *args):
-        species = args[0]
-        variety = args[1]
-
-
-        estate = toon.air.estateMgr._lookupEstate(toon)
-        if not estate:
-            return "Estate not found!"
-
-        house = estate.getAvHouse(avId)
-        garden = house.gardenManager.gardens.get(toon.doId)
-        if not garden:
-            return "Garden not found!"
-
-        from toontown.estate.DistributedGardenPlotAI import DistributedGardenPlotAI
-        i = 0
-        for obj in garden.objects.copy():
-            if isinstance(obj, DistributedGardenPlotAI):
-                if obj.plotType != GardenGlobals.FLOWER_TYPE:
-                    continue
-
-                if not obj.plantFlower(species, variety, 1):
-                    return "Error on plot %d!" % i
-
-                i += 1
-
-        return "%d flowers planted." % i
-
-
-class RestockFlowerSpecials(MagicWord):
-    desc = "Give special flowers."
-    execLocation = MagicWordConfig.EXEC_LOC_SERVER
-
-    def handleWord(self, invoker, avId, toon, *args):
-        toon.gardenSpecials = []
-        for x in (100, 101, 102, 103, 105, 106, 107, 108, 109, 130, 131, 135):
-            toon.addGardenItem(x, 99)
+# class GrowFlowers(MagicWord):
+#     desc = "Grow a target's flowers."
+#     execLocation = MagicWordConfig.EXEC_LOC_SERVER
+#
+#     def handleWord(self, invoker, avId, toon, *args):
+#         estate = toon.air.estateMgr._lookupEstate(toon)
+#
+#         if not estate:
+#             return "Estate not found!"
+#
+#         house = estate.getAvHouse(avId)
+#         garden = house.gardenManager.gardens.get(toon.doId)
+#         if not garden:
+#             return "Garden not found!"
+#
+#         now = int(time.time())
+#         i = 0
+#         for flower in garden.flowers:
+#             flower.b_setWaterLevel(5)
+#             flower.b_setGrowthLevel(2)
+#             flower.update()
+#             i += 1
+#
+#         return "%d flowers grown." % i
+#
+#
+# class PickAllFlowers(MagicWord):
+#     aliases = ["pickflowers"]
+#     desc = "Picks all of the target's flowers."
+#     execLocation = MagicWordConfig.EXEC_LOC_SERVER
+#
+#     def handleWord(self, invoker, avId, toon, *args):
+#         estate = toon.air.estateMgr._lookupEstate(toon)
+#
+#         if not estate:
+#             return "Estate not found!"
+#
+#         house = estate.getAvHouse(avId)
+#         garden = house.gardenManager.gardens.get(toon.doId)
+#         if not garden:
+#             return "Garden not found!"
+#
+#         i = 0
+#         for flower in garden.flowers.copy():
+#             if flower.getGrowthLevel() >= flower.growthThresholds[2]:
+#                 flower.removeItem(1)
+#                 i += 1
+#
+#         return "%d flowers picked." % i
+#
+#
+# class GrowTrees(MagicWord):
+#     desc = "Grows the target's trees."
+#     execLocation = MagicWordConfig.EXEC_LOC_SERVER
+#     arguments = [("track", str, True), ("index", int, True), ("amount", int, False, 21)]
+#
+#     def handleWord(self, invoker, avId, toon, *args):
+#         track = args[0]
+#         index = args[1]
+#         grown = args[2]
+#
+#         estate = toon.air.estateMgr._lookupEstate(toon)
+#
+#         if not estate:
+#             return "Estate not found!"
+#
+#         house = estate.getAvHouse(avId)
+#         garden = house.gardenManager.gardens.get(toon.doId)
+#         if not garden:
+#             return "Garden not found!"
+#
+#         try:
+#             trackIndex = ('toonup', 'trap', 'lure', 'sound', 'throw',
+#                      'squirt', 'drop').index(track)
+#         except ValueError:
+#             # Backwards compatibility
+#             try:
+#                 trackIndex = int(track)
+#             except ValueError:
+#                 return 'Gag track is invalid.'
+#
+#         if trackIndex > 6:
+#             return 'Gag track is invalid.'
+#
+#         tree = garden.getTree(trackIndex, index)
+#         if not tree:
+#             return "Tree not found!"
+#
+#         result = tree.doGrow(grown)
+#         return '%d trees grown.' % result
+#
+#
+# class PickTrees(MagicWord):
+#     desc = "Picks the target's trees."
+#     execLocation = MagicWordConfig.EXEC_LOC_SERVER
+#     arguments = [("track", str, True), ("index", int, True)]
+#
+#     def handleWord(self, invoker, avId, toon, *args):
+#         track = args[0]
+#         index = args[1]
+#         estate = toon.air.estateMgr._lookupEstate(toon)
+#
+#         if not estate:
+#             return "Estate not found!"
+#
+#         house = estate.getAvHouse(avId)
+#         garden = house.gardenManager.gardens.get(toon.doId)
+#         if not garden:
+#             return "Garden not found!"
+#
+#         try:
+#             trackIndex = ('toonup', 'trap', 'lure', 'sound', 'throw',
+#                      'squirt', 'drop').index(track)
+#         except ValueError:
+#             # Backwards compatibility
+#             try:
+#                 trackIndex = int(track)
+#             except ValueError:
+#                 return 'Gag track is invalid.'
+#
+#         if trackIndex > 6:
+#             return 'Gag track is invalid.'
+#
+#         tree = garden.getTree(trackIndex, index)
+#         if not tree:
+#             return "Tree not found!"
+#
+#         tree.calculate(0, tree.lastCheck)
+#         tree.sendUpdate('setFruiting', [tree.getFruiting()])
+#         return "Trees picked."
+#
+#
+# class FlowerAll(MagicWord):
+#     desc = "Flowers the target's flowers."
+#     execLocation = MagicWordConfig.EXEC_LOC_SERVER
+#     arguments = [("species", int, False, 49), ("variety", int, False, 0)]
+#
+#     def handleWord(self, invoker, avId, toon, *args):
+#         species = args[0]
+#         variety = args[1]
+#
+#
+#         estate = toon.air.estateMgr._lookupEstate(toon)
+#         if not estate:
+#             return "Estate not found!"
+#
+#         house = estate.getAvHouse(avId)
+#         garden = house.gardenManager.gardens.get(toon.doId)
+#         if not garden:
+#             return "Garden not found!"
+#
+#         from toontown.estate.DistributedGardenPlotAI import DistributedGardenPlotAI
+#         i = 0
+#         for obj in garden.objects.copy():
+#             if isinstance(obj, DistributedGardenPlotAI):
+#                 if obj.plotType != GardenGlobals.FLOWER_TYPE:
+#                     continue
+#
+#                 if not obj.plantFlower(species, variety, 1):
+#                     return "Error on plot %d!" % i
+#
+#                 i += 1
+#
+#         return "%d flowers planted." % i
+#
+#
+# class RestockFlowerSpecials(MagicWord):
+#     desc = "Give special flowers."
+#     execLocation = MagicWordConfig.EXEC_LOC_SERVER
+#
+#     def handleWord(self, invoker, avId, toon, *args):
+#         toon.gardenSpecials = []
+#         for x in (100, 101, 102, 103, 105, 106, 107, 108, 109, 130, 131, 135):
+#             toon.addGardenItem(x, 99)
 
 
 class MaxDoodle(MagicWord):
@@ -1931,7 +1924,7 @@ class SetExp(MagicWord):
         track = args[0]
         amt = args[1]
 
-        tracks = ['toon-up', 'trap', 'lure', 'sound', 'throw', 'squirt', 'drop']
+        tracks = ['toon-up', 'trap', 'lure', 'sound', 'squirt', 'zap', 'throw', 'drop']
         maxed = ['max', 'maxxed']
 
         if track not in tracks + maxed:
@@ -1955,24 +1948,25 @@ class SetExp(MagicWord):
             return "Set %s exp to %d successfully." % (track, amt)
 
 
-class SetPrestige(MagicWord):
-    aliases = ["prest", "prestige"]
-    desc = "Modify the invoker's prestige tracks. "
+class SetTrackFrames(MagicWord):
+    aliases = ["trackframes", "frames"]
+    desc = "Modify the invoker's training track frames. "
     execLocation = MagicWordConfig.EXEC_LOC_SERVER
-    arguments = [("toonup", int, True),("trap", int, True),("lure", int, True),("sound", int, True),
-                 ("throw", int, True),("squirt", int, True),("zap", int, True),("drop", int, True)]
+    maxFrames = ToontownGlobals.MaxTrainingFrames
+    arguments = [("amount", int, maxFrames)]
 
     def handleWord(self, invoker, avId, toon, *args):
-        numTracks = ToontownBattleGlobals.MAX_TRACK_INDEX + 1
-        gagAccess = invoker.getTrackAccess()
+        trainingFrames = invoker.getTrainingFrames()
+        amount = args[0]
 
-        trackPrestige = [-1] * numTracks
-        for track in xrange(numTracks):
-            if gagAccess[track]:
-                trackPrestige[track] = args[track]
+        for i in xrange(self.maxFrames):
+            if trainingFrames[i] == -2 and i < amount:
+                trainingFrames[i] = -1
+            elif i >= amount:
+                trainingFrames[i] = -2
 
-        invoker.b_setTrackPrestige(trackPrestige)
-        return "Track bonus set!"
+        invoker.b_setTrainingFrames(trainingFrames)
+        return "Track frames set!"
 
 
 class SetCogSuit(MagicWord):

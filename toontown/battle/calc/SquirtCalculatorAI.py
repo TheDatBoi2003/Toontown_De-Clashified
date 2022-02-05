@@ -69,7 +69,7 @@ class SquirtCalculatorAI(DirectObject):
             if statusRemoved:
                 self.statusCalculator.removeStatus(suit, statusRemoved)
             else:
-                self.statusCalculator.removeStatus(suit, name=SOAKED_STATUS)
+                self.statusCalculator.removeStatus(suit, statusName=SOAKED_STATUS)
 
     def postSuitStatusRounds(self):
         for activeSuit in self.battle.activeSuits:

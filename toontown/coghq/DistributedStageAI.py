@@ -13,6 +13,7 @@ class DistributedStageAI(DistributedObjectAI.DistributedObjectAI):
     def __init__(self, air, stageId, zoneId, floorNum, avIds, layoutIndex, battleExpAggreg = None):
         DistributedObjectAI.DistributedObjectAI.__init__(self, air)
         self.stageId = stageId
+        self.stageType = ToontownGlobals.facilityIdToType[stageId]
         self.zoneId = zoneId
         self.floorNum = floorNum
         self.avIds = avIds

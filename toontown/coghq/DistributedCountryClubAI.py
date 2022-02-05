@@ -12,6 +12,7 @@ class DistributedCountryClubAI(DistributedObjectAI.DistributedObjectAI):
     def __init__(self, air, countryClubId, zoneId, floorNum, avIds, layoutIndex, battleExpAggreg = None):
         DistributedObjectAI.DistributedObjectAI.__init__(self, air)
         self.countryClubId = countryClubId
+        self.countryClubType = ToontownGlobals.facilityIdToType[countryClubId]
         self.zoneId = zoneId
         self.floorNum = floorNum
         self.avIds = avIds

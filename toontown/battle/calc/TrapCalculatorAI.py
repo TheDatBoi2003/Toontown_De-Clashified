@@ -71,7 +71,7 @@ class TrapCalculatorAI(DirectObject):
     def removeTrapStatus(self, suit):
         if suit in self.trappedSuits:
             self.trappedSuits.remove(suit)
-            self.statusCalculator.removeStatus(suit, name=TRAPPED_STATUS)
+            self.statusCalculator.removeStatus(suit, statusName=TRAPPED_STATUS)
 
     def clearTrapCreator(self, creatorId, suit=None):
         if not suit:

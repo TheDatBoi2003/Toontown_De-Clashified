@@ -307,15 +307,15 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         # Barnacle Boatyard
         self.zoneTable[ToontownGlobals.DonaldsDock] = (
-            (ToontownGlobals.DonaldsDock, 1, 0), (ToontownGlobals.BarnacleBoulevard, 1, 1),
+            (ToontownGlobals.DonaldsDock, 1, 0), (ToontownGlobals.BuccaneerBoulevard, 1, 1),
             (ToontownGlobals.SeaweedStreet, 1, 1), (ToontownGlobals.LighthouseLane, 1, 1)
         )
         self.createHood(DDHoodDataAI, ToontownGlobals.DonaldsDock)
 
         # Daffodil Gardens
         self.zoneTable[ToontownGlobals.DaisyGardens] = (
-            (ToontownGlobals.DaisyGardens, 1, 0), (ToontownGlobals.ElmStreet, 1, 1),
-            (ToontownGlobals.MapleStreet, 1, 1), (ToontownGlobals.OakStreet, 1, 1)
+            (ToontownGlobals.DaisyGardens, 1, 0), (ToontownGlobals.PetuniaPlace, 1, 1),
+            (ToontownGlobals.DaisyDrive, 1, 1), (ToontownGlobals.TulipTerrace, 1, 1)
         )
         self.createHood(DGHoodDataAI, ToontownGlobals.DaisyGardens)
 

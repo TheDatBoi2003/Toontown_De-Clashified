@@ -579,6 +579,10 @@ class RewardPanel(DirectFrame):
                 cogDict['isForeman'] = 1
             if flags & ToontownBattleGlobals.DLF_SUPERVISOR:
                 cogDict['isSupervisor'] = 1
+            if flags & ToontownBattleGlobals.DLF_CLERK:
+                cogDict['isClerk'] = 1
+            if flags & ToontownBattleGlobals.DLF_CLUB_PRES:
+                cogDict['isClubPresident'] = 1
             if flags & ToontownBattleGlobals.DLF_VIRTUAL:
                 cogDict['isVirtual'] = 1
             if flags & ToontownBattleGlobals.DLF_REVIVES:
@@ -592,6 +596,14 @@ class RewardPanel(DirectFrame):
                 cogDict['type'] = None
                 cogDict['track'] = SuitDNA.suitDepts[cogIndex]
                 cogDict['isCFO'] = 1
+            elif flags & ToontownBattleGlobals.DLF_CJ:
+                cogDict['type'] = None
+                cogDict['track'] = SuitDNA.suitDepts[cogIndex]
+                cogDict['isCJ'] = 1
+            elif flags & ToontownBattleGlobals.DLF_CEO:
+                cogDict['type'] = None
+                cogDict['track'] = SuitDNA.suitDepts[cogIndex]
+                cogDict['isCEO'] = 1
             else:
                 cogDict['type'] = SuitDNA.suitHeadTypes[cogIndex]
                 cogDict['track'] = SuitDNA.getSuitDept(cogDict['type'])
@@ -601,17 +613,6 @@ class RewardPanel(DirectFrame):
                     if toonList[j] is not None:
                         activeToonIds.append(toonList[j].getDoId())
             cogDict['activeToons'] = activeToonIds
-
-            if flags & ToontownBattleGlobals.DLF_SKELECOG:
-                cogDict['isSkelecog'] = 1
-            if flags & ToontownBattleGlobals.DLF_FOREMAN:
-                cogDict['isForeman'] = 1
-            if flags & ToontownBattleGlobals.DLF_SUPERVISOR:
-                cogDict['isSupervisor'] = 1
-            if flags & ToontownBattleGlobals.DLF_VIRTUAL:
-                cogDict['isVirtual'] = 1
-            if flags & ToontownBattleGlobals.DLF_REVIVES:
-                cogDict['hasRevives'] = 1
             cogList.append(cogDict)
 
         try:
@@ -644,6 +645,10 @@ class RewardPanel(DirectFrame):
                             num = quest.doesVPCount(avId, cogDict, zoneId, toonShortList)
                         elif cogDict['isCFO']:
                             num = quest.doesCFOCount(avId, cogDict, zoneId, toonShortList)
+                        elif cogDict['isCJ']:
+                            num = quest.doesCJCount(avId, cogDict, zoneId, toonShortList)
+                        elif cogDict['isCEO']:
+                            num = quest.doesCEOCount(avId, cogDict, zoneId, toonShortList)
                         else:
                             num = quest.doesCogCount(avId, cogDict, zoneId, toonShortList)
                         if num:

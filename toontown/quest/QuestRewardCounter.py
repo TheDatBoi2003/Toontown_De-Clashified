@@ -28,8 +28,9 @@ class QuestRewardCounter:
         if zoneId not in self.teleportAccess:
             self.teleportAccess.append(zoneId)
 
-    def addTrainingFrame(self, progressIndex):
-        self.trainingFrames = self.trainingFrames | 1 << progressIndex
+    def addTrainingFrame(self, index):
+        if self.trainingFrames[index] == -2:
+            self.trainingFrames[index] = -1
 
     def getTrainingFrames(self):
         return self.trainingFrames
@@ -39,10 +40,6 @@ class QuestRewardCounter:
 
     def getRefundPoints(self):
         return self.refundPoints
-
-    def clearTrackProgress(self):
-        self.trainingFramesId = -1
-        self.trainingFrames = 0
 
     def setFromAvatar(self, av):
         rewardIds = []
@@ -135,11 +132,5 @@ class QuestRewardCounter:
         if self.teleportAccess != av.teleportZoneArray:
             self.notify.info('Changed avatar %d to have teleportAccess %s instead of %s' % (av.doId, self.teleportAccess, av.teleportZoneArray))
             av.b_setTeleportAccess(self.teleportAccess)
-            anyChanged = 1
-        if self.trackAccess != av.trackArray:
-            self.notify.info('Changed avatar %d to have trackAccess %s instead of %s' % (av.doId, self.trackAccess, av.trackArray))
-            av.b_setTrackAccess(self.trackAccess)
-            anyChanged = 1
-        if av.fixTrackAccess():
             anyChanged = 1
         return anyChanged

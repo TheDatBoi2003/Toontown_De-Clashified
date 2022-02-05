@@ -9,7 +9,7 @@ class LawOfficeBase:
 
     def setLawOfficeId(self, factoryId):
         self.lawOfficeId = factoryId
-        self.factoryType = ToontownGlobals.factoryId2factoryType[factoryId]
+        self.factoryType = ToontownGlobals.facilityIdToType[factoryId]
         self.cogTrack = ToontownGlobals.cogHQZoneId2dept(factoryId)
 
     def getCogTrack(self):

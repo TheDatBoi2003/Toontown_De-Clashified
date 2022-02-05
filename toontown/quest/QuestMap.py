@@ -141,7 +141,7 @@ class QuestMap(DirectFrame):
                     if quest.getHolder() == Quests.AnyFish:
                         self.putBuildingMarker(self.fishingSpotInfo, mapIndex=mapIndex)
                     continue
-                elif quest.getType() != Quests.DeliverGagQuest and quest.getType() != Quests.DeliverItemQuest and quest.getType() != Quests.VisitQuest and quest.getType() != Quests.RefundQuest:
+                elif quest.getType() != Quests.DeliverGagQuest and quest.getType() != Quests.DeliverItemQuest and quest.getType() != Quests.VisitQuest:
                     continue
             if toNpcId == Quests.ToonHQ:
                 self.putBuildingMarker(self.hqPosInfo, mapIndex=mapIndex)

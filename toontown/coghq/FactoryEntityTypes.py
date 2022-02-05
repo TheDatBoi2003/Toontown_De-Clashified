@@ -31,14 +31,15 @@ class GagBarrel(BarrelBase):
        'max': 5}), ('gagTrack',
       0,
       'choice',
-      {'choiceSet': ('heal', 'trap', 'lure', 'sound', 'throw', 'squirt', 'drop', 'random'),
+      {'choiceSet': ('heal', 'trap', 'lure', 'sound', 'squirt', 'zap', 'throw', 'drop', 'random'),
        'valueDict': {'heal': 0,
                      'trap': 1,
                      'lure': 2,
                      'sound': 3,
-                     'throw': 4,
-                     'squirt': 5,
-                     'drop': 6,
+                     'squirt': 4,
+                     'zap': 5,
+                     'throw': 6,
+                     'drop': 7,
                      'random': 'random'}}))
 
 

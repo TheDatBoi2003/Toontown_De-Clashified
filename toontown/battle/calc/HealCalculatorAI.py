@@ -63,7 +63,6 @@ class HealCalculatorAI(DirectObject):
         toonHp = self.getToonHp(toon)
         if toonHp - attack[SUIT_HP_COL][position] <= 0:
             self.notify.debug('Toon %d has died, removing' % toon)
-            self.battle.__removeToon(toon)
             attack[TOON_DIED_COL] = attack[TOON_DIED_COL] | 1 << position
         self.notify.debug('Toon %s takes %s damage' % (toon, attack[SUIT_HP_COL][position]))
         self.toonHPAdjusts[toon] -= attack[SUIT_HP_COL][position]
