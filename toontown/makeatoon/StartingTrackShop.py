@@ -163,5 +163,5 @@ class StartingTrackShop(StateData.StateData):
             self.tracks[self.index] = value
             self.optionsLeft += 1
             if self.toon:
-                self.toon.choices[self.optionsLeft] = -1
+                self.toon.choices[self.optionsLeft - 1] = -1
         self.__updateNext()

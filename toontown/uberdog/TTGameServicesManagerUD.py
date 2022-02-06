@@ -169,8 +169,8 @@ class CreateAvatarOperation(GameOperation):
         GameOperation.__init__(self, gameServicesManager, target)
         self.index = None
         self.dna = None
-        from toontown.toonbase.ToontownBattleGlobals import MAX_TRACK_INDEX
-        self.trackAccess = [0 for _ in xrange(MAX_TRACK_INDEX + 1)]
+        from toontown.toonbase.ToontownGlobals import MaxTrainingFrames
+        self.trainingFrames = [-2 for _ in xrange(MaxTrainingFrames + 1)]
 
     def enterStart(self, dna, index, choices):
         # First, perform some basic sanity checking.
@@ -187,9 +187,8 @@ class CreateAvatarOperation(GameOperation):
         # Store these values.
         self.index = index
         self.dna = dna
-        for i in xrange(len(self.trackAccess)):
-            if i in choices:
-                self.trackAccess[i] = 1
+        for i in xrange(len(choices) * 2):
+            self.trainingFrames[i] = choices[i / 2]
 
         # Now we can query their account.
         self.demand('RetrieveAccount')
@@ -235,7 +234,7 @@ class CreateAvatarOperation(GameOperation):
                       'WishName': ('',),
                       'setDNAString': (self.dna,),
                       'setDISLid': (self.target,),
-                      'setTrackAccess': (self.trackAccess,)}
+                      'setTrainingFrames': (self.trainingFrames,)}
 
         # Create this new Toon object in the database. self.__handleCreate is the
         # callback that will be called upon the completion of createObject.

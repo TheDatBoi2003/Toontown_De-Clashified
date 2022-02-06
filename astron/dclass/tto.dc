@@ -985,12 +985,12 @@ dclass DistributedToon : DistributedPlayer {
   setBattleId(uint32 = 0) required broadcast ram;
   setExperience(uint16[] = [0, 0, 0, 0, 0, 0, 0, 0]) required ownrecv db;
   setMaxCarry(uint8 = 20) required ownrecv db;
-  setTrackAccess(uint16[] = [0, 0, 0, 0, 1, 1, 0, 0]) required broadcast ownrecv db;
+  setTrackAccess(uint16[] = [0, 0, 0, 0, 0, 0, 0, 0]) required broadcast ownrecv db;
   setFrameTrack(uint32, int8 = -1) ownrecv;
-  setRefundPoints(uint8) required ownrecv db;
+  setRefundPoints(uint8 = 0) required ownrecv db;
   setTrackPrestige(uint8[] = [0, 0, 0, 0, 0, 0, 0, 0]) required broadcast ownrecv db;
   setInventory(blob = [0 * 7, 0 * 7, 0 * 7, 0 * 7, 1, 0 * 6, 1, 0 * 6, 0 * 7, 0 * 7]) required ownrecv db;
-  setTrainingFrames(int8[] = [4, 4, 5, 5, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2]) required ownrecv db;
+  setTrainingFrames(int8[] = [-1, -1, -1, -1, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2]) required ownrecv db;
   applyTrackChoice(uint8, uint8) airecv clsend;
   setMaxNPCFriends(uint16 = 16) required ownrecv db;
   setNPCFriendsDict(Friend[] = []) required ownrecv db;

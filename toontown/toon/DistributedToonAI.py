@@ -1792,6 +1792,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.trainingFrames[index] == -2:
             self.trainingFrames[index] = -1
             self.d_setTrainingFrames(self.trainingFrames)
+        else:
+            self.notify.warning("Training frame already unlocked!")
 
     def getTrainingFrames(self):
         return self.trainingFrames

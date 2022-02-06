@@ -94,12 +94,15 @@ PropTypeToTrackBonus = {
 
 # avatar skill levels (totalled)
 Levels = [0, 20, 100, 500, 2000, 6000, 10000, 15000]
-NewLevels = [0, 20, 100, 500, 1700, 4200, 8500, 14000]
-NewLevelsAlt = [0, 20, 100, 500, 2000, 5000, 10000, 17500]
-# See my suggestion for details ~ DTM1218
+# The first 2 are from a "balanced" gag progression suggestion I wrote up a while ago,
+# the last one is simply one to remove the game's grind. ~ DTM1218
+# Levels = [0, 20, 100, 500, 1700, 4200, 8500, 14000] # Suggestion 1
+# Levels = [0, 20, 100, 500, 2000, 5000, 10000, 17500] # Suggestion 2
+# Levels = [0, 5, 50, 200, 500, 1000, 1800, 3000] # Anti-Grind
 
-# MaxSkill = 10000
+# MaxSkill = 10000 # Original
 MaxSkill = 20000
+# MaxSkill = 5000 # Anti-Grind
 # This is the maximum amount of experience per track that may be
 # earned in one battle (or in one building).
 ExperienceCap = 1500
