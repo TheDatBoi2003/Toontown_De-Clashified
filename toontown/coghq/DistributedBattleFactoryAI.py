@@ -16,7 +16,7 @@ class DistributedBattleFactoryAI(DistributedLevelBattleAI.DistributedLevelBattle
         DistributedLevelBattleAI.DistributedLevelBattleAI.__init__(self, air, battleMgr, pos, suit, toonId, zoneId,
                                                                    level, battleCellId, 'FactoryReward', roundCallback,
                                                                    finishCallback, maxSuits)
-        self.battleCalc.setSkillCreditMultiplier(1)
+        self.battleCalc.setSkillCreditMultiplier(4)
         if self.bossBattle:
             self.level.d_setForemanConfronted(toonId)
         self.fsm.addState(State.State('FactoryReward', self.enterFactoryReward, self.exitFactoryReward, ['Resume']))

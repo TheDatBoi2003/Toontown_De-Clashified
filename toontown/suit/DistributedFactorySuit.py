@@ -6,9 +6,10 @@ from direct.directnotify import DirectNotifyGlobal
 import DistributedSuitBase
 from direct.task.Task import Task
 import random
-from toontown.toonbase import ToontownGlobals
+from toontown.toonbase import ToontownGlobals, TTLocalizer
 from otp.level import LevelConstants
 from toontown.distributed.DelayDeletable import DelayDeletable
+
 
 class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedFactorySuit')
@@ -19,12 +20,18 @@ class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDelet
         except:
             self.DistributedSuit_initialized = 1
             DistributedSuitBase.DistributedSuitBase.__init__(self, cr)
-            self.fsm = ClassicFSM.ClassicFSM('DistributedSuit', [State.State('Off', self.enterOff, self.exitOff, ['Walk', 'Battle']),
-             State.State('Walk', self.enterWalk, self.exitWalk, ['WaitForBattle', 'Battle', 'Chase']),
-             State.State('Chase', self.enterChase, self.exitChase, ['WaitForBattle', 'Battle', 'Return']),
-             State.State('Return', self.enterReturn, self.exitReturn, ['WaitForBattle', 'Battle', 'Walk']),
-             State.State('Battle', self.enterBattle, self.exitBattle, ['Walk', 'Chase', 'Return']),
-             State.State('WaitForBattle', self.enterWaitForBattle, self.exitWaitForBattle, ['Battle'])], 'Off', 'Off')
+            self.fsm = ClassicFSM.ClassicFSM('DistributedSuit',
+                                             [State.State('Off', self.enterOff, self.exitOff, ['Walk', 'Battle']),
+                                              State.State('Walk', self.enterWalk, self.exitWalk,
+                                                          ['WaitForBattle', 'Battle', 'Chase']),
+                                              State.State('Chase', self.enterChase, self.exitChase,
+                                                          ['WaitForBattle', 'Battle', 'Return']),
+                                              State.State('Return', self.enterReturn, self.exitReturn,
+                                                          ['WaitForBattle', 'Battle', 'Walk']),
+                                              State.State('Battle', self.enterBattle, self.exitBattle,
+                                                          ['Walk', 'Chase', 'Return']),
+                                              State.State('WaitForBattle', self.enterWaitForBattle,
+                                                          self.exitWaitForBattle, ['Battle'])], 'Off', 'Off')
             self.path = None
             self.walkTrack = None
             self.chaseTrack = None
@@ -83,6 +90,12 @@ class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDelet
             self.reparentTo(hidden)
         else:
             self.doReparent()
+        if self.boss:
+            self.renameBoss()
+
+    def renameBoss(self):
+        self.setName(TTLocalizer.Foreman)
+        self.updateName()
 
     def comeOutOfReserve(self):
         self.doReparent()
@@ -140,11 +153,11 @@ class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDelet
         self.cr.playGame.getPlace().setState('WaitForBattle')
         self.factory.lockVisibility(zoneNum=self.factory.getEntityZoneEntId(self.spec['parentEntId']))
         self.sendUpdate('requestBattle', [pos[0],
-         pos[1],
-         pos[2],
-         hpr[0],
-         hpr[1],
-         hpr[2]])
+                                          pos[1],
+                                          pos[2],
+                                          hpr[0],
+                                          hpr[1],
+                                          hpr[2]])
 
     def handleBattleBlockerCollision(self):
         self.__handleToonCollision(None)
@@ -205,7 +218,7 @@ class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDelet
     def subclassManagesParent(self):
         return 1
 
-    def enterWalk(self, ts = 0):
+    def enterWalk(self, ts=0):
         self.enableBattleDetect('walk', self.__handleToonCollision)
         if self.path:
             if self.walkTrack:
@@ -227,7 +240,7 @@ class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDelet
             self.pauseTime = self.walkTrack.pause()
             self.paused = 1
 
-    def lookForToon(self, on = 1):
+    def lookForToon(self, on=1):
         if self.behavior in ['chase']:
             if on:
                 self.accept(self.uniqueName('entertoonSphere'), self.__handleToonAlert)
@@ -267,7 +280,7 @@ class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDelet
         self.chasing = avId
         self.setState('Chase')
 
-    def startChaseTask(self, delay = 0):
+    def startChaseTask(self, delay=0):
         self.notify.debug('DistributedFactorySuit.startChaseTask delay=%s' % delay)
         taskMgr.remove(self.taskName('chaseTask'))
         taskMgr.doMethodLater(delay, self.chaseTask, self.taskName('chaseTask'))
@@ -303,7 +316,7 @@ class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDelet
         self.startChaseTask(1.0)
         return
 
-    def startCheckStrayTask(self, on = 1):
+    def startCheckStrayTask(self, on=1):
         taskMgr.remove(self.taskName('checkStray'))
         if on:
             taskMgr.add(self.checkStrayTask, self.taskName('checkStray'))
@@ -332,7 +345,7 @@ class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDelet
         self.notify.debug('DistributedFactorySuit.setReturn')
         self.setState('Return')
 
-    def startReturnTask(self, delay = 0):
+    def startReturnTask(self, delay=0):
         taskMgr.remove(self.taskName('returnTask'))
         taskMgr.doMethodLater(delay, self.returnTask, self.taskName('returnTask'))
 
@@ -397,7 +410,7 @@ class DistributedFactorySuit(DistributedSuitBase.DistributedSuitBase, DelayDelet
         self.cTrav = None
         return
 
-    def setVirtual(self, isVirtual = 1):
+    def setVirtual(self, isVirtual=1):
         self.virtual = isVirtual
         if self.virtual:
             actorNode = self.find('**/__Actor_modelRoot')

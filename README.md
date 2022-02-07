@@ -2,10 +2,15 @@
 Gameplay Changes include:
 - Clothing stores require jellybeans
 - All elevators will take 5 seconds (for convenience)
+- Reworked taskline to reduce grinding
+- Training points in the form of "Training Frames"
+- Orbiting Camera Mode/FPS Mode (must be enabled in settings.json)
 - Gag Levels, Accuracies, and Experience matched to TTCC
-- All gags from levels 1 to 8! (minus the zap track)
+- All gags from levels 1 to 8!
+- Zap gags!
 - Purchaseable level 8 gags
 - Cog levels and attacks that match TTCC
+- TTCC's gag prestige (except Toon-Up, Sound, and Throw)
 - Implemented the unused Cog attacks (Cigar Smoke, Song and Dance, and Throw Book)
 - New Cogs:
 - Forecaster (lv 2-7 SB Field Specialist)
@@ -16,7 +21,7 @@ Gameplay Changes include:
 - First Mover (lv 7-15 SB Field Specialist)
 - Executive Cogs
 - Lure Knockback bonus fix
-- Smooth Animations (can be turned off in settings.json)
+- Smooth Animations (can be turned on in settings.json)
 - Sounds all go off at once
 - In certain scenarios, 5+ cogs can enter a battle!
 - Tons of more to come soon!

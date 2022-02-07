@@ -237,6 +237,12 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
     def isSupervisor(self):
         return 0
 
+    def isClerk(self):
+        return 0
+
+    def isPresident(self):
+        return 0
+
     def setVirtual(self, virtual):
         pass
 

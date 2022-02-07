@@ -62,7 +62,8 @@ suitATypes = ['ym',
               'm',
               'mh',
               'af',
-              'tr']
+              'tr',
+              'foreman']
 suitBTypes = ['p',
               'ds',
               'b',
@@ -89,6 +90,7 @@ suitNamesByDept = {'c': ['f', 'p', 'ym', 'mm', 'ds', 'hh', 'cr', 'tbc'],
                     'l': ['bf', 'b', 'dt', 'ac', 'bs', 'sd', 'le', 'bw'],
                     'm': ['sc', 'pp', 'tw', 'bc', 'nc', 'mb', 'ls', 'rb'],
                     's': ['cc', 'tm', 'nd', 'gh', 'ms', 'tf', 'm', 'mh', 'fc', 'af', 'ps', 'tr', 'gk', 'fm']}
+specialNamesByDept = {'s': ['foreman']}
 suitDepts = ['c',
              'l',
              'm',
@@ -131,6 +133,14 @@ def getSuitBodyType(name):
 def getSuitDept(name):
     for i in suitDepts:
         if name in suitNamesByDept[i]:
+            return i
+    print 'Unknown dept for suit name: ', name
+    return None
+
+
+def getSpecialDept(name):
+    for i in suitDepts:
+        if name in specialNamesByDept[i]:
             return i
     print 'Unknown dept for suit name: ', name
     return None
@@ -241,9 +251,14 @@ class SuitDNA(AvatarDNA.AvatarDNA):
         self.dept = getSuitDept(self.name)
         self.body = getSuitBodyType(self.name)
 
-    def newSuit(self, name=None):
+    def newSuit(self, name=None, special=0):
         if not name:
             self.__defaultSuit()
+        elif special:
+            self.type = 'm'
+            self.name = name
+            self.dept = getSpecialDept(self.name)
+            self.body = getSuitBodyType(self.name)
         else:
             self.type = 's'
             self.name = name

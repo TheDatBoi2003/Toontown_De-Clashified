@@ -788,10 +788,10 @@ class VPQuest(CogQuest):
             return TTLocalizer.CogVPs
 
     def doesCogCount(self, avId, cogDict, zoneId, avList):
-        return 0
+        return cogDict['isBoss'] > 0 and self.isLocationMatch(zoneId)
 
-    def doesVPCount(self, avId, cogDict, zoneId, avList):
-        return self.isLocationMatch(zoneId)
+    def doesCFOCount(self, avId, cogDict, zoneId, avList):
+        return self.doesCogCount(avId, cogDict, zoneId, avList)
 
 
 class SupervisorQuest(CogQuest):
@@ -829,10 +829,10 @@ class CFOQuest(CogQuest):
             return TTLocalizer.CogCFOs
 
     def doesCogCount(self, avId, cogDict, zoneId, avList):
-        return 0
+        return cogDict['isBoss'] > 0 and self.isLocationMatch(zoneId)
 
-    def doesCFOCount(self, avId, cogDict, zoneId, avList):
-        return self.isLocationMatch(zoneId)
+    def doesVPCount(self, avId, cogDict, zoneId, avList):
+        return self.doesCogCount(avId, cogDict, zoneId, avList)
 
 
 class ClerkQuest(CogQuest):
@@ -870,10 +870,10 @@ class CJQuest(CogQuest):
             return TTLocalizer.CogCJs
 
     def doesCogCount(self, avId, cogDict, zoneId, avList):
-        return 0
+        return cogDict['isBoss'] > 0 and self.isLocationMatch(zoneId)
 
-    def doesCJCount(self, avId, cogDict, zoneId, avList):
-        return self.isLocationMatch(zoneId)
+    def doesCFOCount(self, avId, cogDict, zoneId, avList):
+        return self.doesCogCount(avId, cogDict, zoneId, avList)
 
 
 class PresidentQuest(CogQuest):
@@ -892,7 +892,7 @@ class PresidentQuest(CogQuest):
             return TTLocalizer.ClubPresidentP
 
     def doesCogCount(self, avId, cogDict, zoneId, avList):
-        return bool(CogQuest.doesCogCount(self, avId, cogDict, zoneId, avList) and cogDict['isClubPresident'])
+        return bool(CogQuest.doesCogCount(self, avId, cogDict, zoneId, avList) and cogDict['isPresident'])
 
 
 class CEOQuest(CogQuest):
@@ -911,10 +911,10 @@ class CEOQuest(CogQuest):
             return TTLocalizer.CogCEOs
 
     def doesCogCount(self, avId, cogDict, zoneId, avList):
-        return 0
+        return cogDict['isBoss'] > 0 and self.isLocationMatch(zoneId)
 
-    def doesCEOCount(self, avId, cogDict, zoneId, avList):
-        return self.isLocationMatch(zoneId)
+    def doesCFOCount(self, avId, cogDict, zoneId, avList):
+        return self.doesCogCount(avId, cogDict, zoneId, avList)
 
 
 class RescueQuest(VPQuest):

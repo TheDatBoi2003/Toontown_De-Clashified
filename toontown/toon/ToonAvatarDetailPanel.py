@@ -201,10 +201,10 @@ class ToonAvatarDetailPanel(DirectFrame):
         messenger.send('updateLaffMeter', [avatar, avatar.hp, avatar.maxHp])
 
     def __updateTrackInfo(self):
-        xOffset = -0.501814
-        xSpacing = 0.1835
-        yOffset = 0.1
-        ySpacing = -0.115
+        xOffset = -0.55
+        xSpacing = 0.167
+        yOffset = 0.213
+        ySpacing = -0.1155
         inventory = self.avatar.inventory
         inventoryModels = loader.loadModel('phase_3.5/models/gui/inventory_gui')
         buttonModel = inventoryModels.find('**/InventoryButtonUp')
@@ -222,7 +222,7 @@ class ToonAvatarDetailPanel(DirectFrame):
                         else:
                             image_color = Vec4(0, 0.6, 1, 1)
                             geom_color = None
-                        DirectLabel(parent=self, image=buttonModel, image_scale=(0.92, 1, 1), image_color=image_color, geom=inventory.invModels[track][item], geom_color=geom_color, geom_scale=0.6, relief=None, pos=(xOffset + item * xSpacing, 0, yOffset + track * ySpacing))
+                        DirectLabel(parent=self, image=buttonModel, image_scale=(0.88, 0.88, 1), image_color=image_color, geom=inventory.invModels[track][item], geom_color=geom_color, geom_scale=0.6, relief=None, pos=(xOffset + item * xSpacing, 0, yOffset + track * ySpacing))
                     else:
                         break
 

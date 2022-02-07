@@ -652,7 +652,7 @@ class Suit(Avatar.Avatar):
             self.headTexture = 'mingler.jpg'
             self.generateHead('twoface')
             self.setHeight(7.61)
-        elif dna.name == 'mh':
+        elif dna.name in ('mh', 'foreman'):
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.92, 0.89, 0.88, 1.0)
             self.generateBody()

@@ -706,17 +706,17 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 toon.d_setHp(toon.hp)
                 toon.d_setInventory(toon.inventory.makeNetString())
                 self.air.cogPageManager.toonEncounteredCogs(toon, self.suitsEncountered)
-        elif len(self.suits) > 0 and not self.streetBattle:
-            self.notify.info('toon %d aborted non-street battle; clearing inventory and hp.' % toonId)
-            toon = DistributedToonAI.DistributedToonAI(self.air)
-            toon.doId = toonId
-            empty = InventoryBase.InventoryBase(toon)
-            toon.b_setInventory(empty.makeNetString())
-            toon.b_setHp(0)
-            db = DatabaseObject.DatabaseObject(self.air, toonId)
-            db.storeObject(toon, ['setInventory', 'setHp'])
-            self.notify.info('killing mem leak from temporary DistributedToonAI %d' % toonId)
-            toon.deleteDummy()
+        # elif len(self.suits) > 0 and not self.streetBattle:
+        #     self.notify.info('toon %d aborted non-street battle; clearing inventory and hp.' % toonId)
+        #     toon = DistributedToonAI.DistributedToonAI(self.air)
+        #     toon.doId = toonId
+        #     empty = InventoryBase.InventoryBase(toon)
+        #     toon.b_setInventory(empty.makeNetString())
+        #     toon.b_setHp(0)
+        #     db = DatabaseObject.DatabaseObject(self.air, toonId)
+        #     db.storeObject(toon, ['setInventory', 'setHp'])
+        #     self.notify.info('killing mem leak from temporary DistributedToonAI %d' % toonId)
+        #     toon.deleteDummy()
         return
 
     def getToon(self, toonId):
@@ -1593,9 +1593,10 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                              'track': suit.dna.dept,
                              'isSkelecog': suit.getSkelecog(),
                              'isForeman': suit.isForeman(),
-                             'isVP': 0,
-                             'isCFO': 0,
                              'isSupervisor': suit.isSupervisor(),
+                             'isClerk': suit.isClerk(),
+                             'isPresident': suit.isPresident(),
+                             'isBoss': 0,
                              'isVirtual': suit.isVirtual(),
                              'hasRevives': suit.getMaxSkeleRevives(),
                              'activeToons': self.activeToons[:]}

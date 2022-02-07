@@ -4,11 +4,8 @@ from direct.directnotify import DirectNotifyGlobal
 class DistributedMintSuitAI(DistributedFactorySuitAI.DistributedFactorySuitAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMintSuitAI')
 
-    def isForeman(self):
-        return 0
-
     def isSupervisor(self):
-        return self.boss
+        return self.boss and self.track == 'm'
 
-    def isVirtual(self):
-        return 0
+    def isPresident(self):
+        return self.boss and self.track == 'c'

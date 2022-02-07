@@ -131,13 +131,10 @@ DLF_SKELECOG = 0x01
 DLF_FOREMAN = 0x02
 DLF_SUPERVISOR = 0x04
 DLF_CLERK = 0x08
-DLF_CLUB_PRES = 0x10
-DLF_VP = 0x20
-DLF_CFO = 0x40
-DLF_CJ = 0x80
-DLF_CEO = 0x100
-DLF_VIRTUAL = 0x2000
-DLF_REVIVES = 0x4000
+DLF_PRESIDENT = 0x10
+DLF_BOSS = 0x20
+DLF_VIRTUAL = 0x40
+DLF_REVIVES = 0x80
 
 # Pie names.  These map to props in BattleProps, but it must be
 # defined here beccause BattleProps cannot be included on the AI.

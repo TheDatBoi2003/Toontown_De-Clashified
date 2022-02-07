@@ -581,29 +581,17 @@ class RewardPanel(DirectFrame):
                 cogDict['isSupervisor'] = 1
             if flags & ToontownBattleGlobals.DLF_CLERK:
                 cogDict['isClerk'] = 1
-            if flags & ToontownBattleGlobals.DLF_CLUB_PRES:
-                cogDict['isClubPresident'] = 1
+            if flags & ToontownBattleGlobals.DLF_PRESIDENT:
+                cogDict['isPresident'] = 1
             if flags & ToontownBattleGlobals.DLF_VIRTUAL:
                 cogDict['isVirtual'] = 1
             if flags & ToontownBattleGlobals.DLF_REVIVES:
                 cogDict['hasRevives'] = 1
 
-            if flags & ToontownBattleGlobals.DLF_VP:
+            if flags & ToontownBattleGlobals.DLF_BOSS:
                 cogDict['type'] = None
                 cogDict['track'] = SuitDNA.suitDepts[cogIndex]
-                cogDict['isVP'] = 1
-            elif flags & ToontownBattleGlobals.DLF_CFO:
-                cogDict['type'] = None
-                cogDict['track'] = SuitDNA.suitDepts[cogIndex]
-                cogDict['isCFO'] = 1
-            elif flags & ToontownBattleGlobals.DLF_CJ:
-                cogDict['type'] = None
-                cogDict['track'] = SuitDNA.suitDepts[cogIndex]
-                cogDict['isCJ'] = 1
-            elif flags & ToontownBattleGlobals.DLF_CEO:
-                cogDict['type'] = None
-                cogDict['track'] = SuitDNA.suitDepts[cogIndex]
-                cogDict['isCEO'] = 1
+                cogDict['isBoss'] = 1
             else:
                 cogDict['type'] = SuitDNA.suitHeadTypes[cogIndex]
                 cogDict['track'] = SuitDNA.getSuitDept(cogDict['type'])
@@ -641,16 +629,15 @@ class RewardPanel(DirectFrame):
                         earned = itemList.count(questItem)
                 else:
                     for cogDict in cogList:
-                        if cogDict['isVP']:
-                            num = quest.doesVPCount(avId, cogDict, zoneId, toonShortList)
-                        elif cogDict['isCFO']:
-                            num = quest.doesCFOCount(avId, cogDict, zoneId, toonShortList)
-                        elif cogDict['isCJ']:
-                            num = quest.doesCJCount(avId, cogDict, zoneId, toonShortList)
-                        elif cogDict['isCEO']:
-                            num = quest.doesCEOCount(avId, cogDict, zoneId, toonShortList)
-                        else:
-                            num = quest.doesCogCount(avId, cogDict, zoneId, toonShortList)
+                        if cogDict['isBoss']:
+                            if cogDict['track'] == 'c':
+                                num = quest.doesCEOCount(avId, cogDict, zoneId, toonShortList)
+                            elif cogDict['track'] == 'l':
+                                num = quest.doesCJCount(avId, cogDict, zoneId, toonShortList)
+                            elif cogDict['track'] == 'm':
+                                num = quest.doesCFOCount(avId, cogDict, zoneId, toonShortList)
+                            elif cogDict['track'] == 's':
+                                num = quest.doesVPCount(avId, cogDict, zoneId, toonShortList)
                         if num:
                             if base.config.GetBool('battle-passing-no-credit', True):
                                 if avId in helpfulToonsList:

@@ -65,10 +65,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if num > self.maxSkeleRevives:
             self.maxSkeleRevives = num
         nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': self._name,
-         'dept': self.getStyleDept(),
-         'level': self.getActualLevel(),
-         'exe': self.getExecutiveTitle(),
-         'revives': self.getSkeleRevivesTitle()}
+                                                        'dept': self.getStyleDept(),
+                                                        'level': self.getActualLevel(),
+                                                        'exe': self.getExecutiveTitle(),
+                                                        'revives': self.getSkeleRevivesTitle()}
         self.setDisplayName(nameInfo)
         return
 
@@ -200,21 +200,48 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if moveIn:
             lerpPosTrack = Sequence(self.posInterval(timeTillLanding, pos, startPos=skyPos), Wait(impactLength))
             shadowScale = self.dropShadow.getScale()
-            shadowTrack = Sequence(Func(self.dropShadow.reparentTo, render), Func(self.dropShadow.setPos, pos), self.dropShadow.scaleInterval(timeTillLanding, self.scale, startScale=Vec3(0.01, 0.01, 1.0)), Func(self.dropShadow.reparentTo, self.getShadowJoint()), Func(self.dropShadow.setPos, 0, 0, 0), Func(self.dropShadow.setScale, shadowScale))
-            fadeInTrack = Sequence(Func(self.setTransparency, 1), self.colorScaleInterval(1, colorScale=VBase4(1, 1, 1, 1), startColorScale=VBase4(1, 1, 1, 0)), Func(self.clearColorScale), Func(self.clearTransparency))
-            animTrack = Sequence(Func(self.pose, 'landing', 0), Wait(waitTime), ActorInterval(self, 'landing', duration=dur), Func(self.loop, 'walk'))
+            shadowTrack = Sequence(Func(self.dropShadow.reparentTo, render), Func(self.dropShadow.setPos, pos),
+                                   self.dropShadow.scaleInterval(timeTillLanding, self.scale,
+                                                                 startScale=Vec3(0.01, 0.01, 1.0)),
+                                   Func(self.dropShadow.reparentTo, self.getShadowJoint()),
+                                   Func(self.dropShadow.setPos, 0, 0, 0), Func(self.dropShadow.setScale, shadowScale))
+            fadeInTrack = Sequence(Func(self.setTransparency, 1),
+                                   self.colorScaleInterval(1, colorScale=VBase4(1, 1, 1, 1),
+                                                           startColorScale=VBase4(1, 1, 1, 0)),
+                                   Func(self.clearColorScale), Func(self.clearTransparency))
+            animTrack = Sequence(Func(self.pose, 'landing', 0), Wait(waitTime),
+                                 ActorInterval(self, 'landing', duration=dur), Func(self.loop, 'walk'))
             self.attachPropeller()
-            propTrack = Parallel(SoundInterval(self.propInSound, duration=waitTime + dur, node=self), Sequence(ActorInterval(self.prop, 'propeller', constrainedLoop=1, duration=waitTime + spinTime, startTime=0.0, endTime=spinTime), ActorInterval(self.prop, 'propeller', duration=propDur - openTime, startTime=openTime), Func(self.detachPropeller)))
-            return Parallel(lerpPosTrack, shadowTrack, fadeInTrack, animTrack, propTrack, name=self.taskName('trackName'))
+            propTrack = Parallel(SoundInterval(self.propInSound, duration=waitTime + dur, node=self), Sequence(
+                ActorInterval(self.prop, 'propeller', constrainedLoop=1, duration=waitTime + spinTime, startTime=0.0,
+                              endTime=spinTime),
+                ActorInterval(self.prop, 'propeller', duration=propDur - openTime, startTime=openTime),
+                Func(self.detachPropeller)))
+            return Parallel(lerpPosTrack, shadowTrack, fadeInTrack, animTrack, propTrack,
+                            name=self.taskName('trackName'))
         else:
             lerpPosTrack = Sequence(Wait(impactLength), LerpPosInterval(self, timeTillLanding, skyPos, startPos=pos))
-            shadowTrack = Sequence(Func(self.dropShadow.reparentTo, render), Func(self.dropShadow.setPos, pos), self.dropShadow.scaleInterval(timeTillLanding, Vec3(0.01, 0.01, 1.0), startScale=self.scale), Func(self.dropShadow.reparentTo, self.getShadowJoint()), Func(self.dropShadow.setPos, 0, 0, 0))
-            fadeOutTrack = Sequence(Func(self.setTransparency, 1), self.colorScaleInterval(1, colorScale=VBase4(1, 1, 1, 0), startColorScale=VBase4(1, 1, 1, 1)), Func(self.clearColorScale), Func(self.clearTransparency), Func(self.reparentTo, hidden))
+            shadowTrack = Sequence(Func(self.dropShadow.reparentTo, render), Func(self.dropShadow.setPos, pos),
+                                   self.dropShadow.scaleInterval(timeTillLanding, Vec3(0.01, 0.01, 1.0),
+                                                                 startScale=self.scale),
+                                   Func(self.dropShadow.reparentTo, self.getShadowJoint()),
+                                   Func(self.dropShadow.setPos, 0, 0, 0))
+            fadeOutTrack = Sequence(Func(self.setTransparency, 1),
+                                    self.colorScaleInterval(1, colorScale=VBase4(1, 1, 1, 0),
+                                                            startColorScale=VBase4(1, 1, 1, 1)),
+                                    Func(self.clearColorScale), Func(self.clearTransparency),
+                                    Func(self.reparentTo, hidden))
             actInt = ActorInterval(self, 'landing', loop=0, startTime=dur, endTime=0.0)
             self.attachPropeller()
             self.prop.hide()
-            propTrack = Parallel(SoundInterval(self.propOutSound, duration=waitTime + dur, node=self), Sequence(Func(self.prop.show), ActorInterval(self.prop, 'propeller', endTime=openTime, startTime=propDur), ActorInterval(self.prop, 'propeller', constrainedLoop=1, duration=propDur - openTime, startTime=spinTime, endTime=0.0), Func(self.detachPropeller)))
-            return Parallel(ParallelEndTogether(lerpPosTrack, shadowTrack, fadeOutTrack), actInt, propTrack, name=self.taskName('trackName'))
+            propTrack = Parallel(SoundInterval(self.propOutSound, duration=waitTime + dur, node=self),
+                                 Sequence(Func(self.prop.show),
+                                          ActorInterval(self.prop, 'propeller', endTime=openTime, startTime=propDur),
+                                          ActorInterval(self.prop, 'propeller', constrainedLoop=1,
+                                                        duration=propDur - openTime, startTime=spinTime, endTime=0.0),
+                                          Func(self.detachPropeller)))
+            return Parallel(ParallelEndTogether(lerpPosTrack, shadowTrack, fadeOutTrack), actInt, propTrack,
+                            name=self.taskName('trackName'))
         return
 
     def enableBattleDetect(self, name, handler):
@@ -236,7 +263,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.collNodePath = None
         return
 
-    def enableRaycast(self, enable = 1):
+    def enableRaycast(self, enable=1):
         if not self.cTrav or not hasattr(self, 'cRayNode') or not self.cRayNode:
             return
         self.cTrav.removeCollider(self.cRayNodePath)
@@ -301,7 +328,8 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             track.append(Func(nodePath.headsUp, endPoint[0], endPoint[1], endPoint[2]))
             distance = Vec3(endPoint - startPoint).length()
             duration = distance / velocity
-            track.append(LerpPosInterval(nodePath, duration=duration, pos=Point3(endPoint), startPos=Point3(startPoint)))
+            track.append(
+                LerpPosInterval(nodePath, duration=duration, pos=Point3(endPoint), startPos=Point3(startPoint)))
 
         return track
 
@@ -397,7 +425,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                         elif 90 < absNum <= 100:
                             hpTextStr += '\n' + TTLocalizer.SillySurgeTerms[10]
                         elif 100 < absNum <= 110:
-                            hpTextStr +='\n' + TTLocalizer.SillySurgeTerms[11]
+                            hpTextStr += '\n' + TTLocalizer.SillySurgeTerms[11]
                         else:
                             hpTextStr += '\n' + TTLocalizer.SillySurgeTerms[12]
 
@@ -426,7 +454,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                     g = 0
                     b = 0
                     a = 1
-                    if self.interactivePropTrackBonus > -1 and self.interactivePropTrackBonus == attackTrack\
+                    if self.interactivePropTrackBonus > -1 and self.interactivePropTrackBonus == attackTrack \
                             or attackTrack == ToontownBattleGlobals.SQUIRT_TRACK:
                         r = 0
                         g = 0
@@ -447,7 +475,8 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                     self.nametag3d.setDepthTest(0)
                     self.nametag3d.setBin('fixed', 99)
                 self.hpText.setPos(0, 0, self.height / 2)
-                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
+                seq = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'),
+                               Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
                 seq.start()
 
     def showStatusText(self, statusName, rounds=0, scale=1, attackTrack=-1, attackLevel=-1):
@@ -467,7 +496,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 g = 0.7
                 b = 0.1
                 a = 1
-            elif statusName == SuitBattleGlobals.SOAKED_STATUS\
+            elif statusName == SuitBattleGlobals.SOAKED_STATUS \
                     or statusName == SuitBattleGlobals.DMG_DOWN_STATUS:
                 r = 0
                 g = 0

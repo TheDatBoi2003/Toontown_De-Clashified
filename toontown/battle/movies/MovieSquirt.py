@@ -167,10 +167,9 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpBonus, kbBonus, anim, died, lef
             suitInterval.append(__soakNearby(suitIndex - 1, battle.activeSuits))
 
         showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=SQUIRT_TRACK, attackLevel=attackLevel)
-        updateHealthBar = Func(suit.updateHealthBar, hp)
         suitTrack.append(Wait(tContact))
         suitTrack.append(showDamage)
-        suitTrack.append(updateHealthBar)
+        suitTrack.append(Func(suit.updateHealthBar, hp))
         if not geyser:
             suitTrack.append(suitInterval)
         elif not uberRepeat:
@@ -189,11 +188,11 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpBonus, kbBonus, anim, died, lef
         if kbBonus > 0:
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -kbBonus, 2, openEnded=0, attackTrack=SQUIRT_TRACK))
-            bonusTrack.append(updateHealthBar)
+            bonusTrack.append(Func(suit.updateHealthBar, kbBonus))
         if hpBonus > 0:
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpBonus, 1, openEnded=0, attackTrack=SQUIRT_TRACK))
-            bonusTrack.append(updateHealthBar)
+            bonusTrack.append(Func(suit.updateHealthBar, hpBonus))
         if died:
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:

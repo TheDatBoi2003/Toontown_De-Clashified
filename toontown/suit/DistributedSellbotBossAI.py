@@ -382,7 +382,11 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def enterVictory(self):
         self.resetBattles()
         self.suitsKilled.append(
-            {'type': None, 'level': None, 'track': self.dna.dept, 'isVP': 1, 'activeToons': self.involvedToons[:]})
+            {'type': None,
+             'level': None,
+             'track': self.dna.dept,
+             'isBoss': 1,
+             'activeToons': self.involvedToons[:]})
         self.barrier = self.beginBarrier('Victory', self.involvedToons, 10, self.__doneVictory)
         return
 

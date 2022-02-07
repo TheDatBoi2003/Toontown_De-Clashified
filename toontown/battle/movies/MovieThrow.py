@@ -326,7 +326,6 @@ def __throwPie(throw, delay, hitCount):
     if hitSuit:
         suitResponseTrack = Sequence()
         showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=THROW_TRACK)
-        updateHealthBar = Func(suit.updateHealthBar, hp)
         if kbBonus > 0:
             anim = 'pie-small-react'
             suitInterval = MovieUtil.startSuitKnockbackInterval(suit, anim, battle)
@@ -337,18 +336,17 @@ def __throwPie(throw, delay, hitCount):
             suitInterval = ActorInterval(suit, 'pie-small-react')
         suitResponseTrack.append(Wait(delay + tPieHitsSuit))
         suitResponseTrack.append(showDamage)
-        suitResponseTrack.append(updateHealthBar)
+        suitResponseTrack.append(Func(suit.updateHealthBar, hp))
         suitResponseTrack.append(suitInterval)
         bonusTrack = Sequence(Wait(delay + tPieHitsSuit))
         if kbBonus > 0:
             bonusTrack.append(Wait(0.75))
-            bonusTrack.append(updateHealthBar)
             bonusTrack.append(Func(suit.showHpText, -kbBonus, 2, openEnded=0, attackTrack=THROW_TRACK))
-            bonusTrack.append(updateHealthBar)
+            bonusTrack.append(Func(suit.updateHealthBar, kbBonus))
         if hpBonus > 0:
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpBonus, 1, openEnded=0, attackTrack=THROW_TRACK))
-            bonusTrack.append(updateHealthBar)
+            bonusTrack.append(Func(suit.updateHealthBar, hpBonus))
         if revived != 0:
             suitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         elif died != 0:

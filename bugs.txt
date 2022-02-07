@@ -1,7 +1,7 @@
-- Short toons can't go FPS (testing)
-- Toontorial is broken perhaps (just skip it for now)
 - Knockback does not work on two cogs same track
-- Freelook in the ground after battle (difficult to fix)
-- Fix squirt and zap the movies are boken!
+- The zap movies sometimes prematurely jump to the death animation
 - 5+ cogs might be broken in BattleCalculatorAI
 - Going sad takes max toons to 120 laff???
+- Toontorial with new camera is broken (just skip it for now)
+- New camera stuck in the ground after battle (difficult to fix)
+- With 2 instakill sounds, only the first goes off (not a serious bug)
