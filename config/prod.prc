@@ -2,7 +2,7 @@
 # specific to production instances of Toontown Online.
 
 # Window settings
-window-title Toontown Online
+window-title Toontown De-Clashified
 
 # Notify settings
 console-output false

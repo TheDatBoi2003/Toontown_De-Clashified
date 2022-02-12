@@ -5304,7 +5304,7 @@ InventorySOS = 'SOS'
 InventoryPass = 'PASS'
 InventoryFire = 'FIRE'
 InventoryClickToAttack = 'Click a\ngag to\nattack'
-InventoryDamageBonus = '(+%d)'
+InventoryDamageBonus = '(+%s)'
 NPCForceAcknowledgeMessage = "You must ride the trolley before leaving.\n\n\n\n\n\n\n\n\nYou can find the trolley next to Goofy's Gag Shop."
 NPCForceAcknowledgeMessage2 = 'You must return to Toon Headquarters before leaving.\n\n\n\n\n\n\n\n\n\nToon Headquarters is located near the center of the playground.'
 NPCForceAcknowledgeMessage3 = "Remember to ride the trolley.\n\n\n\n\n\n\n\nYou can find the trolley next to Goofy's Gag Shop."
@@ -10351,6 +10351,20 @@ AccessoriesPageBackpack = 'Backpack IDs'
 AccessoriesPageShoes = 'Shoes IDs'
 TeleportGUITitle = 'Teleport'
 TeleportGUITeleport = 'Go!'
-StatusSoakRounds = '\n+%s Soak Rounds'
-StatusNames = ['Lured', 'Soaked', 'Trapped', 'Cogs Miss', 'Immune']
+SuitStatusSoakRounds = '\n+%s Soak Rounds'
+SuitStatusNames = {
+    'trapped': 'Trapped',
+    'lured': 'Lured',
+    'soaked': 'Soaked',
+    'marked': 'Marked For Laff',
+    'dmg-down': 'Damage Down',
+    'immune': 'Immune'}
+SuitStatusDesc = {
+    'trapped': 'The cog is trapped and will take %d damage when lured.',
+    'lured': 'The cog cannot move!\n%f%% knockback, %f%% min. accuracy',
+    'soaked': 'The cog is weak to zap  and is 15% less likely to dodge.',
+    'marked': 'The cog will take %f%% more damage from gags.',
+    'dmg-down': 'The cog will deal %f%% less damage.',
+    'immune': 'The cog is temporarily immune from attacks!'
+}
 StatusRounds = ' %s Rounds'

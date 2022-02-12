@@ -314,7 +314,6 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         propBonus = self.checkPropBonus(track)
         accuracy = AvPropAccuracy[track][level]
         damageBonusStr = ''
-        damageBonus = 0
         if track in ACC_UP_TRACKS:
             if self.propAndPrestigeStack:
                 if propBonus:
@@ -324,19 +323,8 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
             else:
                 if propBonus or prestigeBonus:
                     accuracy = AvBonusAccuracy[track][level]
-        elif track in DMG_UP_TRACKS:
-            if self.propAndPrestigeStack:
-                if propBonus:
-                    damageBonus += getDamageBonus(damage)
-                if prestigeBonus:
-                    damageBonus += getDamageBonus(damage)
-                if damageBonus:
-                    damageBonusStr = TTLocalizer.InventoryDamageBonus % damageBonus
-            else:
-                if propBonus or prestigeBonus:
-                    damageBonus += getDamageBonus(damage)
-                if damageBonus:
-                    damageBonusStr = TTLocalizer.InventoryDamageBonus % damageBonus
+        if track == SOUND_TRACK and (prestigeBonus or propBonus):
+            damageBonusStr = TTLocalizer.InventoryDamageBonus % 'Varies'
 
         def getAccKey(acc):
             if acc == 0:

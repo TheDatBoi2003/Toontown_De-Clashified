@@ -1,4 +1,6 @@
+from direct.interval.ActorInterval import ActorInterval
 from direct.interval.IntervalGlobal import *
+from direct.interval.MetaInterval import Parallel as parallel
 
 import MovieCamera
 import MovieUtil
@@ -62,12 +64,12 @@ def doSquirts(squirts):
     return mainTrack, camTrack
 
 
-def clearSuitSoaks(soakRemovals):
+def doSoakRemovals(soakRemovals):
     mainTrack = Parallel()
     for soakRemoval in soakRemovals:
         if len(soakRemoval) > 0:
             suit = soakRemoval['suit']
-            mainTrack.append(Sequence(ActorInterval(suit, 'soak')))
+            mainTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=6.5), __soakSuit(suit, 1)))
 
     camDuration = mainTrack.getDuration()
     camTrack = MovieCamera.allGroupHighShot(None, camDuration)
@@ -160,7 +162,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpBonus, kbBonus, anim, died, lef
 
         if fShowStun == 1:
             suitInterval.append(MovieUtil.createSuitStunInterval(suit, beforeStun, afterStun))
-        suitInterval.append(soakSuit(suit))
+        suitInterval.append(__soakSuit(suit))
         if prest:
             suitIndex = battle.activeSuits.index(suit)
             suitInterval.append(__soakNearby(suitIndex + 1, battle.activeSuits))
@@ -204,17 +206,25 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpBonus, kbBonus, anim, died, lef
         return MovieUtil.createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits)
 
 
-def soakSuit(suit):
-    suitBody = [suit.find('**/torso'), suit.find('**/arms'), suit.find('**/legs')]
-    suitInterval = Sequence(Func(suitBody[0].setColor, SoakColor),
-                            Func(suitBody[1].setColor, SoakColor),
-                            Func(suitBody[2].setColor, SoakColor))
+def __soakSuit(suit, remove=0):
+    if remove:
+        color = Point4(1.0, 1.0, 1.0)
+    else:
+        color = SoakColor
+    if suit.isSkeleton:
+        suitBody = [suit]
+    else:
+        suitBody = [suit.find('**/torso'), suit.find('**/arms'), suit.find('**/legs')]
+    suitInterval = Sequence()
+    for bodyPart in suitBody:
+        if bodyPart:
+            suitInterval.append(Func(bodyPart.setColor, color))
     return suitInterval
 
 
 def __soakNearby(suitIndex, suits):
     if len(suits) > suitIndex >= 0:
-        return Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), soakSuit(suits[suitIndex]))
+        return Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex]))
     else:
         return Sequence()
 

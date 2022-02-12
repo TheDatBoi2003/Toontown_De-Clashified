@@ -20,9 +20,8 @@ class HealCalculatorAI(DirectObject):
     def calcAttackResults(self, attack, targets, toonId):
         _, atkLevel, atkHp = getActualTrackLevelHp(attack, self.notify)
         targetList = createToonTargetList(self.battle, toonId)
-        npcSOS = attack[TOON_TRACK_COL] == NPCSOS
         toon = self.battle.getToon(toonId)
-        healing = doDamageCalc(self.battle, atkHp, atkLevel, HEAL, npcSOS, toon, PropAndPrestigeStack)
+        healing = doDamageCalc(self.battle, atkLevel, HEAL, toon, PropAndPrestigeStack)
         if not attackHasHit(attack, self.notify, suit=0):
             healing = healing * 0.2
         self.notify.debug('toon does ' + str(healing) + ' healing to toon(s)')
@@ -33,18 +32,17 @@ class HealCalculatorAI(DirectObject):
         healedToons = 0
         for target in targetList:
 
-            result = healing
             healedToons += self.getToonHp(target) > 0
 
-            self.notify.debug('%d targets %s, result: %d' % (toonId, target, result))
+            self.notify.debug('%d targets %s, result: %d' % (toonId, target, healing))
 
             if target not in targets:
                 self.notify.debug("The toon is not accessible!")
                 continue
 
-            results[targets.index(target)] = result
+            results[targets.index(target)] = healing
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
-        return healedToons
+        return healedToons > 0
 
     def healToon(self, toon, attack, healing, position):
         if CAP_HEALS:

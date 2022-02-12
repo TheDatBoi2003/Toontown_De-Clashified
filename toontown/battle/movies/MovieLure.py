@@ -4,6 +4,7 @@ import toontown.battle.movies.BattleProps
 import MovieCamera
 import MovieNPCSOS
 import MovieUtil
+from toontown.battle import SuitBattleGlobals
 from toontown.battle.movies.BattleProps import *
 from toontown.battle.movies.BattleSounds import *
 from toontown.toon.ToonDNA import *
@@ -102,6 +103,7 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
             reachPos = Point3(origPos[0], origPos[1] - reachDist, origPos[2])
             suitTrack.append(Func(suit.loop, 'neutral'))
             suitTrack.append(Wait(3.5))
+            __showStatusText(suit, suitTrack, trapProp)
             suitName = suit.getStyleName()
             retardPos, retardHpr = battle.getActorPosHpr(suit)
             retardPos.setY(retardPos.getY() + MovieUtil.SUIT_EXTRA_REACH_DISTANCE)
@@ -120,11 +122,7 @@ def __createFishingPoleMultiTrack(lure, dollar, dollarName):
             suitTrack.append(Func(suit.loop, 'lured'))
             suitTrack.append(Func(battle.lureSuit, suit))
             if hp > 0:
-                suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp))
-            if revived != 0:
-                suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-            if died != 0:
-                suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
+                suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
             tracks.append(suitTrack)
     else:
         tracks.append(Sequence(Wait(3.7), Func(MovieUtil.indicateMissed, suit)))
@@ -169,6 +167,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet=1, npc
                 shakeDuration = shakeTotalDuration / float(numShakes)
                 suitTrack.append(Func(suit.loop, 'neutral'))
                 suitTrack.append(Wait(suitDelay))
+                __showStatusText(suit, suitTrack, trapProp)
                 suitTrack.append(ActorInterval(suit, 'landing', startTime=2.37, endTime=1.82))
                 for i in xrange(0, numShakes):
                     suitTrack.append(
@@ -179,11 +178,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet=1, npc
                 suitTrack.append(Func(suit.loop, 'lured'))
                 suitTrack.append(Func(battle.lureSuit, suit))
                 if hp > 0:
-                    suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp))
-                if revived != 0:
-                    suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle, npcToons))
-                elif died != 0:
-                    suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle, npcToons))
+                    suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
                 tracks.append(suitTrack)
                 tracks.append(
                     lerpSuit(suit, suitDelay + 0.55 + shakeTotalDuration, suitMoveDuration, reachPos, battle, trapProp))
@@ -234,16 +229,13 @@ def __createHypnoGogglesMultiTrack(lure, npcToons=None):
                 reachPos = Point3(origPos[0], origPos[1] - reachDist, origPos[2])
                 suitTrack.append(Func(suit.loop, 'neutral'))
                 suitTrack.append(Wait(suitDelay))
+                __showStatusText(suit, suitTrack, trapProp)
                 suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
                 suitTrack.append(Func(suit.setPos, battle, reachPos))
                 suitTrack.append(Func(suit.loop, 'lured'))
                 suitTrack.append(Func(battle.lureSuit, suit))
                 if hp > 0:
-                    suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp))
-                if revived != 0:
-                    suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle, npcToons))
-                elif died != 0:
-                    suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle, npcToons))
+                    suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
                 tracks.append(suitTrack)
                 tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
         else:
@@ -300,7 +292,7 @@ def __lureSlideshow(lure, npcToons):
     return __createSlideshowMultiTrack(lure, npcToons)
 
 
-def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
+def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0):
     if not trapProp or trapProp.isEmpty():
         return Func(suit.loop, 'neutral')
     trapProp.wrtReparentTo(battle)
@@ -309,6 +301,8 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
     trapTrackNames = ToontownBattleGlobals.AvProps[trapTrack]
     trapName = trapTrackNames[trapLevel]
     result = Sequence()
+    suitGone = 0
+    suitStartPos = suit.getPos()
 
     def reparentTrap():
         if trapProp and not trapProp.isEmpty():
@@ -316,7 +310,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
 
     result.append(Func(reparentTrap))
     parent = battle
-    if suit.battleTrapIsFresh == 1:
+    if suit.battleTrapIsFresh:
         if trapName == 'quicksand' or trapName == 'trapdoor':
             trapProp.hide()
             trapProp.reparentTo(suit)
@@ -385,14 +379,20 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
         trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)))
         moveTrack = Sequence(Wait(0.9), LerpPosInterval(suit, 0.9, sinkPos1, other=battle),
                              LerpPosInterval(suit, 0.4, sinkPos2, other=battle), Func(suit.setPos, battle, dropPos),
-                             Func(suit.wrtReparentTo, hidden), Wait(1.1), Func(suit.wrtReparentTo, battle),
-                             LerpPosInterval(suit, 0.3, landPos, other=battle))
-        animTrack = Sequence(ActorInterval(suit, 'flail'), ActorInterval(suit, 'flail', startTime=1.1), Wait(0.7),
-                             ActorInterval(suit, 'slip-forward', duration=2.1))
-        damageTrack = Sequence(Wait(3.5), Func(suit.showHpText, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
-        soundTrack = Sequence(Wait(0.7), SoundInterval(globalBattleSoundCache.getSound('TL_quicksand.ogg'), node=suit),
-                              Wait(0.1),
-                              SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
+                             Func(suit.wrtReparentTo, hidden), Wait(1.1))
+        animTrack = Sequence(ActorInterval(suit, 'flail'), ActorInterval(suit, 'flail', startTime=1.1), Wait(0.7))
+        soundTrack = Sequence(Wait(0.7),
+                              SoundInterval(globalBattleSoundCache.getSound('TL_quicksand.ogg'), node=suit))
+        if died:
+            suitGone = 1
+            damageTrack = Sequence()
+        else:
+            moveTrack.append(Func(suit.wrtReparentTo, battle))
+            moveTrack.append(LerpPosInterval(suit, 0.3, landPos, other=battle))
+            damageTrack = Sequence(Wait(3.5), Func(suit.showHpText, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
+            animTrack.append(ActorInterval(suit, 'slip-forward', duration=2.1))
+            soundTrack.append(Wait(0.1))
+            soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
         result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
     elif trapName == 'trapdoor' or trapName == 'wreckingball':
         sinkPos = trapProp.getPos(battle)
@@ -402,17 +402,23 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
         dropPos.setZ(dropPos.getZ() + 15)
         trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)))
         moveTrack = Sequence(Wait(2.2), LerpPosInterval(suit, 0.4, sinkPos, other=battle),
-                             Func(suit.setPos, battle, dropPos), Func(suit.wrtReparentTo, hidden), Wait(1.6),
-                             Func(suit.wrtReparentTo, battle), LerpPosInterval(suit, 0.3, landPos, other=battle))
+                             Func(suit.setPos, battle, dropPos), Func(suit.wrtReparentTo, hidden), Wait(1.6))
         animTrack = Sequence(getSplicedLerpAnimsTrack(suit, 'flail', 0.7, 0.25),
                              Func(trapProp.setColor, Vec4(0, 0, 0, 1)),
                              ActorInterval(suit, 'flail', startTime=0.7, endTime=0),
-                             ActorInterval(suit, 'neutral', duration=0.5), ActorInterval(suit, 'flail', startTime=1.1),
-                             Wait(1.1), ActorInterval(suit, 'slip-forward', duration=2.1))
-        damageTrack = Sequence(Wait(3.5), Func(suit.showHpText, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
-        soundTrack = Sequence(Wait(0.8), SoundInterval(globalBattleSoundCache.getSound('TL_trap_door.ogg'), node=suit),
-                              Wait(0.8),
-                              SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
+                             ActorInterval(suit, 'neutral', duration=0.5), ActorInterval(suit, 'flail', startTime=1.1))
+        soundTrack = Sequence(Wait(0.8), SoundInterval(globalBattleSoundCache.getSound('TL_trap_door.ogg'), node=suit))
+        if died:
+            suitGone = 1
+            damageTrack = Sequence()
+        else:
+            moveTrack.append(Func(suit.wrtReparentTo, battle))
+            moveTrack.append(LerpPosInterval(suit, 0.3, landPos, other=battle))
+            animTrack.append(Wait(1.1))
+            animTrack.append(ActorInterval(suit, 'slip-forward', duration=2.1))
+            damageTrack = Sequence(Wait(3.5), Func(suit.showHpText, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
+            soundTrack.append(Wait(0.8))
+            soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
         result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
     elif trapName == 'wreckingball':
         sinkPos = trapProp.getPos(battle)
@@ -440,17 +446,23 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
         suitTrack = Sequence(ActorInterval(suit, 'flail', duration=0.7),
                              ActorInterval(suit, 'flail', startTime=0.7, endTime=0.0),
                              ActorInterval(suit, 'neutral', duration=0.4),
-                             ActorInterval(suit, 'flail', startTime=0.6, endTime=0.7), Wait(0.4),
-                             ActorInterval(suit, 'slip-forward', startTime=2.48, duration=0.1),
-                             Func(battle.movie.needRestoreColor), Func(suit.setColorScale, Vec4(0.2, 0.2, 0.2, 1)),
-                             Func(trapProp.reparentTo, hidden), ActorInterval(suit, 'slip-forward', startTime=2.58),
-                             Func(suit.clearColorScale), Func(trapProp.sparksEffect.cleanup),
-                             Func(battle.movie.clearRestoreColor))
-        damageTrack = Sequence(Wait(2.3), Func(suit.showHpText, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
+                             ActorInterval(suit, 'flail', startTime=0.6, endTime=0.7))
         explosionSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
         soundTrack = Sequence(
             SoundInterval(globalBattleSoundCache.getSound('TL_dynamite.ogg'), duration=2.0, node=suit),
             SoundInterval(explosionSound, duration=0.6, node=suit))
+        if died:
+            suitGone = 1
+            damageTrack = Sequence()
+            suitTrack.append(MovieUtil.createSuitWalkOut(suit, battle))
+        else:
+            suitTrack2 = Sequence(Wait(0.4), ActorInterval(suit, 'slip-forward', startTime=2.48, duration=0.1),
+                Func(battle.movie.needRestoreColor), Func(suit.setColorScale, Vec4(0.2, 0.2, 0.2, 1)),
+                Func(trapProp.reparentTo, hidden), ActorInterval(suit, 'slip-forward', startTime=2.58),
+                Func(suit.clearColorScale), Func(trapProp.sparksEffect.cleanup),
+                Func(battle.movie.clearRestoreColor))
+            suitTrack.append(suitTrack2)
+            damageTrack = Sequence(Wait(2.3), Func(suit.showHpText, -hp, openEnded=0), Func(suit.updateHealthBar, hp))
         result.append(Parallel(tntTrack, suitTrack, damageTrack, explosionTrack, soundTrack))
     elif trapName == 'traintrack':
         trainInterval = createIncomingTrainInterval(battle, suit, hp, lure, trapProp)
@@ -459,11 +471,19 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp):
         notify.warning('unknown trapName: %s detected on suit: %s' % (trapName, suit))
     suit.battleTrapProp = trapProp
     result.append(Func(battle.removeTrap, suit, True))
-    result.append(Func(battle.unlureSuit, suit))
-    result.append(MovieUtil.createSuitResetPosTrack(suit, battle))
-    result.append(Func(suit.loop, 'neutral'))
-    if trapName == 'traintrack':
-        result.append(Func(MovieUtil.removeProp, trapProp))
+    if suitGone and trapName == 'tnt':
+        #result.append(MovieUtil.createSuitWalkOut(suit, battle))
+        pass
+    else:
+        result.append(Func(battle.unlureSuit, suit))
+        result.append(MovieUtil.createSuitResetPosTrack(suit, battle))
+        result.append(Func(suit.loop, 'neutral'))
+        if trapName == 'traintrack':
+            result.append(Func(MovieUtil.removeProp, trapProp))
+        if revived:
+            result.append(MovieUtil.createSuitReviveTrack(suit, battle))
+        elif died and not suitGone:
+            result.append(MovieUtil.createSuitDeathTrack(suit, battle))
     return result
 
 
@@ -497,7 +517,7 @@ def lerpSuit(suit, delay, duration, reachPos, battle, trapProp):
 
 
 def createTNTExplosionTrack(parent, explosionPoint=None, trapProp=None, relativeTo=render):
-    explosionTrack = Sequence()
+    explosionTrack = Sequence(Func(trapProp.hide))
     explosion = toontown.battle.movies.BattleProps.globalPropPool.getProp('kapow')
     explosion.setBillboardPointEye()
     if not explosionPoint:
@@ -661,16 +681,13 @@ def __createSlideshowMultiTrack(lure, npcToons=None):
                 reachPos = Point3(origPos[0], origPos[1] - reachDist, origPos[2])
                 suitTrack.append(Func(suit.doNeutralAnim))
                 suitTrack.append(Wait(suitDelay))
+                __showStatusText(suit, suitTrack, trapProp)
                 suitTrack.append(ActorInterval(suit, 'hypnotized', duration=3.1))
                 suitTrack.append(Func(suit.setPos, battle, reachPos))
                 suitTrack.append(Func(suit.doNeutralAnim))
                 suitTrack.append(Func(battle.lureSuit, suit))
                 if hp > 0:
-                    suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp))
-                if revived != 0:
-                    suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle, npcToons))
-                elif died != 0:
-                    suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle, npcToons))
+                    suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
                 tracks.append(suitTrack)
                 tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
         else:
@@ -679,3 +696,11 @@ def __createSlideshowMultiTrack(lure, npcToons=None):
     tracks.append(getSoundTrack('TL_presentation.ogg', delay=2.3, node=toon))
     tracks.append(getSoundTrack('AA_drop_trigger_box.ogg', delay=slideshowDelay, node=toon))
     return tracks
+
+
+def __showStatusText(suit, suitTrack, trapProp=0):
+    if trapProp:
+        suitTrack.append(Func(suit.showStatusText, SuitBattleGlobals.TRAPPED_STATUS))
+    else:
+        lureStatus = suit.getStatus(SuitBattleGlobals.LURED_STATUS)
+        suitTrack.append(Func(suit.showStatusText, lureStatus['name'], lureStatus['rounds']))

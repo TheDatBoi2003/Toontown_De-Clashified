@@ -55,7 +55,6 @@ class ZapCalculatorAI(DirectObject):
     def calcAttackResults(self, attack, targets, toonId):
         atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack, self.notify)
         toon = self.battle.getToon(toonId)
-        npcSOS = attack[TOON_TRACK_COL] == NPCSOS
         attack[TOON_HPBONUS_COL] = [-1 for _ in xrange(len(targets))]
         targetList = self.__calcJumpPositions(toonId)
         targetsHit = 0
@@ -79,8 +78,7 @@ class ZapCalculatorAI(DirectObject):
             tgtPos = self.battle.activeSuits.index(target)
             attack[TOON_HPBONUS_COL][tgtPos] = i
 
-            baseDamage = doInstaKillCalc(self.battle, atkHp, atkLevel, atkTrack, npcSOS,
-                                         target, toon, PropAndPrestigeStack)
+            baseDamage = doDamageCalc(self.battle, atkLevel, atkTrack, toon, PropAndPrestigeStack)
 
             targetsHit += target.getHP() > 0
 

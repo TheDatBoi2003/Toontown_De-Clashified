@@ -82,21 +82,18 @@ def findLowestDefense(atkTargets, tgtDef, notify):
     return highestDecay, tgtDef
 
 
-def doInstaKillCalc(battle, atkHp, atkLevel, atkTrack, npcSOS, target, toon, propAndPrestigeStack=0):
+def receiveDamageCalc(battle, atkLevel, atkTrack, target, toon, propAndPrestigeStack=0):
     if toon and toon.getInstaKill():
         attackDamage = target.getHP()
     else:
-        attackDamage = doDamageCalc(battle, atkHp, atkLevel, atkTrack, npcSOS, toon, propAndPrestigeStack)
+        attackDamage = doDamageCalc(battle, atkLevel, atkTrack, toon, propAndPrestigeStack)
     return attackDamage
 
 
-def doDamageCalc(battle, atkHp, atkLevel, atkTrack, npcSOS, toon, propAndPrestigeStack=0):
-    if npcSOS:
-        damage = atkHp
-    else:
-        damage = getAvPropDamage(atkTrack, atkLevel, toon.experience.getExp(atkTrack),
-                                 toon.checkTrackPrestige(atkTrack), getToonPropBonus(battle, atkTrack),
-                                 propAndPrestigeStack)
+def doDamageCalc(battle, atkLevel, atkTrack, toon, propAndPrestigeStack=0):
+    damage = getAvPropDamage(atkTrack, atkLevel, toon.experience.getExp(atkTrack),
+                             toon.checkTrackPrestige(atkTrack), getToonPropBonus(battle, atkTrack),
+                             propAndPrestigeStack)
     return damage
 
 
@@ -139,20 +136,19 @@ def getActualTrackLevelHp(toonAttack, notify):
             return track, level, hp
         else:
             notify.warning('No NPC with id: %d' % toonAttack[TOON_TGT_COL])
-    else:
-        if toonAttack[TOON_TRACK_COL] == PETSOS:
-            petProxyId = toonAttack[TOON_TGT_COL]
-            trickId = toonAttack[TOON_LVL_COL]
-            healRange = PetTricks.TrickHeals[trickId]
-            hp = 0
-            if petProxyId in simbase.air.doId2do:
-                petProxy = simbase.air.doId2do[petProxyId]
-                if trickId < len(petProxy.trickAptitudes):
-                    aptitude = petProxy.trickAptitudes[trickId]
-                    hp = int(lerp(healRange[0], healRange[1], aptitude))
-            else:
-                notify.warning('pet proxy: %d not in doId2do!' % petProxyId)
-            return toonAttack[TOON_TRACK_COL], toonAttack[TOON_LVL_COL], hp
+    elif toonAttack[TOON_TRACK_COL] == PETSOS:
+        petProxyId = toonAttack[TOON_TGT_COL]
+        trickId = toonAttack[TOON_LVL_COL]
+        healRange = PetTricks.TrickHeals[trickId]
+        hp = 0
+        if petProxyId in simbase.air.doId2do:
+            petProxy = simbase.air.doId2do[petProxyId]
+            if trickId < len(petProxy.trickAptitudes):
+                aptitude = petProxy.trickAptitudes[trickId]
+                hp = int(lerp(healRange[0], healRange[1], aptitude))
+        else:
+            notify.warning('pet proxy: %d not in doId2do!' % petProxyId)
+        return toonAttack[TOON_TRACK_COL], toonAttack[TOON_LVL_COL], hp
     return toonAttack[TOON_TRACK_COL], toonAttack[TOON_LVL_COL], 0
 
 

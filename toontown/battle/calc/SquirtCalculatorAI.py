@@ -12,7 +12,7 @@ class SquirtCalculatorAI(DirectObject):
         self.soakedSuits = []                       # Keeps track of soaked suits over a longer period of time
         self.battle = battle
         self.statusCalculator = statusCalculator
-        self.accept('post-suit', self.postSuitStatusRounds)
+        self.accept('post-suit', self.__postSuitStatusRounds)
 
     def cleanup(self):
         self.ignoreAll()
@@ -21,15 +21,14 @@ class SquirtCalculatorAI(DirectObject):
         atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack, self.notify)
         toon = self.battle.getToon(toonId)
         targetList, suitIndex = self.__calcSquirtTargets(attack, toon)
-        npcSOS = attack[TOON_TRACK_COL] == NPCSOS
         results = [0 for _ in xrange(len(targets))]
         targetsExist = 0
         for target in targetList:
-            self.soakSuit(atkLevel, target)
+            self.__soakSuit(atkLevel, target)
             attackDamage = 0
             if targets[suitIndex] == target:
-                attackDamage = doInstaKillCalc(self.battle, atkHp, atkLevel, atkTrack, npcSOS, target,
-                                               toon, PropAndPrestigeStack)
+                attackDamage = receiveDamageCalc(self.battle, atkLevel, atkTrack, target,
+                                                 toon, PropAndPrestigeStack)
                 self.notify.debug('%d targets %s, damage: %d' % (toonId, target, attackDamage))
             elif self.notify.getDebug():
                 self.notify.debug('%d targets %s to soak' % (toonId, target))
@@ -47,15 +46,15 @@ class SquirtCalculatorAI(DirectObject):
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
         return targetsExist > 0
 
-    def soakSuit(self, atkLevel, suit):
+    def __soakSuit(self, atkLevel, suit):
         soakStatus = suit.getStatus(SOAKED_STATUS)
         soakRounds = NumRoundsSoaked[atkLevel]
         if not soakStatus or soakStatus['rounds'] < soakRounds:
             if soakStatus:
                 self.statusCalculator.removeStatus(suit, soakStatus)
-            self.addSoakStatus(suit, soakRounds)
+            self.__addSoakStatus(suit, soakRounds)
 
-    def addSoakStatus(self, suit, rounds):
+    def __addSoakStatus(self, suit, rounds):
         soakStatus = genSuitStatus(SOAKED_STATUS)
         soakStatus['rounds'] = rounds
         suit.b_addStatus(soakStatus)
@@ -71,7 +70,7 @@ class SquirtCalculatorAI(DirectObject):
             else:
                 self.statusCalculator.removeStatus(suit, statusName=SOAKED_STATUS)
 
-    def postSuitStatusRounds(self):
+    def __postSuitStatusRounds(self):
         for activeSuit in self.battle.activeSuits:
             removedStatus = activeSuit.decStatusRounds(SOAKED_STATUS)
             if removedStatus:

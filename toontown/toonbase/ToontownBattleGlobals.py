@@ -68,8 +68,6 @@ NPC_COGS_MISS = MAX_TRACK_INDEX + 3
 MIN_LEVEL_INDEX = 0
 MAX_LEVEL_INDEX = 7
 
-DMG_UP_TRACKS = [SOUND_TRACK]
-
 ACC_UP_TRACKS = [DROP_TRACK]
 
 OPERA_LEVEL_INDEX = MAX_LEVEL_INDEX
@@ -399,24 +397,7 @@ def getAvPropDamage(attackTrack, attackLevel, exp, prestige=False, propBonus=Fal
     # In the gag purchase tutorial the sneak peak gags show as negative
     if damage <= 0:
         damage = minD
-    if attackTrack in DMG_UP_TRACKS:
-        if propAndPrestigeStack:
-            originalDamage = damage
-            if prestige:
-                damage += getDamageBonus(originalDamage)
-            if propBonus:
-                damage += getDamageBonus(originalDamage)
-        else:
-            if prestige or propBonus:
-                damage += getDamageBonus(damage)
     return damage
-
-
-def getDamageBonus(normal):
-    bonus = int(normal * 0.1)
-    if (bonus < 1) and (normal > 0):
-        bonus = 1
-    return bonus
 
 
 # def isGroup(track, level):

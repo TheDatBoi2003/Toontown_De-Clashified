@@ -1554,12 +1554,6 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 if target:
                     target.battleTrap = NO_TRAP
 
-        if self.battleCalc.trapCalculator.trainTrapTriggered:
-            self.notify.debug('Train trap triggered, clearing all traps')
-            for otherSuit in self.activeSuits:
-                self.notify.debug('suit =%d, oldBattleTrap=%d' % (otherSuit.doId, otherSuit.battleTrap))
-                otherSuit.battleTrap = NO_TRAP
-
         currLuredSuits = self.battleCalc.getLuredSuits()
         if len(self.luredSuits) == len(currLuredSuits):
             for suit in self.luredSuits:

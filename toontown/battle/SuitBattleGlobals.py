@@ -4,7 +4,6 @@ import random
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from direct.directnotify import DirectNotifyGlobal
-from panda3d.core import Point4
 
 from otp.otpbase import OTPLocalizer
 from toontown.toonbase import TTLocalizer
@@ -1317,20 +1316,21 @@ def getAttackTaunt(attackName, index=None):
 
 
 SuitAttackTaunts = TTLocalizer.SuitAttackTaunts
-SuitStatusNames = ['lured', 'soaked', 'trapped', 'dmg-down', 'immune']
 
-LURED_STATUS = SuitStatusNames[0]
-SOAKED_STATUS = SuitStatusNames[1]
-TRAPPED_STATUS = SuitStatusNames[2]
-DMG_DOWN_STATUS = SuitStatusNames[3]
-IMMUNE_STATUS = SuitStatusNames[4]
+TRAPPED_STATUS = 'trapped'
+LURED_STATUS = 'lured'
+SOAKED_STATUS = 'soaked'
+MARKED_STATUS = 'marked'
+DMG_DOWN_STATUS = 'dmg-down'
+IMMUNE_STATUS = 'immune'
 
-SuitStatuses = [{'name': LURED_STATUS, 'rounds': 1, 'kbBonus': 0.5, 'decay': 100, 'toons': [], 'levels': []},
-                {'name': SOAKED_STATUS, 'rounds': 1, 'defense': -15, 'toons': [0]},
-                {'name': TRAPPED_STATUS, 'level': -1, 'damage': 0, 'toon': 0},
-                {'name': DMG_DOWN_STATUS, 'rounds': 1, 'percent': 0.4},
+SuitStatuses = [{'name': TRAPPED_STATUS, 'level': -1, 'damage': 0, 'toon': 0},
+                {'name': LURED_STATUS, 'rounds': 1, 'kbBonus': 0.5, 'decay': 100, 'toons': [], 'levels': []},
+                {'name': SOAKED_STATUS, 'rounds': 1, 'defense': -15},
+                {'name': MARKED_STATUS, 'rounds': 2, 'damage-mod': 0.08},
+                {'name': DMG_DOWN_STATUS, 'rounds': 1, 'accuracy-mod': 0.4},
                 {'name': IMMUNE_STATUS, 'rounds': 2}]
-ROUND_STATUSES = [LURED_STATUS, SOAKED_STATUS, DMG_DOWN_STATUS, IMMUNE_STATUS]
+ROUND_STATUSES = [LURED_STATUS, SOAKED_STATUS, MARKED_STATUS, DMG_DOWN_STATUS, IMMUNE_STATUS]
 
 
 def genSuitStatus(name):
@@ -1346,14 +1346,16 @@ def makeStatusString(status):
     dg.addString(status['name'])
     if status['name'] in ROUND_STATUSES:
         dg.addInt16(status['rounds'])
-    if status['name'] == 'lured':
-        dg.addFloat32(status['kbBonus'])
-        dg.addInt8(status['decay'])
-    elif status['name'] == 'soaked':
-        dg.addInt16(status['defense'])
-    elif status['name'] == 'trapped':
+    if status['name'] == TRAPPED_STATUS:
         dg.addInt8(status['level'])
         dg.addInt32(status['damage'])
+    elif status['name'] == LURED_STATUS:
+        dg.addFloat32(status['kbBonus'])
+        dg.addInt8(status['decay'])
+    elif status['name'] == SOAKED_STATUS:
+        dg.addInt16(status['defense'])
+    elif status['name'] == MARKED_STATUS:
+        dg.addInt16(status['damage-mod'])
 
     return dg.getMessage()
 
@@ -1364,12 +1366,14 @@ def getStatusFromString(statusString):
     status = genSuitStatus(dgi.getString())
     if status['name'] in ROUND_STATUSES:
         status['rounds'] = dgi.getInt16()
-    if status['name'] == 'lured':
-        status['kbBonus'] = dgi.getFloat32()
-        status['decay'] = dgi.getInt8()
-    elif status['name'] == 'soaked':
-        status['defense'] = dgi.getInt16()
-    elif status['name'] == 'trapped':
+    if status['name'] == TRAPPED_STATUS:
         status['level'] = dgi.getInt8()
         status['damage'] = dgi.getInt32()
+    elif status['name'] == LURED_STATUS:
+        status['kbBonus'] = dgi.getFloat32()
+        status['decay'] = dgi.getInt8()
+    elif status['name'] == SOAKED_STATUS:
+        status['defense'] = dgi.getInt16()
+    elif status['name'] == MARKED_STATUS:
+        status['damage-mod'] = dgi.getInt16()
     return status

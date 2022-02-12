@@ -399,7 +399,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                     hpTextStr = str(number)
 
                     if attackTrack == ToontownBattleGlobals.SQUIRT_TRACK:
-                        hpTextStr += TTLocalizer.StatusSoakRounds % ToontownBattleGlobals.AvSoakRounds[attackLevel]
+                        hpTextStr += TTLocalizer.SuitStatusSoakRounds % ToontownBattleGlobals.AvSoakRounds[attackLevel]
 
                     if base.cr.newsManager.isHolidayRunning(ToontownGlobals.SILLY_SURGE_HOLIDAY):
                         self.sillySurgeText = True
@@ -479,12 +479,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                                Wait(0.85), self.hpText.colorInterval(0.1, Vec4(r, g, b, 0), 0.1), Func(self.hideHpText))
                 seq.start()
 
-    def showStatusText(self, statusName, rounds=0, scale=1, attackTrack=-1, attackLevel=-1):
+    def showStatusText(self, statusName, rounds=0, scale=1):
         if self.HpTextEnabled and not self.ghostMode:
             if self.hpText:
                 self.hideHpText()
             self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
-            textStr = TTLocalizer.StatusNames[SuitBattleGlobals.SuitStatusNames.index(statusName)]
+            textStr = TTLocalizer.SuitStatusNames[statusName]
             if rounds:
                 textStr += TTLocalizer.StatusRounds % rounds
 
@@ -502,12 +502,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 g = 0
                 b = 1
                 a = 1
-            elif statusName == SuitBattleGlobals.SuitStatusNames[2]:
+            elif statusName == SuitBattleGlobals.TRAPPED_STATUS:
                 r = 0.9
                 g = 0
                 b = 0
                 a = 1
-            elif statusName == SuitBattleGlobals.SuitStatusNames[4]:
+            elif statusName == SuitBattleGlobals.IMMUNE_STATUS:
                 r = 1.0
                 g = 0.5
                 b = 0

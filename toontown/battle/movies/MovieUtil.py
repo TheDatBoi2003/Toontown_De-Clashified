@@ -300,6 +300,17 @@ def createSuitDeathTrack(suit, battle, npcToons=None, headless=False):
     return Parallel(suitTrack, deathSoundTrack, gears1Track, gears2MTrack, toonMTrack)
 
 
+def createSuitWalkOut(suit, battle):
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    deathSuit = suit.getLoseActor()
+    suitTrack = Sequence(Func(insertDeathSuit, suit, deathSuit, battle, suitPos, suitHpr),
+                         Func(deathSuit.setColorScale, Vec4(0.2, 0.2, 0.2, 1)),
+                         ActorInterval(deathSuit, 'lose', startTime=SUIT_LOSE_DURATION + 0.2),
+                         Func(removeDeathSuit, suit, deathSuit, name='remove-death-suit'))
+
+    return suitTrack
+
+
 def __removeTrainTrap(battle, suit, suitTrack):
     if hasattr(suit, 'battleTrapProp') and \
             suit.battleTrapProp and \

@@ -4,8 +4,6 @@ from direct.showbase.MessengerGlobal import messenger
 from toontown.battle.calc.BattleCalculatorGlobals import *
 from toontown.toonbase.ToontownBattleGlobals import AvProps
 
-LURED_STATUS = LURED_STATUS
-
 
 class LureCalculatorAI(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('LureCalculatorAI')
@@ -14,7 +12,7 @@ class LureCalculatorAI(DirectObject):
         DirectObject.__init__(self)
         self.luredSuits = []                        # Keeps track of suit lured over a longer period of time
         self.successfulLures = {}                   # Keeps track of successful lures for the current turn
-        self.delayedWakes = []                      # Store cogs that will lose the lure status at the end of the turn
+        self.delayedWakes = set()                      # Store cogs that will lose the lure status at the end of the turn
         self.battle = battle
         self.statusCalculator = statusCalculator
         self.trapCalculator = trapCalculator
@@ -110,7 +108,7 @@ class LureCalculatorAI(DirectObject):
             else:
                 self.notify.debug('Suit ' + str(target.doId) + ' not found in currently lured suits')
 
-        self.delayedWakes = []
+        self.delayedWakes = set()
 
     def removeLureStatus(self, suit, statusRemoved=None):
         if suit in self.luredSuits:
@@ -146,7 +144,7 @@ class LureCalculatorAI(DirectObject):
 
     def __addSuitToDelayedWake(self, toonId, target=None, ignoreDamageCheck=False):
         if target:
-            self.delayedWakes.append(target)
+            self.delayedWakes.add(target)
         else:
             targetList = createToonTargetList(self.battle, toonId)
             for thisTarget in targetList:
@@ -154,7 +152,7 @@ class LureCalculatorAI(DirectObject):
                 pos = self.battle.activeSuits.index(thisTarget)
                 if (thisTarget.getStatus(LURED_STATUS) and target not in self.delayedWakes and
                         (attack[TOON_HP_COL][pos] > 0 or ignoreDamageCheck)):
-                    self.delayedWakes.append(target)
+                    self.delayedWakes.add(target)
 
     def __calcLuredHitExp(self, attack, target):
         for (toonId, level) in self.__getLuredExpInfo(target):

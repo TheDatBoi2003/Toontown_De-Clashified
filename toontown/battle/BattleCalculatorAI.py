@@ -1,9 +1,12 @@
 from DistributedBattleAI import *
 from toontown.battle import BattleExperienceAI
 from toontown.battle.calc import BattleCalculatorGlobals
+from toontown.battle.calc.DropCalculatorAI import *
 from toontown.battle.calc.HealCalculatorAI import *
 from toontown.battle.calc.LureCalculatorAI import *
+from toontown.battle.calc.SoundCalculatorAI import *
 from toontown.battle.calc.SquirtCalculatorAI import *
+from toontown.battle.calc.ThrowCalculatorAI import *
 from toontown.battle.calc.TrapCalculatorAI import *
 from toontown.battle.calc.ZapCalculatorAI import *
 from toontown.toonbase.ToontownBattleGlobals import RAILROAD_LEVEL_INDEX
@@ -30,13 +33,19 @@ class BattleCalculatorAI(DirectObject):
         self.healCalculator = HealCalculatorAI(self.battle, self.statusCalculator)
         self.trapCalculator = TrapCalculatorAI(self.battle, self.statusCalculator)
         self.lureCalculator = LureCalculatorAI(self.battle, self.statusCalculator, self.trapCalculator)
+        self.soundCalculator = SoundCalculatorAI(self.battle)
         self.squirtCalculator = SquirtCalculatorAI(self.battle, self.statusCalculator)
         self.zapCalculator = ZapCalculatorAI(self.battle, self.squirtCalculator)
+        self.throwCalculator = ThrowCalculatorAI(self.battle, self.statusCalculator)
+        self.dropCalculator = DropCalculatorAI(self.battle)
         self.trackCalculators = {HEAL: self.healCalculator,
                                  TRAP: self.trapCalculator,
                                  LURE: self.lureCalculator,
+                                 SOUND: self.soundCalculator,
                                  SQUIRT: self.squirtCalculator,
-                                 ZAP: self.zapCalculator}
+                                 ZAP: self.zapCalculator,
+                                 THROW: self.throwCalculator,
+                                 DROP: self.dropCalculator}
         self.toonAtkOrder = []
         self.toonSkillPtsGained = {}
         self.suitAtkStats = {}
@@ -71,7 +80,7 @@ class BattleCalculatorAI(DirectObject):
     def addTrainTrapForJoiningSuit(self, suitId):
         trapInfoToUse = None
         for suit in self.trapCalculator.trappedSuits:
-            trapStatus = suit.getStatus(SuitStatusNames[2])
+            trapStatus = suit.getStatus(TRAPPED_STATUS)
             if trapStatus and trapStatus['level'] == RAILROAD_LEVEL_INDEX:
                 trapInfoToUse = trapStatus
                 break
@@ -128,6 +137,7 @@ class BattleCalculatorAI(DirectObject):
         self.__clearBonuses()
         self.__updateActiveToons()
         messenger.send('init-round')
+        messenger.send('init-round-order', [self.toonAtkOrder])
         return
 
     def __findToonAttacks(self):
@@ -216,7 +226,7 @@ class BattleCalculatorAI(DirectObject):
         messenger.send('update-active-toons')
 
         for suit in self.trapCalculator.trappedSuits:
-            trapStatus = suit.getStatus(SuitStatusNames[2])
+            trapStatus = suit.getStatus(TRAPPED_STATUS)
             if trapStatus['toon'] not in self.battle.activeToons:
                 self.notify.debug('Trap for toon ' + str(trapStatus['toon']) + ' will no longer give exp')
                 trapStatus['toon'] = 0
@@ -262,33 +272,14 @@ class BattleCalculatorAI(DirectObject):
         trackExp = self.__checkTrackAccBonus(attackId[TOON_ID_COL], atkTrack)
         trackExp = self.__findHighestTrackBonus(atkTrack, attackId, trackExp)
 
-        propAcc = AvPropAccuracy[atkTrack][atkLevel]
-
-        currAtk = self.toonAtkOrder.index(attackIndex)
-        if atkTrack == DROP and currAtk == 0:
-            singleDrop = 1
-            for toonAttack in self.toonAtkOrder:
-                if toonAttack in self.battle.toonAttacks and \
-                        self.battle.toonAttacks[toonAttack][TOON_TRACK_COL] == DROP:
-                    singleDrop = 0
-                    break
-            if singleDrop:
-                prestige = getToonPrestige(self.battle, attackId[TOON_ID_COL], atkTrack)
-                propBonus = getToonPropBonus(self.battle, atkTrack)
-                if PropAndPrestigeStack:
-                    propAcc = 0
-                    if prestige:
-                        self.notify.debug('using track bonus accuracy')
-                        propAcc += AvBonusAccuracy[atkTrack][atkLevel] - AvPropAccuracy[atkTrack][atkLevel]
-                    if propBonus:
-                        self.notify.debug('using prop bonus accuracy')
-                        propAcc += AvBonusAccuracy[atkTrack][atkLevel] - AvPropAccuracy[atkTrack][atkLevel]
-                elif prestige or propBonus:
-                    self.notify.debug('using track OR prop bonus accuracy')
-                    propAcc = AvBonusAccuracy[atkTrack][atkLevel]
+        if atkTrack in ACC_UP_TRACKS:
+            propAcc = self.dropCalculator.calcAccBonus(attackId, atkLevel)
+        else:
+            propAcc = AvPropAccuracy[atkTrack][atkLevel]
 
         attackAcc = propAcc + trackExp + tgtDef
 
+        currAtk = self.toonAtkOrder.index(attackIndex)
         if currAtk > 0 and atkTrack != HEAL:
             prevAtkTrack, prevAttack = self.__getPreviousAttack(currAtk)
             if (atkTrack == prevAtkTrack and (attackId[TOON_TGT_COL] == prevAttack[TOON_TGT_COL]
@@ -318,10 +309,10 @@ class BattleCalculatorAI(DirectObject):
         else:
             randChoice = random.randint(0, 99)
         if randChoice < acc:
-            self.notify.debug('HIT: Toon attack rolled' + str(randChoice) + 'to hit with an accuracy of' + str(acc))
+            self.notify.debug('HIT: Toon attack rolled ' + str(randChoice) + ' to hit with an accuracy of ' + str(acc))
             attackId[TOON_MISSED_COL] = 0
         else:
-            self.notify.debug('MISS: Toon attack rolled' + str(randChoice) + 'to hit with an accuracy of' + str(acc))
+            self.notify.debug('MISS: Toon attack rolled ' + str(randChoice) + ' to hit with an accuracy of ' + str(acc))
             attackId[TOON_MISSED_COL] = 1
         return not attackId[TOON_MISSED_COL]
 
@@ -408,11 +399,9 @@ class BattleCalculatorAI(DirectObject):
         results = [0 for _ in xrange(len(targets))]
         targetsExist = 0
         for target in targetList:
-            npcSOS = atkTrack == NPCSOS
-            kbBonuses = attack[TOON_KBBONUS_COL]
+            result = 0
             if atkTrack == PETSOS:
                 result = atkHp
-                targetsExist += self.healCalculator.getToonHp(target) > 0
             elif atkTrack == FIRE:
                 result = 0
                 if target:
@@ -423,27 +412,10 @@ class BattleCalculatorAI(DirectObject):
                         target.skeleRevives = 0
                         result = target.getHP()
                 result = result
-                targetsExist += target.getHP() > 0
-            elif atkTrack == SOUND:
-                if target.getStatus(LURED_STATUS):
-                    self.notify.debug('Sound on lured suit, ' + 'indicating with KB_BONUS_COL flag')
-                    pos = self.battle.activeSuits.index(target)
-                    kbBonuses[pos] = KB_BONUS_LURED_FLAG
-                    messenger.send('delayed-wake', [toonId, target])
-                result = doInstaKillCalc(self.battle, atkHp, atkLevel, atkTrack, npcSOS, target, toon,
-                                         PropAndPrestigeStack)
-                targetsExist += target.getHP() > 0
-            elif atkTrack == DROP:
-                if target.getStatus(LURED_STATUS):
-                    result, targetExists = 0, 0
-                    self.notify.debug('setting damage to 0, since drop on a lured suit')
-                else:
-                    result = doInstaKillCalc(self.battle, atkHp, atkLevel, atkTrack, npcSOS, target, toon,
-                                             PropAndPrestigeStack)
-                targetsExist += target.getHP() > 0
+
+            if atkTrack in HEALING_TRACKS:
+                targetsExist += self.healCalculator.getToonHp(target) > 0
             else:
-                result = doInstaKillCalc(self.battle, atkHp, atkLevel, atkTrack, npcSOS, target, toon,
-                                         PropAndPrestigeStack)
                 targetsExist += target.getHP() > 0
 
             self.notify.debug('%d targets %s, result: %d' % (toonId, target, result))
@@ -452,9 +424,6 @@ class BattleCalculatorAI(DirectObject):
                 if target not in targets:
                     self.notify.debug("The target is not accessible!")
                     continue
-
-                if result > 0 and target in self.lureCalculator.luredSuits:
-                    messenger.send('lured-hit-exp', [attack, target])
 
                 results[targets.index(target)] = result
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
@@ -481,18 +450,6 @@ class BattleCalculatorAI(DirectObject):
             if currentToon != -1:
                 self.__applyAttack(currentToon, lastAttacks, lastTrack)
 
-        if self.trapCalculator.trainTrapTriggered:
-            for suit in self.battle.activeSuits:
-                suitId = suit.doId
-                self.trapCalculator.removeTrapStatus(suit)
-                suit.battleTrap = NO_TRAP
-                self.notify.debug('train trap triggered, removing trap from %d' % suitId)
-
-        if self.notify.getDebug():
-            for currentToon in self.toonAtkOrder:
-                attack = self.battle.toonAttacks[currentToon]
-                self.notify.debug('Final Toon attack: ' + str(attack))
-
     def __applyAttack(self, currentToon, lastAttacks, lastTrack):
         attack = self.battle.toonAttacks[currentToon]
         atkTrack, atkLevel = getActualTrackLevel(attack, self.notify)
@@ -505,7 +462,7 @@ class BattleCalculatorAI(DirectObject):
                     self.__rememberToonAttack(suit.getDoId(), attack[TOON_ID_COL], damageDone)
                 if atkTrack == TRAP:
                     if suit in self.trapCalculator.trappedSuits:
-                        trapInfo = suit.getStatus(SuitStatusNames[2])
+                        trapInfo = suit.getStatus(TRAPPED_STATUS)
                         suit.battleTrap = trapInfo['level']
                 targetDead = 0
                 if suit.getHP() > 0:
@@ -522,10 +479,6 @@ class BattleCalculatorAI(DirectObject):
                     self.notify.debug('applying lure data: ' + repr(lureInfo))
                     tgtPos = self.battle.activeSuits.index(suit)
                     if suit in self.trapCalculator.trappedSuits:
-                        trapInfo = suit.getStatus(SuitStatusNames[2])
-                        if trapInfo['level'] == RAILROAD_LEVEL_INDEX:
-                            self.notify.debug('train trap triggered for %d' % suit.doId)
-                            self.trapCalculator.trainTrapTriggered = True
                         self.trapCalculator.removeTrapStatus(suit)
                     attack[TOON_KBBONUS_COL][tgtPos] = KB_BONUS_TGT_LURED
                     attack[TOON_HP_COL][tgtPos] = lureInfo[2]
@@ -710,7 +663,6 @@ class BattleCalculatorAI(DirectObject):
             dmg = attack[TOON_HP_COL][tgtPos]
             if hp:
                 self.__addBonus(attackIndex, self.hpBonuses[tgtPos], dmg, atkTrack)
-                self.notify.debug(self.hpBonuses)
             elif currTgt.getStatus(LURED_STATUS):
                 self.__addBonus(attackIndex, self.kbBonuses[tgtPos], dmg, atkTrack)
 
@@ -745,19 +697,6 @@ class BattleCalculatorAI(DirectObject):
             lastAtk[SUIT_DIED_COL] = lastAtk[SUIT_DIED_COL] ^ 1 << position
             self.suitLeftBattle(tgt)
             currAtk[SUIT_DIED_COL] = currAtk[SUIT_DIED_COL] | 1 << position
-
-    def __allTargetsDead(self, attackIdx, toon=1):
-        allTargetsDead = 1
-        if toon:
-            targets = createToonTargetList(self.battle, attackIdx)
-            for currTgt in targets:
-                if currTgt.getHp() > 0:
-                    allTargetsDead = 0
-                    break
-
-        else:
-            self.notify.warning('__allTargetsDead: suit ver. not implemented!')
-        return allTargetsDead
 
     # EXPERIENCE CALCULATION ===========================================================================================
 
@@ -989,6 +928,7 @@ class BattleCalculatorAI(DirectObject):
         self.lureCalculator.removeLureStatus(suit)
         self.trapCalculator.removeTrapStatus(suit)
         self.squirtCalculator.removeSoakStatus(suit)
+        self.throwCalculator.removeMarkStatus(suit)
         if suitId in self.SuitAttackers:
             del self.SuitAttackers[suitId]
 

@@ -1,4 +1,6 @@
-- Knockback does not work on two cogs same track
+- Only the first cog gets its actions caulculated
+- Knockback does not work on two cogs same track (throw only?)
+- When a gag kills, the movie ignores playing any toon-up clips
 - The zap movies sometimes prematurely jump to the death animation
 - 5+ cogs might be broken in BattleCalculatorAI
 - Going sad takes max toons to 120 laff???
