@@ -9,8 +9,7 @@ from toontown.toonbase.ToontownBattleGlobals import *
 class DistributedBattleBldgAI(DistributedBattleBaseAI.DistributedBattleBaseAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleBldgAI')
 
-    def __init__(self, air, zoneId, roundCallback=None, finishCallback=None,
-                 maxSuits=SuitBattleGlobals.MAX_SUIT_CAPACITY, bossBattle=0):
+    def __init__(self, air, zoneId, roundCallback=None, finishCallback=None, maxSuits=4, bossBattle=0):
         DistributedBattleBaseAI.DistributedBattleBaseAI.__init__(self, air, zoneId, finishCallback, maxSuits,
                                                                  bossBattle)
         self.streetBattle = 0
@@ -75,7 +74,7 @@ class DistributedBattleBldgAI(DistributedBattleBaseAI.DistributedBattleBaseAI):
 
     def handleFaceOffDone(self):
         for suit in self.suits:
-            self.activeSuits.append(suit)
+            self.activateSuit(suit)
 
         for toon in self.toons:
             self.activeToons.append(toon)

@@ -21,12 +21,13 @@ FIRST_TRAP_ONLY = 0
 KB_BONUS_LURED_FLAG = 0
 KB_BONUS_TGT_LURED = 1
 
+notify = DirectNotifyGlobal.directNotify.newCategory('BattleCalculatorGlobals')
 PropAndPrestigeStack = simbase.config.GetBool('prop-and-organic-bonus-stack', 0)
 
 
 def createToonTargetList(battle, attackIndex):
     attack = battle.toonAttacks[attackIndex]
-    atkTrack, atkLevel = getActualTrackLevel(attack, battle.notify)
+    atkTrack, atkLevel = getActualTrackLevel(attack)
     targetList = []
     if atkTrack == NPCSOS:
         return targetList
@@ -50,18 +51,18 @@ def createToonTargetList(battle, attackIndex):
     return targetList
 
 
-def attackHasHit(attack, notify, suit=0):
+def attackHasHit(attack, suit=0):
     if suit:
         for dmg in attack[SUIT_HP_COL]:
             if dmg > 0:
                 return 1
         return 0
     else:
-        track = getActualTrack(attack, notify)
+        track = getActualTrack(attack)
         return not attack[TOON_MISSED_COL] and track != NO_ATTACK
 
 
-def getAttackDamage(attack):
+def getMostDamage(attack):
     mostDamage = 0
     for hp in attack[TOON_HP_COL]:
         if hp > mostDamage:
@@ -69,7 +70,7 @@ def getAttackDamage(attack):
     return mostDamage
 
 
-def findLowestDefense(atkTargets, tgtDef, notify):
+def findLowestDefense(atkTargets, tgtDef):
     highestDecay = 0
     for currTarget in atkTargets:
         thisSuitDef = getTargetDefense(currTarget)
@@ -82,18 +83,16 @@ def findLowestDefense(atkTargets, tgtDef, notify):
     return highestDecay, tgtDef
 
 
-def receiveDamageCalc(battle, atkLevel, atkTrack, target, toon, propAndPrestigeStack=0):
+def receiveDamageCalc(atkLevel, atkTrack, target, toon):
     if toon and toon.getInstaKill():
         attackDamage = target.getHP()
     else:
-        attackDamage = doDamageCalc(battle, atkLevel, atkTrack, toon, propAndPrestigeStack)
+        attackDamage = doDamageCalc(atkLevel, atkTrack, toon)
     return attackDamage
 
 
-def doDamageCalc(battle, atkLevel, atkTrack, toon, propAndPrestigeStack=0):
-    damage = getAvPropDamage(atkTrack, atkLevel, toon.experience.getExp(atkTrack),
-                             toon.checkTrackPrestige(atkTrack), getToonPropBonus(battle, atkTrack),
-                             propAndPrestigeStack)
+def doDamageCalc(atkLevel, atkTrack, toon):
+    damage = getAvPropDamage(atkTrack, atkLevel, toon.experience.getExp(atkTrack))
     return damage
 
 
@@ -109,7 +108,7 @@ def getToonPropBonus(battle, track):
     return battle.getInteractivePropTrackBonus() == track
 
 
-def getActualTrack(toonAttack, notify):
+def getActualTrack(toonAttack):
     if toonAttack[TOON_TRACK_COL] == NPCSOS:
         track = NPCToons.getNPCTrack(toonAttack[TOON_TGT_COL])
         if track is not None:
@@ -119,7 +118,7 @@ def getActualTrack(toonAttack, notify):
     return toonAttack[TOON_TRACK_COL]
 
 
-def getActualTrackLevel(toonAttack, notify):
+def getActualTrackLevel(toonAttack):
     if toonAttack[TOON_TRACK_COL] == NPCSOS:
         track, level, hp = NPCToons.getNPCTrackLevelHp(toonAttack[TOON_TGT_COL])
         if track is not None:
@@ -129,7 +128,7 @@ def getActualTrackLevel(toonAttack, notify):
     return toonAttack[TOON_TRACK_COL], toonAttack[TOON_LVL_COL]
 
 
-def getActualTrackLevelHp(toonAttack, notify):
+def getActualTrackLevelHp(toonAttack):
     if toonAttack[TOON_TRACK_COL] == NPCSOS:
         track, level, hp = NPCToons.getNPCTrackLevelHp(toonAttack[TOON_TGT_COL])
         if track:
@@ -152,7 +151,7 @@ def getActualTrackLevelHp(toonAttack, notify):
     return toonAttack[TOON_TRACK_COL], toonAttack[TOON_LVL_COL], 0
 
 
-def calculatePetTrickSuccess(toonAttack, notify):
+def calculatePetTrickSuccess(toonAttack):
     petProxyId = toonAttack[TOON_TGT_COL]
     if petProxyId not in simbase.air.doId2do:
         notify.warning('pet proxy %d not in doId2do!' % petProxyId)
@@ -181,3 +180,11 @@ def getTargetDefense(suit):
         if 'defense' in status:
             suitDef += status['defense']
     return -suitDef
+
+
+def getLureRounds(suit):
+    lured = suit.getStatus(SuitBattleGlobals.LURED_STATUS)
+    if lured:
+        return lured['rounds']
+    return -1
+

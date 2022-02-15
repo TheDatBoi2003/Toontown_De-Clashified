@@ -17,32 +17,33 @@ class SquirtCalculatorAI(DirectObject):
     def cleanup(self):
         self.ignoreAll()
 
-    def calcAttackResults(self, attack, targets, toonId):
-        atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack, self.notify)
+    def calcAttackResults(self, attack, toonId):
+        atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack)
         toon = self.battle.getToon(toonId)
         targetList, suitIndex = self.__calcSquirtTargets(attack, toon)
-        results = [0 for _ in xrange(len(targets))]
+        suits = self.battle.activeSuits
+        results = [0 for _ in xrange(len(suits))]
         targetsExist = 0
         for target in targetList:
             self.__soakSuit(atkLevel, target)
             attackDamage = 0
-            if targets[suitIndex] == target:
-                attackDamage = receiveDamageCalc(self.battle, atkLevel, atkTrack, target,
-                                                 toon, PropAndPrestigeStack)
+            if suits[suitIndex] == target:
+                attackDamage = receiveDamageCalc(atkLevel, atkTrack, target,
+                                                 toon)
                 self.notify.debug('%d targets %s, damage: %d' % (toonId, target, attackDamage))
             elif self.notify.getDebug():
                 self.notify.debug('%d targets %s to soak' % (toonId, target))
 
             targetsExist += target.getHP() > 0
 
-            if target not in targets:
+            if target not in suits:
                 self.notify.debug("The suit is not accessible!")
                 continue
 
             if attackDamage > 0 and target.getStatus(LURED_STATUS):
                 messenger.send('lured-hit-exp', [attack, target])
 
-            results[targets.index(target)] = attackDamage
+            results[suits.index(target)] = attackDamage
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
         return targetsExist > 0
 

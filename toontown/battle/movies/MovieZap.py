@@ -121,7 +121,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, anim, died, leftSuits, rightSuits
         suitTrack = Sequence(Wait(tContact))
         suitInterval = ActorInterval(suit, anim)
         if fShowStun:
-            suitInterval = Parallel(Func(suit.loop, anim), zapCog(suit, beforeStun, afterStun, battle))
+            suitInterval = Parallel(Func(suit.doNeutralAnim), zapCog(suit, beforeStun, afterStun, battle))
         showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=ZAP_TRACK)
         updateHealthBar = Func(suit.updateHealthBar, hp)
         suitTrack.append(showDamage)

@@ -267,7 +267,7 @@ def doSuitAttack(attack):
             toonHprTrack.append(Sequence(Func(toon.headsUp, battle, MovieUtil.PNT3_ZERO), Func(toon.loop, 'neutral')))
 
     suit = attack['suit']
-    neutralIval = Func(suit.loop, 'neutral')
+    neutralIval = Func(suit.doNeutralAnim)
     suitTrack = Sequence(suitTrack, neutralIval, toonHprTrack)
     return suitTrack, camTrack
 
@@ -288,7 +288,7 @@ def getResetTrack(suit, battle):
     moveDuration = 0.5
     walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr),
                          ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=1e-05),
-                         Func(suit.loop, 'neutral'))
+                         Func(suit.doNeutralAnim))
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
     return Parallel(walkTrack, moveTrack)
 

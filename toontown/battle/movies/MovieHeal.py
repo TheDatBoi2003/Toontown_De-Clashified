@@ -21,36 +21,40 @@ healHpr = Vec3(180.0, 0, 0)
 runHealTime = 1.0
 toonHealJokes = TTLocalizer.ToonHealJokes
 
-def doHeals(heals, hasInteractivePropHealBonus):
+
+def doHeals(heals):
     if len(heals) == 0:
-        return (None, None)
+        return None, None
     track = Sequence()
-    for h in heals:
-        interval = __doHealLevel(h, hasInteractivePropHealBonus)
+    for heal in heals:
+        for target in heal['target']:
+            if heal['toon'] == target['toon']:
+                heal['toon'].toonUp(target['hp'])
+        interval = __doHealLevel(heal)
         if interval:
             track.append(interval)
 
     camDuration = track.getDuration()
     camTrack = MovieCamera.chooseHealShot(heals, camDuration)
-    return (track, camTrack)
+    return track, camTrack
 
 
-def __doHealLevel(heal, hasInteractivePropHealBonus):
+def __doHealLevel(heal):
     level = heal['level']
     if level == 0:
-        return __healTickle(heal, hasInteractivePropHealBonus)
+        return __healTickle(heal)
     elif level == 1:
-        return __healJoke(heal, hasInteractivePropHealBonus)
+        return __healJoke(heal)
     elif level == 2:
-        return __healSmooch(heal, hasInteractivePropHealBonus)
+        return __healSmooch(heal)
     elif level == 3:
-        return __healDance(heal, hasInteractivePropHealBonus)
+        return __healDance(heal)
     elif level == 4 or level == 6:
-        return __healSprinkle(heal, hasInteractivePropHealBonus)
+        return __healSprinkle(heal)
     elif level == 5:
-        return __healJuggle(heal, hasInteractivePropHealBonus)
+        return __healJuggle(heal)
     elif level == 7:
-        return __healDive(heal, hasInteractivePropHealBonus)
+        return __healDive(heal)
     return None
 
 
@@ -83,7 +87,7 @@ def __returnToBase(heal):
     return Sequence(a, b, c, d)
 
 
-def __healToon(toon, hp, ineffective, hasInteractivePropHealBonus):
+def __healToon(toon, hp, ineffective):
     notify.debug('healToon() - toon: %d hp: %d ineffective: %d' % (toon.doId, hp, ineffective))
     if ineffective == 1:
         laughter = random.choice(TTLocalizer.MovieHealLaughterMisses)
@@ -95,7 +99,7 @@ def __healToon(toon, hp, ineffective, hasInteractivePropHealBonus):
             laughter = random.choice(TTLocalizer.MovieHealLaughterHits1)
     toon.setChatAbsolute(laughter, CFSpeech | CFTimeout)
     if hp > 0 and toon.hp:
-        toon.toonUp(hp, hasInteractivePropHealBonus)
+        toon.toonUp(hp)
     else:
         notify.debug('__healToon() - toon: %d hp: %d' % (toon.doId, hp))
     return
@@ -124,7 +128,7 @@ def __getSoundTrack(level, delay, duration = None, node = None):
     return soundIntervals
 
 
-def __healTickle(heal, hasInteractivePropHealBonus):
+def __healTickle(heal):
     toon = heal['toon']
     target = heal['target']['toon']
     hp = heal['target']['hp']
@@ -158,7 +162,10 @@ def __healTickle(heal, hasInteractivePropHealBonus):
     featherTrack = Parallel(MovieUtil.getActorIntervals(feathers, 'feather'), Sequence(Wait(tFeatherScaleUp), Func(
         MovieUtil.showProps, feathers, hands), Func(scaleFeathers, feathers), MovieUtil.getScaleIntervals(feathers, dFeatherScaleUp, MovieUtil.PNT3_NEARZERO, feathers[0].getScale)), Sequence(Wait(toon.getDuration('tickle') - dFeatherScaleDown), MovieUtil.getScaleIntervals(feathers, dFeatherScaleDown, None, MovieUtil.PNT3_NEARZERO)))
     tHeal = 3.0
-    mtrack = Parallel(featherTrack, ActorInterval(toon, 'tickle'), __getSoundTrack(level, 1, node=toon), Sequence(Wait(tHeal), Func(__healToon, target, hp, ineffective, hasInteractivePropHealBonus), ActorInterval(target, 'cringe', startTime=20.0 / target.getFrameRate('cringe'))))
+    mtrack = Parallel(featherTrack, ActorInterval(toon, 'tickle'),
+                      __getSoundTrack(level, 1, node=toon),
+                      Sequence(Wait(tHeal), Func(__healToon, target, hp, ineffective),
+                               ActorInterval(target, 'cringe', startTime=20.0 / target.getFrameRate('cringe'))))
     track.append(mtrack)
     track.append(Func(MovieUtil.removeProps, feathers))
     track.append(__returnToBase(heal))
@@ -166,7 +173,7 @@ def __healTickle(heal, hasInteractivePropHealBonus):
     return track
 
 
-def __healJoke(heal, hasInteractivePropHealBonus):
+def __healJoke(heal):
     npcId = 0
     if 'npcId' in heal:
         npcId = heal['npcId']
@@ -209,7 +216,7 @@ def __healJoke(heal, hasInteractivePropHealBonus):
     for target in targets:
         targetToon = target['toon']
         hp = target['hp']
-        reactTrack.append(Func(__healToon, targetToon, hp, ineffective, hasInteractivePropHealBonus))
+        reactTrack.append(Func(__healToon, targetToon, hp, ineffective))
 
     reactTrack.append(Wait(dTargetLaugh))
     for target in targets:
@@ -225,7 +232,7 @@ def __healJoke(heal, hasInteractivePropHealBonus):
     return track
 
 
-def __healSmooch(heal, hasInteractivePropHealBonus):
+def __healSmooch(heal):
     toon = heal['toon']
     target = heal['target']['toon']
     level = heal['level']
@@ -254,13 +261,16 @@ def __healSmooch(heal, hasInteractivePropHealBonus):
     lipsTrack = Sequence(Wait(tLips), Func(MovieUtil.showProp, lips, render, getLipPos), Func(lips.setBillboardPointWorld), LerpScaleInterval(lips, dScale, Point3(3, 3, 3), startScale=MovieUtil.PNT3_NEARZERO), Wait(tThrow - tLips - dScale), LerpPosInterval(lips, dThrow, Point3(target.getPos() + Point3(0, 0, target.getHeight()))), Func(
         MovieUtil.removeProp, lips))
     delay = tThrow + dThrow
-    mtrack = Parallel(lipstickTrack, lipsTrack, __getSoundTrack(level, 2, node=toon), Sequence(ActorInterval(toon, 'smooch'), *__returnToBase(heal)), Sequence(Wait(delay), ActorInterval(target, 'conked')), Sequence(Wait(delay), Func(__healToon, target, hp, ineffective, hasInteractivePropHealBonus)))
+    mtrack = Parallel(lipstickTrack, lipsTrack, __getSoundTrack(level, 2, node=toon),
+                      Sequence(ActorInterval(toon, 'smooch'), *__returnToBase(heal)),
+                      Sequence(Wait(delay), ActorInterval(target, 'conked')),
+                      Sequence(Wait(delay), Func(__healToon, target, hp, ineffective)))
     track.append(mtrack)
     track.append(Func(target.clearChat))
     return track
 
 
-def __healDance(heal, hasInteractivePropHealBonus):
+def __healDance(heal):
     npcId = 0
     if 'npcId' in heal:
         npcId = heal['npcId']
@@ -282,7 +292,7 @@ def __healDance(heal, hasInteractivePropHealBonus):
     for target in targets:
         targetToon = target['toon']
         hp = target['hp']
-        reactIval = Func(__healToon, targetToon, hp, ineffective, hasInteractivePropHealBonus)
+        reactIval = Func(__healToon, targetToon, hp, ineffective)
         if first:
             targetTrack.append(Wait(delay))
             first = 0
@@ -315,7 +325,7 @@ def __healDance(heal, hasInteractivePropHealBonus):
     return track
 
 
-def __healSprinkle(heal, hasInteractivePropHealBonus):
+def __healSprinkle(heal):
     toon = heal['toon']
     target = heal['target']['toon']
     hp = heal['target']['hp']
@@ -338,14 +348,21 @@ def __healSprinkle(heal, hasInteractivePropHealBonus):
         toon.headsUp(render, targetPoint)
 
     delay = 2.5
-    mtrack = Parallel(__getPartTrack(sprayEffect, 1.5, 0.5, [sprayEffect, toon, 0]), __getPartTrack(dropEffect, 1.9, 2.0, [dropEffect, target, 0]), __getPartTrack(explodeEffect, 2.7, 1.0, [explodeEffect, toon, 0]), __getPartTrack(poofEffect, 3.4, 1.0, [poofEffect, target, 0]), __getPartTrack(wallEffect, 4.05, 1.2, [wallEffect, toon, 0]), __getSoundTrack(level, 2, duration=4.1, node=toon), Sequence(Func(face90), ActorInterval(toon, 'sprinkle-dust')), Sequence(Wait(delay), Func(__healToon, target, hp, ineffective, hasInteractivePropHealBonus)))
+    mtrack = Parallel(__getPartTrack(sprayEffect, 1.5, 0.5, [sprayEffect, toon, 0]),
+                      __getPartTrack(dropEffect, 1.9, 2.0, [dropEffect, target, 0]),
+                      __getPartTrack(explodeEffect, 2.7, 1.0, [explodeEffect, toon, 0]),
+                      __getPartTrack(poofEffect, 3.4, 1.0, [poofEffect, target, 0]),
+                      __getPartTrack(wallEffect, 4.05, 1.2, [wallEffect, toon, 0]),
+                      __getSoundTrack(level, 2, duration=4.1, node=toon),
+                      Sequence(Func(face90), ActorInterval(toon, 'sprinkle-dust')),
+                      Sequence(Wait(delay), Func(__healToon, target, hp, ineffective)))
     track.append(mtrack)
     track.append(__returnToBase(heal))
     track.append(Func(target.clearChat))
     return track
 
 
-def __healJuggle(heal, hasInteractivePropHealBonus):
+def __healJuggle(heal):
     npcId = 0
     if 'npcId' in heal:
         npcId = heal['npcId']
@@ -367,7 +384,7 @@ def __healJuggle(heal, hasInteractivePropHealBonus):
     for target in targets:
         targetToon = target['toon']
         hp = target['hp']
-        reactIval = Func(__healToon, targetToon, hp, ineffective, hasInteractivePropHealBonus)
+        reactIval = Func(__healToon, targetToon, hp, ineffective)
         if first == 1:
             targetTrack.append(Wait(delay))
             first = 0
@@ -392,7 +409,7 @@ def __healJuggle(heal, hasInteractivePropHealBonus):
     return track
 
 
-def __healDive(heal, hasInteractivePropHealBonus):
+def __healDive(heal):
     splash = Splash.Splash(render)
     splash.reparentTo(render)
     npcId = 0
@@ -416,7 +433,7 @@ def __healDive(heal, hasInteractivePropHealBonus):
     for target in targets:
         targetToon = target['toon']
         hp = target['hp']
-        reactIval = Func(__healToon, targetToon, hp, ineffective, hasInteractivePropHealBonus)
+        reactIval = Func(__healToon, targetToon, hp, ineffective)
         if first == 1:
             targetTrack.append(Wait(delay))
             first = 0

@@ -7,7 +7,7 @@ from toontown.battle.calc.BattleCalculatorGlobals import *
 
 
 class SoundCalculatorAI(DirectObject):
-    notify = DirectNotifyGlobal.directNotify.newCategory('TrapCalculatorAI')
+    notify = DirectNotifyGlobal.directNotify.newCategory('SoundCalculatorAI')
 
     def __init__(self, battle):
         DirectObject.__init__(self)
@@ -16,28 +16,29 @@ class SoundCalculatorAI(DirectObject):
     def cleanup(self):
         pass
 
-    def calcAttackResults(self, attack, targets, toonId):
-        atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack, self.notify)
+    def calcAttackResults(self, attack, toonId):
+        atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack)
         targetList = createToonTargetList(self.battle, toonId)
         toon = self.battle.getToon(toonId)
         prestige, propBonus = toon.checkTrackPrestige(atkTrack), getToonPropBonus(self.battle, atkTrack)
-        results = [0 for _ in xrange(len(targets))]
+        suits = self.battle.activeSuits
+        results = [0 for _ in xrange(len(suits))]
         targetsHit = 0
         if prestige or propBonus:
+            highestLevel = max(target.getActualLevel() for target in targetList) + 1
             if PropAndPrestigeStack and prestige and propBonus:
-                bonusDamage = int(max(target.level for target in targetList))
+                bonusDamage = int(highestLevel)
             else:
-                bonusDamage = int(ceil(max(target.level for target in targetList) / 2.))
+                bonusDamage = int(ceil(highestLevel * 0.5))
         else:
             bonusDamage = 0
 
         for target in targetList:
-            if target not in targets:
+            if target not in suits:
                 self.notify.debug("The target is not accessible!")
                 continue
 
-            attackDamage = receiveDamageCalc(self.battle, atkLevel, atkTrack, target, toon,
-                                             PropAndPrestigeStack) + bonusDamage
+            attackDamage = receiveDamageCalc(atkLevel, atkTrack, target, toon) + bonusDamage
 
             targetsHit += target.getHP() > 0
 
@@ -45,11 +46,11 @@ class SoundCalculatorAI(DirectObject):
 
             if target.getStatus(LURED_STATUS):
                 self.notify.debug('Sound on lured suit, ' + 'indicating with KB_BONUS_COL flag')
-                pos = self.battle.activeSuits.index(target)
+                pos = suits.index(target)
                 attack[TOON_KBBONUS_COL][pos] = KB_BONUS_LURED_FLAG
                 messenger.send('delayed-wake', [toonId, target])
                 messenger.send('lured-hit-exp', [attack, target])
 
-            results[targets.index(target)] = attackDamage
+            results[suits.index(target)] = attackDamage
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
         return targetsHit > 0

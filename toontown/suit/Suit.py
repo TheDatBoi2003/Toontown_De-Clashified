@@ -399,6 +399,7 @@ class Suit(Avatar.Avatar):
         self.isWaiter = 0
         self.isExecutive = 0
         self.isRental = 0
+        self.splats = set()
         return
 
     def delete(self):
@@ -635,7 +636,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(6.4)
         elif dna.name == 'ms':
             self.scale = 4.75 / bSize
-            self.handColor = VBase4(1.0, 0.87, 0.7, 1.0)
+            self.handColor = VBase4(1.0, 0.8, 0.75, 1.0)
             self.generateBody()
             self.generateHead('movershaker')
             self.setHeight(6.7)
@@ -668,7 +669,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(4.75)
         elif dna.name == 'af':
             self.scale = 4.4 / aSize
-            self.handColor = VBase4(1.0, 0.8, 0.75, 1.0)
+            self.handColor = VBase4(1.0, 0.87, 0.7, 1.0)
             self.headColor = VBase4(1.0, 0.85, 0.75, 1.0)
             self.generateBody()
             self.generateHead('yesman')
@@ -783,13 +784,13 @@ class Suit(Avatar.Avatar):
         phase = 3.5
 
         def __doItTheOldWay__():
-            torsoTex = loader.loadTexture('phase_%s/maps/%s_blazer.jpg' % (phase, dept))
+            torsoTex = loader.loadTexture('phase_%s/maps/%s_blazer.png' % (phase, dept))
             torsoTex.setMinfilter(Texture.FTNearestMipmapLinear)
             torsoTex.setMagfilter(Texture.FTNearest)
-            legTex = loader.loadTexture('phase_%s/maps/%s_leg.jpg' % (phase, dept))
+            legTex = loader.loadTexture('phase_%s/maps/%s_leg.png' % (phase, dept))
             legTex.setMinfilter(Texture.FTNearestMipmapLinear)
             legTex.setMagfilter(Texture.FTNearest)
-            armTex = loader.loadTexture('phase_%s/maps/%s_sleeve.jpg' % (phase, dept))
+            armTex = loader.loadTexture('phase_%s/maps/%s_sleeve.png' % (phase, dept))
             armTex.setMinfilter(Texture.FTNearestMipmapLinear)
             armTex.setMagfilter(Texture.FTNearest)
             modelRoot.find('**/torso').setTexture(torsoTex, 1)

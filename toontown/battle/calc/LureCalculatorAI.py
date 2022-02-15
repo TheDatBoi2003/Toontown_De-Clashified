@@ -11,7 +11,7 @@ class LureCalculatorAI(DirectObject):
     def __init__(self, battle, statusCalculator, trapCalculator):
         DirectObject.__init__(self)
         self.luredSuits = []                        # Keeps track of suit lured over a longer period of time
-        self.successfulLures = {}                   # Keeps track of successful lures for the current turn
+        self.successfulLures = set()                   # Keeps track of successful lures for the current turn
         self.delayedWakes = set()                      # Store cogs that will lose the lure status at the end of the turn
         self.battle = battle
         self.statusCalculator = statusCalculator
@@ -25,10 +25,11 @@ class LureCalculatorAI(DirectObject):
     def cleanup(self):
         self.ignoreAll()
 
-    def calcAttackResults(self, attack, targets, toonId):
+    def calcAttackResults(self, attack, toonId):
         atkLevel = attack[TOON_LVL_COL]
         targetList = createToonTargetList(self.battle, toonId)
-        results = [0 for _ in xrange(len(targets))]
+        suits = self.battle.activeSuits
+        results = [0 for _ in xrange(len(suits))]
         numLured = 0
         for target in targetList:
             result = LURE_SUCCEEDED
@@ -45,19 +46,24 @@ class LureCalculatorAI(DirectObject):
                 result = attackDamage
                 self.trapCalculator.removeTrapStatus(target)
             if targetLured and suitId not in self.successfulLures:
-                self.successfulLures[suitId] = [atkLevel, toonId, result]
+                self.successfulLures.add(suitId)
+                tgtPos = self.battle.activeSuits.index(target)
+                if target in self.trapCalculator.trappedSuits:
+                    self.trapCalculator.removeTrapStatus(target)
+                attack[TOON_KBBONUS_COL][tgtPos] = KB_BONUS_TGT_LURED
+                attack[TOON_HP_COL][tgtPos] = result
 
             numLured += validTarget
 
             if result != 0:
-                if target not in targets:
+                if target not in suits:
                     self.notify.debug("The suit is not accessible!")
                     continue
 
                 if result > 0 and target in self.luredSuits:
                     messenger.send('lured-hit-exp', [attack, target])
 
-                results[targets.index(target)] = result
+                results[suits.index(target)] = result
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
         return numLured > 0
 
@@ -119,13 +125,6 @@ class LureCalculatorAI(DirectObject):
                 self.statusCalculator.removeStatus(suit, statusName=LURED_STATUS)
 
     @staticmethod
-    def getLureRounds(suit):
-        lured = suit.getStatus(SuitBattleGlobals.LURED_STATUS)
-        if lured:
-            return lured['rounds']
-        return -1
-
-    @staticmethod
     def __getLuredExpInfo(suit):
         returnInfo = []
         lureStatus = suit.getStatus(LURED_STATUS)
@@ -140,7 +139,7 @@ class LureCalculatorAI(DirectObject):
         return returnInfo
 
     def __resetFields(self):
-        self.successfulLures = {}
+        self.successfulLures = set()
 
     def __addSuitToDelayedWake(self, toonId, target=None, ignoreDamageCheck=False):
         if target:

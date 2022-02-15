@@ -426,12 +426,12 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, 
         elif died != 0:
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle, npcToons, headless))
         else:
-            suitTrack.append(Func(suit.loop, 'neutral'))
+            suitTrack.append(Func(suit.doNeutralAnim))
         if not bonusTrack:
             suitTrack = Parallel(suitTrack, bonusTrack)
     elif 'kbBonus' in target and target['kbBonus'] == 0:
         suitTrack = Sequence(Wait(delay + tObjectAppears), Func(MovieUtil.indicateMissed, suit, 0.6),
-                             Func(suit.loop, 'neutral'))
+                             Func(suit.doNeutralAnim))
     else:
         if alreadyDodged > 0:
             return

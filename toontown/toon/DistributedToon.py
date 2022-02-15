@@ -2010,7 +2010,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.inventory.updateGUI()
 
     def getTrackPrestige(self, track=None):
-        if not track:
+        if track is None:
             return self.trackPrestige
         elif track < len(self.trackPrestige):
             return self.trackPrestige[track]
@@ -2018,7 +2018,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def checkTrackPrestige(self, track):
         trackPrestige = self.getTrackPrestige(track)
-        return trackPrestige == 1
+        return trackPrestige
 
     def setGardenTrophies(self, trophyList):
         self.gardenTrophies = trophyList
@@ -2510,7 +2510,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         newText = ' '.join(newwords)
         return newText
 
-    def toonUp(self, hpGained, hasInteractivePropBonus=False):
+    def toonUp(self, hpGained):
         if self.hp is None or hpGained < 0:
             return
         oldHp = self.hp
@@ -2520,11 +2520,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.hp = min(max(self.hp, 0) + hpGained, self.maxHp)
         hpGained = self.hp - max(oldHp, 0)
         if hpGained > 0:
-            self.showHpText(hpGained, hasInteractivePropBonus=hasInteractivePropBonus)
+            self.showHpText(hpGained)
             self.hpChange(quietly=0)
         return
 
-    def showHpText(self, number, bonus=0, scale=1, hasInteractivePropBonus=False):
+    def showHpText(self, number, bonus=0, scale=1):
         if self.HpTextEnabled and not self.ghostMode:
             if number != 0:
                 if self.hpText:
@@ -2534,8 +2534,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
                     self.HpTextGenerator.setText(str(number))
                 else:
                     hpGainedStr = '+' + str(number)
-                    if hasInteractivePropBonus:
-                        hpGainedStr += '\n' + TTLocalizer.InteractivePropTrackBonusTerms[0]
                     self.HpTextGenerator.setText(hpGainedStr)
                 self.HpTextGenerator.clearShadow()
                 self.HpTextGenerator.setAlign(TextNode.ACenter)

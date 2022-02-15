@@ -52,9 +52,8 @@ def doSounds(sounds):
 
         for sound in soundList:
             for target in sound['target']:
-                if target['hp'] > 0:
-                    lastSound = sound
-                    totalDamages[sound['target'].index(target)] += target['hp']
+                lastSound = sound
+                totalDamages[sound['target'].index(target)] += target['hp']
 
     if lastSound:
         mainTrack.append(__getSuitTrack(lastSound, soundHitsCount, totalDamages))
@@ -117,13 +116,13 @@ def __getSuitTrack(sound, hitCount, totalDamages):
                 bonusTrack = Sequence(Wait(tSuitReact + 0.75 + uberDelay),
                                       Func(suit.showHpText, -hpBonus, 1, openEnded=0))
                 bonusTrack.append(updateHealthBar)
-            suitTrack.append(Func(suit.loop, 'neutral'))
+            suitTrack.append(Func(suit.doNeutralAnim))
             if bonusTrack:
                 tracks.append(Parallel(suitTrack, bonusTrack))
             else:
                 tracks.append(suitTrack)
         elif totalDamages[targetIndex] <= 0:
-            tracks.append(Sequence(Wait(2.9), Func(MovieUtil.indicateMissed, suit, 1.0)))
+            tracks.append(MovieUtil.createSuitTeaseMultiTrack(2.9))
 
     return tracks
 

@@ -1808,7 +1808,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
     def __adjustDone(self):
         for s in self.adjustingSuits:
             self.pendingSuits.remove(s)
-            self.activeSuits.append(s)
+            self.activateSuit(s)
 
         self.adjustingSuits = []
         for toon in self.adjustingToons:
@@ -1853,3 +1853,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         num = self.serialNum
         self.serialNum += 1
         return num
+
+    def activateSuit(self, suit):
+        self.activeSuits.append(suit)
+        self.battleCalc.createSuitCalc(suit)

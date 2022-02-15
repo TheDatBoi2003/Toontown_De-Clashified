@@ -5,7 +5,7 @@ from toontown.battle.calc.BattleCalculatorGlobals import *
 
 
 class ThrowCalculatorAI(DirectObject):
-    notify = DirectNotifyGlobal.directNotify.newCategory('TrapCalculatorAI')
+    notify = DirectNotifyGlobal.directNotify.newCategory('ThrowCalculatorAI')
 
     def __init__(self, battle, statusCalculator):
         DirectObject.__init__(self)
@@ -17,20 +17,20 @@ class ThrowCalculatorAI(DirectObject):
     def cleanup(self):
         self.ignoreAll()
 
-    def calcAttackResults(self, attack, targets, toonId):
-        atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack, self.notify)
+    def calcAttackResults(self, attack, toonId):
+        atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack)
         targetList = createToonTargetList(self.battle, toonId)
+        suits = self.battle.activeSuits
         toon = self.battle.getToon(toonId)
         prestige, propBonus = toon.checkTrackPrestige(atkTrack), getToonPropBonus(self.battle, atkTrack)
-        results = [0 for _ in xrange(len(targets))]
+        results = [0 for _ in xrange(len(suits))]
         targetsHit = 0
         for target in targetList:
-            if target not in targets:
+            if target not in suits:
                 self.notify.debug("The target is not accessible!")
                 continue
 
-            attackDamage = receiveDamageCalc(self.battle, atkLevel, atkTrack, target, toon,
-                                             PropAndPrestigeStack)
+            attackDamage = receiveDamageCalc(atkLevel, atkTrack, target, toon)
 
             targetsHit += target.getHP() > 0
 
@@ -51,7 +51,7 @@ class ThrowCalculatorAI(DirectObject):
                 messenger.send('delayed-wake', [toonId, target])
                 messenger.send('lured-hit-exp', [attack, target])
 
-            results[targets.index(target)] = attackDamage
+            results[suits.index(target)] = attackDamage
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
         return targetsHit > 0
 

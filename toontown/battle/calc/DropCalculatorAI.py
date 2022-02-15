@@ -4,7 +4,7 @@ from toontown.battle.calc.BattleCalculatorGlobals import *
 
 
 class DropCalculatorAI(DirectObject):
-    notify = DirectNotifyGlobal.directNotify.newCategory('TrapCalculatorAI')
+    notify = DirectNotifyGlobal.directNotify.newCategory('DropCalculatorAI')
 
     def __init__(self, battle):
         DirectObject.__init__(self)
@@ -30,29 +30,29 @@ class DropCalculatorAI(DirectObject):
                 propAcc = AvBonusAccuracy[DROP][atkLevel]
         return propAcc
 
-    def calcAttackResults(self, attack, targets, toonId):
-        atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack, self.notify)
+    def calcAttackResults(self, attack, toonId):
+        atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack)
         targetList = createToonTargetList(self.battle, toonId)
         toon = self.battle.getToon(toonId)
-        results = [0 for _ in xrange(len(targets))]
+        results = [0 for _ in xrange(len(self.battle.activeSuits))]
         targetsHit = 0
         for target in targetList:
-            if target not in targets:
+            if target not in self.battle.activeSuits:
                 self.notify.debug("The target is not accessible!")
                 continue
 
             if target.getStatus(LURED_STATUS):
                 attackDamage = 0
-                self.notify.debug('setting damage to 0, since drop on a lured suit')
+                attack[TOON_KBBONUS_COL][self.battle.activeSuits.index(target)] = KB_BONUS_LURED_FLAG
+                self.notify.debug('Drop on lured suit! Damage = 0 and setting KB_BONUS_LURED_FLAG')
             else:
-                attackDamage = receiveDamageCalc(self.battle, atkLevel, atkTrack, target, toon,
-                                                 PropAndPrestigeStack)
+                attackDamage = receiveDamageCalc(atkLevel, atkTrack, target, toon)
 
             targetsHit += target.getHP() > 0
 
             self.notify.debug('%d targets %s, result: %d' % (toonId, target, attackDamage))
 
-            results[targets.index(target)] = attackDamage
+            results[self.battle.activeSuits.index(target)] = attackDamage
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
         return targetsHit > 0
 

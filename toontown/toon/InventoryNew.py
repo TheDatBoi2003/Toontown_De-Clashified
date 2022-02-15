@@ -1,11 +1,14 @@
+from math import ceil
+
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
 from direct.interval.IntervalGlobal import *
 
 import InventoryBase
 from toontown.quest import BlinkingArrows
-from toontown.toonbase import ToontownGlobals
+from toontown.toonbase import ToontownGlobals, TTLocalizer as tt_localizer
 from toontown.toonbase.ToontownBattleGlobals import *
+from toontown.toonbase.ToontownBattleGlobals import HEAL_TRACK
 
 
 class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
@@ -172,14 +175,14 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         self.storePurchaseFrame = None
         trashcanGui = loader.loadModel('phase_3/models/gui/trashcan_gui')
         self.deleteEnterButton = DirectButton(parent=self.invFrame, image=(
-        trashcanGui.find('**/TrashCan_CLSD'), trashcanGui.find('**/TrashCan_OPEN'),
-        trashcanGui.find('**/TrashCan_RLVR')), text=('', TTLocalizer.InventoryDelete, TTLocalizer.InventoryDelete),
+            trashcanGui.find('**/TrashCan_CLSD'), trashcanGui.find('**/TrashCan_OPEN'),
+            trashcanGui.find('**/TrashCan_RLVR')), text=('', TTLocalizer.InventoryDelete, TTLocalizer.InventoryDelete),
                                               text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1), text_scale=0.1,
                                               text_pos=(0, -0.1), text_font=getInterfaceFont(), textMayChange=0,
                                               relief=None, pos=(-1, 0, -0.35), scale=1.0)
         self.deleteExitButton = DirectButton(parent=self.invFrame, image=(
-        trashcanGui.find('**/TrashCan_OPEN'), trashcanGui.find('**/TrashCan_CLSD'),
-        trashcanGui.find('**/TrashCan_RLVR')), text=('', TTLocalizer.InventoryDone, TTLocalizer.InventoryDone),
+            trashcanGui.find('**/TrashCan_OPEN'), trashcanGui.find('**/TrashCan_CLSD'),
+            trashcanGui.find('**/TrashCan_RLVR')), text=('', TTLocalizer.InventoryDone, TTLocalizer.InventoryDone),
                                              text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1), text_scale=0.1,
                                              text_pos=(0, -0.1), text_font=getInterfaceFont(), textMayChange=0,
                                              relief=None, pos=(-1, 0, -0.35), scale=1.0)
@@ -210,7 +213,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         self.trackNameLabels = []
         self.trackBars = []
         self.buttons = []
-        for track in xrange(0, len(Tracks)):
+        for track in xrange(len(Tracks)):
             trackFrame = DirectFrame(parent=self.invFrame,
                                      image=self.rowModel,
                                      scale=InventoryNew.TrackBarScale,
@@ -246,7 +249,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                                                 text='', text_scale=0.16, text_fg=(0, 0, 0, 0.8),
                                                 text_align=TextNode.ACenter, text_pos=(0, -0.05)))
             self.buttons.append([])
-            for item in xrange(0, len(Levels)):
+            for item in xrange(len(Levels)):
                 button = DirectButton(parent=self.trackRows[track],
                                       image=(self.upButton, self.downButton, self.rolloverButton, self.flatButton),
                                       geom=self.invModels[track][item],
@@ -342,7 +345,16 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         if accuracy == 0:
             accuracy = 100
         accString = ('%s%% (%s)' % (accuracy, AvTrackAccStrings[accKey]))
-        if track is TRAP_TRACK:
+        if track is HEAL_TRACK:
+            if prestigeBonus or propBonus:
+                damageBonusStr = TTLocalizer.InventoryDamageBonus % ('%d Self' % int(ceil(damage * 0.5)))
+            self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData %
+                                                {'accuracy': accString,
+                                                 'damageString': tt_localizer.InventoryHealString,
+                                                 'damage': damage,
+                                                 'bonus': damageBonusStr,
+                                                 'singleOrGroup': self.getSingleGroupStr(track, level)})
+        elif track is TRAP_TRACK:
             if self.toon.checkTrackPrestige(track):
                 healthyDamage = getTrapDamage(level, self.toon, healthBonus=1)
                 execDamage = getTrapDamage(level, self.toon, execBonus=1, healthBonus=1)
@@ -380,7 +392,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         else:
             self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData %
                                                 {'accuracy': accString,
-                                                 'damageString': self.getDamageStr(track, level),
+                                                 'damageString': tt_localizer.InventoryDamageString,
                                                  'damage': damage,
                                                  'bonus': damageBonusStr,
                                                  'singleOrGroup': self.getSingleGroupStr(track, level)})
@@ -535,7 +547,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
-                        self.makeBookUnpressable(button, track, level)
+                        self.makeBookUnpressable(button, track)
                     else:
                         button.hide()
 
@@ -574,9 +586,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                     if self.itemIsUsable(track, level):
                         button.show()
                         if self.numItem(track, level) <= 0:
-                            self.makeUnpressable(button, track, level)
+                            self.makeUnpressable(button, track)
                         else:
-                            self.makeDeletePressable(button, track, level)
+                            self.makeDeletePressable(button, track)
                     else:
                         button.hide()
 
@@ -616,9 +628,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                     if self.itemIsUsable(track, level):
                         button.show()
                         if self.numItem(track, level) <= 0:
-                            self.makeUnpressable(button, track, level)
+                            self.makeUnpressable(button, track)
                         else:
-                            self.makeDeletePressable(button, track, level)
+                            self.makeDeletePressable(button, track)
                     else:
                         button.hide()
 
@@ -639,9 +651,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                     if self.itemIsUsable(track, level):
                         button.show()
                         if self.numItem(track, level) <= 0:
-                            self.makeUnpressable(button, track, level)
+                            self.makeUnpressable(button, track)
                         else:
-                            self.makeDeletePressable(button, track, level)
+                            self.makeDeletePressable(button, track)
                     else:
                         button.hide()
 
@@ -676,9 +688,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                     if self.itemIsUsable(track, level):
                         button.show()
                         if self.numItem(track, level) <= 0:
-                            self.makeUnpressable(button, track, level)
+                            self.makeUnpressable(button, track)
                         else:
-                            self.makeDeletePressable(button, track, level)
+                            self.makeDeletePressable(button, track)
                     else:
                         button.hide()
 
@@ -717,7 +729,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
-                        self.makeUnpressable(button, track, level)
+                        self.makeUnpressable(button, track)
                     else:
                         button.hide()
 
@@ -746,9 +758,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                     if self.itemIsUsable(track, level):
                         button.show()
                         if self.numItem(track, level) <= 0:
-                            self.makeUnpressable(button, track, level)
+                            self.makeUnpressable(button, track)
                         else:
-                            self.makePressable(button, track, level)
+                            self.makePressable(button, track)
                     else:
                         button.hide()
 
@@ -794,9 +806,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                         button.show()
                         if self.numItem(track, level) >= self.getMax(track,
                                                                      level) or totalProps == maxProps or level > MAX_LEVEL_INDEX:
-                            self.makeUnpressable(button, track, level)
+                            self.makeUnpressable(button, track)
                         else:
-                            self.makePressable(button, track, level)
+                            self.makePressable(button, track)
                     else:
                         button.hide()
 
@@ -840,9 +852,9 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                         button.show()
                         unpaid = not base.cr.isPaid()
                         if self.numItem(track, level) >= self.getMax(track, level) or totalProps == maxProps:
-                            self.makeUnpressable(button, track, level)
+                            self.makeUnpressable(button, track)
                         else:
-                            self.makePressable(button, track, level)
+                            self.makePressable(button, track)
                     else:
                         button.hide()
 
@@ -883,7 +895,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                     if self.itemIsUsable(track, level):
                         button.show()
                         if not self.gagTutMode:
-                            self.makeUnpressable(button, track, level)
+                            self.makeUnpressable(button, track)
                     else:
                         button.hide()
 
@@ -922,7 +934,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
                         button.show()
-                        self.makeUnpressable(button, track, level)
+                        self.makeUnpressable(button, track)
                     else:
                         button.hide()
 
@@ -977,17 +989,16 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                 for level in xrange(len(Levels)):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level):
-                        unpaid = not base.cr.isPaid()
                         button.show()
-                        if self.numItem(track,
-                                        level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure:
-                            self.makeUnpressable(button, track, level)
-                        elif unpaid and gagIsVelvetRoped(track, level):
-                            self.makeDisabledPressable(button, track, level)
+                        if self.numItem(track, level) <= 0 or \
+                                track == HEAL_TRACK and not self.heal or \
+                                track == TRAP_TRACK and not self.trap or \
+                                track == LURE_TRACK and not self.lure:
+                            self.makeUnpressable(button, track)
                         elif self.itemIsCredit(track, level):
-                            self.makePressable(button, track, level)
+                            self.makePressable(button, track)
                         else:
-                            self.makeNoncreditPressable(button, track, level)
+                            self.makeNoncreditPressable(button, track)
                     else:
                         button.hide()
 
@@ -1028,10 +1039,10 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                     button = self.buttons[track][level]
                     if self.itemIsUsable(track, level) and (level == 0 or self.toon.doIHaveRequiredTrees(track, level)):
                         button.show()
-                        self.makeUnpressable(button, track, level)
+                        self.makeUnpressable(button, track)
                         if self.numItem(track, level) > 0:
                             if not self.toon.isTreePlanted(track, level):
-                                self.makePressable(button, track, level)
+                                self.makePressable(button, track)
                     else:
                         button.hide()
 
@@ -1080,7 +1091,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
 
         return (curSkill, retVal)
 
-    def makePressable(self, button, track, level):
+    def makePressable(self, button, track):
         prestige = self.toon.checkTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
@@ -1096,19 +1107,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         else:
             button.configure(image_color=imageColor)
 
-    def makeDisabledPressable(self, button, track, level):
-        prestige = self.toon.checkTrackPrestige(track)
-        propBonus = self.checkPropBonus(track)
-        bonus = prestige or propBonus
-        if bonus:
-            imageColor = self.UnpressableImageBuffedColor
-        else:
-            imageColor = self.UnpressableImageColor
-        button.configure(text_shadow=self.ShadowColor, geom_color=self.UnpressableGeomColor, image_image=self.flatButton,
-                         commandButtons=(DGG.LMB,))
-        button.configure(image_color=imageColor)
-
-    def makeNoncreditPressable(self, button, track, level):
+    def makeNoncreditPressable(self, button, track):
         prestige = self.toon.checkTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
@@ -1124,15 +1123,14 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         else:
             button.configure(image_color=imageColor)
 
-    def makeDeletePressable(self, button, track, level):
+    def makeDeletePressable(self, button, track):
         prestige = self.toon.checkTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
-        bonus = prestige or propBonus
         button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=self.ShadowColor,
                          geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
         button.configure(image_color=self.DeletePressableImageColor)
 
-    def makeUnpressable(self, button, track, level):
+    def makeUnpressable(self, button, track):
         prestige = self.toon.checkTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
@@ -1144,7 +1142,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                          image_image=self.flatButton, commandButtons=())
         button.configure(image_color=imageColor)
 
-    def makeBookUnpressable(self, button, track, level):
+    def makeBookUnpressable(self, button, track):
         prestige = self.toon.checkTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
@@ -1233,12 +1231,6 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
             return TTLocalizer.InventoryAffectsAllCogs
         else:
             return TTLocalizer.InventoryAffectsOneCog
-
-    def getDamageStr(self, track, level):
-        if track == HEAL_TRACK:
-            return TTLocalizer.InventoryHealString
-        else:
-            return TTLocalizer.InventoryDamageString
 
     def deleteItem(self, track, level):
         if self.numItem(track, level) > 0:

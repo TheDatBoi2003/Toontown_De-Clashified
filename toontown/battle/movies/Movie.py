@@ -469,7 +469,7 @@ class Movie(DirectObject.DirectObject):
                 track.append(interval)
                 camTrack.append(cameraInterval)
             hasHealBonus = self.battle.getInteractivePropTrackBonus() == HEAL
-            interval, cameraInterval = MovieHeal.doHeals(self.__findToonAttack(HEAL), hasHealBonus)
+            interval, cameraInterval = MovieHeal.doHeals(self.__findToonAttack(HEAL))
             if interval:
                 track.append(interval)
                 camTrack.append(cameraInterval)

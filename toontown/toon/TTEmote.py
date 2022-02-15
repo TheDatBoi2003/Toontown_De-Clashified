@@ -13,13 +13,24 @@ from direct.directnotify import DirectNotifyGlobal
 EmoteSleepIndex = 4
 EmoteClear = -1
 
+# Wave, Happy, Sad, Angry, Sleepy, Shrug
+# Dance, Think, Bored, Applause, Cringe
+# Confused, Belly Flop, Bow, Banana Peel
+SuitAnims = ['finger-wag', 'victory', 'talk', 'glower', 'lured', 'soaked',
+             'song-and-dance', 'effort', 'magic3', 'hypnotized', 'squirt-small-react',
+             'drop-react', 'slip-forward', 'jump', 'slip-backward']
+
 
 def doVictory(toon, volume=1):
-    duration = toon.getDuration('victory', 'legs')
-    sfx = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_Win.ogg')
-    sfxDuration = duration - 1.0
-    sfxTrack = SoundInterval(sfx, loop=1, duration=sfxDuration, node=toon, volume=volume)
-    track = Sequence(Func(toon.play, 'victory'), sfxTrack, duration=0)
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[6]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration('song-and-dance')
+    else:
+        duration = toon.getDuration('victory', 'legs')
+        sfxDuration = duration - 1.0
+        sfxTrack = SoundInterval(sfx, loop=1, duration=sfxDuration, node=toon, volume=volume)
+        track = Sequence(Func(toon.play, 'victory'), sfxTrack, duration=0)
+        sfx = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_Win.ogg')
     return (track, duration, None)
 
 
@@ -34,7 +45,6 @@ def doDead(toon, volume=1):
 
 
 def doAnnoyed(toon, volume=1):
-    duration = toon.getDuration('angry', 'torso')
     sfx = None
     if toon.style.getAnimal() == 'bear':
         sfx = base.loader.loadSfx('phase_3.5/audio/dial/AV_bear_exclaim.ogg')
@@ -44,7 +54,12 @@ def doAnnoyed(toon, volume=1):
     def playSfx():
         base.playSfx(sfx, volume=volume, node=toon)
 
-    track = Sequence(Func(toon.angryEyes), Func(toon.blinkEyes), Func(toon.play, 'angry'), Func(playSfx))
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[3]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration(SuitAnims[3])
+    else:
+        track = Sequence(Func(toon.angryEyes), Func(toon.blinkEyes), Func(toon.play, 'angry'), Func(playSfx))
+        duration = toon.getDuration('angry', 'torso')
     exitTrack = Sequence(Func(toon.normalEyes), Func(toon.blinkEyes))
     return (track, duration, exitTrack)
 
@@ -55,21 +70,31 @@ def doAngryEyes(toon, volume=1):
 
 
 def doHappy(toon, volume=1):
-    track = Sequence(Func(toon.play, 'jump'), Func(toon.normalEyes), Func(toon.blinkEyes))
-    duration = toon.getDuration('jump', 'legs')
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[1]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration(SuitAnims[1])
+    else:
+        track = Sequence(Func(toon.play, 'jump'), Func(toon.normalEyes), Func(toon.blinkEyes))
+        duration = toon.getDuration('jump', 'legs')
     return (track, duration, None)
 
 
 def doSad(toon, volume=1):
-    track = Sequence(Func(toon.sadEyes), Func(toon.blinkEyes))
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[2]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration(SuitAnims[2])
+    else:
+        track = Sequence(Func(toon.sadEyes), Func(toon.blinkEyes))
+        duration = 3
     exitTrack = Sequence(Func(toon.normalEyes), Func(toon.blinkEyes))
-    return (track, 3, exitTrack)
+    return (track, duration, exitTrack)
 
 
 def doSleep(toon, volume=1):
     duration = 4
     if toon.isDisguised:
-        track = Sequence(Func(toon.suit.loop, 'lured'))
+        track = Sequence(Func(toon.suit.loop, SuitAnims[4]))
+        duration = 0
     else:
         track = Sequence(Func(toon.stopLookAround), Func(toon.stopBlink), Func(toon.closeEyes),
                      Func(toon.lerpLookAt, Point3(0, 1, -4)), Func(toon.loop, 'neutral'),
@@ -125,14 +150,22 @@ def doShrug(toon, volume=1):
     def playSfx():
         base.playSfx(sfx, volume=volume, node=toon)
 
-    track = Sequence(Func(toon.play, 'shrug'), Func(playSfx))
-    duration = toon.getDuration('shrug', 'torso')
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[5]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration(SuitAnims[5])
+    else:
+        track = Sequence(Func(toon.play, 'shrug'), Func(playSfx))
+        duration = toon.getDuration('shrug', 'torso')
     return (track, duration, None)
 
 
 def doWave(toon, volume=1):
-    track = Sequence(Func(toon.play, 'wave'))
-    duration = toon.getDuration('wave', 'torso')
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[0]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration(SuitAnims[0])
+    else:
+        track = Sequence(Func(toon.play, 'wave'))
+        duration = toon.getDuration('wave', 'torso')
     return (track, duration, None)
 
 
@@ -142,8 +175,12 @@ def doApplause(toon, volume=1):
     def playSfx():
         base.playSfx(sfx, volume=1, node=toon)
 
-    track = Sequence(Func(toon.play, 'applause'), Func(playSfx))
-    duration = toon.getDuration('applause', 'torso')
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[9]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration(SuitAnims[9])
+    else:
+        track = Sequence(Func(toon.play, 'applause'), Func(playSfx))
+        duration = toon.getDuration('applause', 'torso')
     return (track, duration, None)
 
 
@@ -153,8 +190,12 @@ def doConfused(toon, volume=1):
     def playSfx():
         base.playSfx(sfx, node=toon, volume=volume)
 
-    track = Sequence(Func(toon.play, 'confused'), Func(playSfx))
-    duration = toon.getDuration('confused', 'torso')
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[11]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration(SuitAnims[11])
+    else:
+        track = Sequence(Func(toon.play, 'confused'), Func(playSfx))
+        duration = toon.getDuration('confused', 'torso')
     return (track, duration, None)
 
 
@@ -165,8 +206,12 @@ def doSlipForward(toon, volume=1):
         base.playSfx(sfx, volume=volume, node=toon)
 
     sfxDelay = 0.7
-    track = Sequence(Func(toon.play, 'slip-forward'), Wait(sfxDelay), Func(playSfx))
-    duration = toon.getDuration('slip-forward', 'torso') - sfxDelay
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[12]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration(SuitAnims[12])
+    else:
+        track = Sequence(Func(toon.play, 'slip-forward'), Wait(sfxDelay), Func(playSfx))
+        duration = toon.getDuration('slip-forward', 'torso') - sfxDelay
     return (track, duration, None)
 
 
@@ -177,13 +222,20 @@ def doBored(toon, volume=1):
         base.playSfx(sfx, volume=volume, node=toon)
 
     sfxDelay = 2.2
-    track = Sequence(Func(toon.play, 'bored'), Wait(sfxDelay), Func(playSfx))
-    duration = toon.getDuration('bored', 'torso') - sfxDelay
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[8]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration(SuitAnims[8])
+    else:
+        track = Sequence(Func(toon.play, 'bored'), Wait(sfxDelay), Func(playSfx))
+        duration = toon.getDuration('bored', 'torso') - sfxDelay
     return (track, duration, None)
 
 
 def doBow(toon, volume=1):
-    if toon.style.torso[1] == 'd':
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[13]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration(SuitAnims[13])
+    elif toon.style.torso[1] == 'd':
         track = Sequence(Func(toon.play, 'curtsy'))
         duration = toon.getDuration('curtsy', 'torso')
     else:
@@ -199,22 +251,34 @@ def doSlipBackward(toon, volume=1):
         base.playSfx(sfx, volume=volume, node=toon)
 
     sfxDelay = 0.7
-    track = Sequence(Func(toon.play, 'slip-backward'), Wait(sfxDelay), Func(playSfx))
-    duration = toon.getDuration('slip-backward', 'torso') - sfxDelay
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[14]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration(SuitAnims[14])
+    else:
+        track = Sequence(Func(toon.play, 'slip-backward'), Wait(sfxDelay), Func(playSfx))
+        duration = toon.getDuration('slip-backward', 'torso') - sfxDelay
     return (track, duration, None)
 
 
 def doThink(toon, volume=1):
-    duration = 47.0 / 24.0 * 2
     animTrack = Sequence(ActorInterval(toon, 'think', startFrame=0, endFrame=46),
                          ActorInterval(toon, 'think', startFrame=46, endFrame=0))
-    track = Sequence(animTrack, duration=0)
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[7]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration(SuitAnims[7])
+    else:
+        track = Sequence(animTrack, duration=0)
+        duration = 47.0 / 24.0 * 2
     return (track, duration, None)
 
 
 def doCringe(toon, volume=1):
-    track = Sequence(Func(toon.play, 'cringe'))
-    duration = toon.getDuration('cringe', 'torso')
+    if toon.isDisguised:
+        track = Sequence(ActorInterval(toon.suit, SuitAnims[10]), Func(toon.suit.loop, 'neutral'))
+        duration = toon.suit.getDuration(SuitAnims[10]) - 2
+    else:
+        track = Sequence(Func(toon.play, 'cringe'))
+        duration = toon.getDuration('cringe', 'torso')
     return (track, duration, None)
 
 

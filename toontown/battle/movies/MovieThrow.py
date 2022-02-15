@@ -14,6 +14,8 @@ hitSoundFiles = ('AA_tart_only.ogg', 'AA_slice_only.ogg',
                  'AA_slice_only.ogg', 'AA_slice_only.ogg',
                  'AA_wholepie_only.ogg', 'AA_throw_cream_pie_cog.ogg',
                  'AA_throw_wedding_cake_cog.ogg', 'AA_throw_wedding_cake_cog.ogg')
+splatDict = {0: 'tiny_splat_cake', 1: 'tiny_splat_fruit', 2: 'tiny_splat_cream',
+             3: 'splat_cake', 4: 'splat_fruit', 5: 'splat_cream', 6: 'splat_cake', 7: 'splat_cake'}
 tPieLeavesHand = 2.7
 tPieHitsSuit = 3.0
 tSuitDodges = 2.45
@@ -83,19 +85,6 @@ def doThrows(throws):
 
     retTrack = Sequence()
     retTrack.append(mainTrack)
-    groupThrowIntervals = Parallel()
-    groupThrows = []
-    for throw in throws:
-        if attackAffectsGroup(throw['track'], throw['level']):
-            groupThrows.append(throw)
-
-    for throw in groupThrows:
-        tracks = __throwGroupPie(throw, 0, groupHitDict)
-        if tracks:
-            for track in tracks:
-                groupThrowIntervals.append(track)
-
-    retTrack.append(groupThrowIntervals)
     camDuration = retTrack.getDuration()
     camTrack = MovieCamera.chooseThrowShot(throws, suitThrowsDict, camDuration)
     return retTrack, camTrack
@@ -336,6 +325,8 @@ def __throwPie(throw, delay, hitCount):
             suitInterval = ActorInterval(suit, 'pie-small-react')
         suitResponseTrack.append(Wait(delay + tPieHitsSuit))
         suitResponseTrack.append(showDamage)
+        if toon.checkTrackPrestige(THROW_TRACK):
+            suitResponseTrack.append(Func(__splatSuit, suit, level))
         suitResponseTrack.append(Func(suit.updateHealthBar, hp))
         suitResponseTrack.append(suitInterval)
         bonusTrack = Sequence(Wait(delay + tPieHitsSuit))
@@ -352,7 +343,7 @@ def __throwPie(throw, delay, hitCount):
         elif died != 0:
             suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
-            suitResponseTrack.append(Func(suit.loop, 'neutral'))
+            suitResponseTrack.append(Func(suit.doNeutralAnim))
         suitResponseTrack = Parallel(suitResponseTrack, bonusTrack)
     else:
         suitResponseTrack = MovieUtil.createSuitDodgeMultitrack(delay + tSuitDodges, suit, leftSuits, rightSuits)
@@ -365,177 +356,20 @@ def __throwPie(throw, delay, hitCount):
                 suitResponseTrack]
 
 
-def __createWeddingCakeFlight(throw, pie, pies):
-    battle = throw['battle']
-    level = throw['level']
-    sidestep = throw['sidestep']
-    numTargets = len(throw['target'])
-    pieName = pieNames[level]
-    splatName = 'splat-' + pieName
-    if pieName == 'wedding-cake':
-        splatName = 'splat-birthday-cake'
-    splat = globalPropPool.getProp(splatName)
-    splats = [splat]
-    for i in xrange(numTargets - 1):
-        splats.append(MovieUtil.copyProp(splat))
-
-    cakePartStrs = ['cake1', 'cake2', 'cake3', 'caketop']
-    cakeParts = []
-    for part in cakePartStrs:
-        cakeParts.append(pie.find('**/%s' % part))
-
-    cakePartDivisions = {1: [[cakeParts[0], cakeParts[1], cakeParts[2], cakeParts[3]]],
-                         2: [[cakeParts[0], cakeParts[1]], [cakeParts[2], cakeParts[3]]],
-                         3: [[cakeParts[0], cakeParts[1]], [cakeParts[2]], [cakeParts[3]]],
-                         4: [[cakeParts[0]], [cakeParts[1]], [cakeParts[2]], [cakeParts[3]]]}
-    cakePartDivToUse = cakePartDivisions[len(throw['target'])]
-    groupPieTracks = Parallel()
-    for i in xrange(numTargets):
-        target = throw['target'][i]
-        suit = target['suit']
-        hitSuit = target['hp'] > 0
-        singlePieTrack = Sequence()
-        if hitSuit:
-            piePartReParent = Func(changeCakePartParent, pie, cakePartDivToUse[i])
-            singlePieTrack.append(piePartReParent)
-            cakePartTrack = Parallel()
-            for cakePart in cakePartDivToUse[i]:
-                pieFly = LerpPosInterval(cakePart, tPieHitsSuit - tPieLeavesHand,
-                                         pos=MovieUtil.avatarFacePoint(suit, other=battle), name=pieFlyTaskName,
-                                         other=battle)
-                cakePartTrack.append(pieFly)
-
-            singlePieTrack.append(cakePartTrack)
-            pieRemoveCakeParts = Func(MovieUtil.removeProps, cakePartDivToUse[i])
-            pieHide = Func(MovieUtil.removeProps, pies)
-            splatShow = Func(__showProp, splats[i], suit, Point3(0, 0, suit.getHeight()))
-            splatBillboard = Func(__billboardProp, splats[i])
-            splatAnim = ActorInterval(splats[i], splatName)
-            splatHide = Func(MovieUtil.removeProp, splats[i])
-            singlePieTrack.append(pieRemoveCakeParts)
-            singlePieTrack.append(pieHide)
-            singlePieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
-            singlePieTrack.append(splatShow)
-            singlePieTrack.append(splatBillboard)
-            singlePieTrack.append(splatAnim)
-            singlePieTrack.append(splatHide)
-        else:
-            missDict = {}
-            if sidestep:
-                suitPoint = MovieUtil.avatarFacePoint(suit, other=battle)
-            else:
-                suitPoint = __suitMissPoint(suit, other=battle)
-            piePartReParent = Func(changeCakePartParent, pie, cakePartDivToUse[i])
-            piePreMiss = Func(__piePreMissGroup, missDict, cakePartDivToUse[i], suitPoint, battle)
-            pieMiss = LerpFunctionInterval(__pieMissGroupLerpCallback, extraArgs=[missDict],
-                                           duration=(tPieHitsSuit - tPieLeavesHand) * ratioMissToHit)
-            pieHide = Func(MovieUtil.removeProps, pies)
-            pieRemoveCakeParts = Func(MovieUtil.removeProps, cakePartDivToUse[i])
-            singlePieTrack.append(piePartReParent)
-            singlePieTrack.append(piePreMiss)
-            singlePieTrack.append(pieMiss)
-            singlePieTrack.append(pieRemoveCakeParts)
-            singlePieTrack.append(pieHide)
-            singlePieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
-        groupPieTracks.append(singlePieTrack)
-
-    return groupPieTracks
-
-
-def __throwGroupPie(throw, delay, groupHitDict):
-    toon = throw['toon']
-    battle = throw['battle']
-    level = throw['level']
-    numTargets = len(throw['target'])
-    avgSuitPos = calcAvgSuitPos(throw)
-    origHpr = toon.getHpr(battle)
-    toonTrack = toonThrowTrack(toon, battle, delay, avgSuitPos, origHpr)
-    suits = []
-    for i in xrange(numTargets):
-        suits.append(throw['target'][i]['suit'])
-
-    pieName = pieNames[level]
-    pie = globalPropPool.getProp(pieName)
-    pieType = globalPropPool.getPropType(pieName)
-    pie2 = MovieUtil.copyProp(pie)
-    pies = [pie, pie2]
-    hands = toon.getRightHands()
-    pieShow = Func(MovieUtil.showProps, pies, hands)
-    pieAnim = Func(__animProp, pies, pieName, pieType)
-    pieScale1 = LerpScaleInterval(pie, 1.0, pie.getScale() * 1.5, startScale=MovieUtil.PNT3_NEARZERO)
-    pieScale2 = LerpScaleInterval(pie2, 1.0, pie2.getScale() * 1.5, startScale=MovieUtil.PNT3_NEARZERO)
-    pieScale = Parallel(pieScale1, pieScale2)
-    piePreflight = Func(__propPreflightGroup, pies, suits, toon, battle)
-    pieTrack = Sequence(Wait(delay), pieShow, pieAnim, pieScale, Func(battle.movie.needRestoreRenderProp, pies[0]),
-                        Wait(tPieLeavesHand - 1.0), piePreflight)
-    if level == WEDDING_LEVEL_INDEX:
-        groupPieTracks = __createWeddingCakeFlight(throw, pie, pies)
+def __splatSuit(suit, level):
+    splatTex = loader.loadTexture('phase_5/maps/' + splatDict[level] + '.png')
+    splat = TextureStage(splatDict[level])
+    splat.setMode(TextureStage.MDecal)
+    splat.setSavedResult()
+    if suit.isSkeleton:
+        suit.setTexture(splat, splatTex)
     else:
-        notify.error('unhandled throw level %d' % level)
-    pieTrack.append(groupPieTracks)
-    didThrowHitAnyone = False
-    for i in xrange(numTargets):
-        target = throw['target'][i]
-        hitSuit = target['hp'] > 0
-        if hitSuit:
-            didThrowHitAnyone = True
-
-    soundTrack = __getSoundTrack(level, didThrowHitAnyone, toon)
-    groupSuitResponseTrack = Parallel()
-    for i in xrange(numTargets):
-        target = throw['target'][i]
-        suit = target['suit']
-        hitSuit = target['hp'] > 0
-        leftSuits = target['leftSuits']
-        rightSuits = target['rightSuits']
-        hp = target['hp']
-        kbBonus = target['kbBonus']
-        hpBonus = target['hpBonus']
-        died = target['died']
-        revived = target['revived']
-        if hitSuit:
-            singleSuitResponseTrack = Sequence()
-            showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=THROW_TRACK)
-            updateHealthBar = Func(suit.updateHealthBar, hp)
-            if kbBonus > 0:
-                anim = 'pie-small-react'
-                suitInterval = MovieUtil.startSuitKnockbackInterval(suit, anim, battle)
-            elif groupHitDict[suit.doId] == 1:
-                suitInterval = Parallel(ActorInterval(suit, 'pie-small-react'),
-                                        MovieUtil.createSuitStunInterval(suit, 0.3, 1.3))
-            else:
-                suitInterval = ActorInterval(suit, 'pie-small-react')
-            singleSuitResponseTrack.append(Wait(delay + tPieHitsSuit))
-            singleSuitResponseTrack.append(showDamage)
-            singleSuitResponseTrack.append(updateHealthBar)
-            singleSuitResponseTrack.append(suitInterval)
-            bonusTrack = Sequence(Wait(delay + tPieHitsSuit))
-            if kbBonus > 0:
-                bonusTrack.append(Wait(0.75))
-                bonusTrack.append(Func(suit.showHpText, -kbBonus, 2, openEnded=0, attackTrack=THROW_TRACK))
-            if hpBonus > 0:
-                bonusTrack.append(Wait(0.75))
-                bonusTrack.append(Func(suit.showHpText, -hpBonus, 1, openEnded=0, attackTrack=THROW_TRACK))
-            if revived != 0:
-                singleSuitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-            elif died != 0:
-                singleSuitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
-            else:
-                singleSuitResponseTrack.append(Func(suit.loop, 'neutral'))
-            singleSuitResponseTrack = Parallel(singleSuitResponseTrack, bonusTrack)
-        else:
-            groupHitValues = groupHitDict.values()
-            if groupHitValues.count(0) == len(groupHitValues):
-                singleSuitResponseTrack = MovieUtil.createSuitDodgeMultitrack(delay + tSuitDodges, suit, leftSuits,
-                                                                              rightSuits)
-            else:
-                singleSuitResponseTrack = Sequence(Wait(tPieHitsSuit - 0.1), Func(MovieUtil.indicateMissed, suit, 1.0))
-        groupSuitResponseTrack.append(singleSuitResponseTrack)
-
-    return [toonTrack,
-            pieTrack,
-            soundTrack,
-            groupSuitResponseTrack]
+        for headPart in suit.headParts:
+            headPart.setTexture(splat, splatTex)
+        suit.find('**/torso').setTexture(splat, splatTex)
+        suit.find('**/arms').setTexture(splat, splatTex)
+        suit.find('**/legs').setTexture(splat, splatTex)
+        suit.find('**/hands').setTexture(splat, splatTex)
 
 
 def toonThrowTrack(toon, battle, delay, suitPos, origHpr):

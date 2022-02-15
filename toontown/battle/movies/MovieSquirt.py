@@ -138,6 +138,7 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpBonus, kbBonus, anim, died, lef
                    battle, fShowStun, beforeStun=0.5, afterStun=1.8, attackLevel=-1, uberRepeat=0, revived=0, prest=0):
     if hp > 0:
         suitTrack = Sequence()
+        soakTracks = Parallel()
         suitInterval = Parallel()
         geyser = attackLevel == ToontownBattleGlobals.MAX_LEVEL_INDEX
         if kbBonus > 0 and not geyser:
@@ -162,11 +163,12 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpBonus, kbBonus, anim, died, lef
 
         if fShowStun == 1:
             suitInterval.append(MovieUtil.createSuitStunInterval(suit, beforeStun, afterStun))
-        suitInterval.append(__soakSuit(suit))
+
+        soakTracks.append(__soakSuit(suit))
         if prest:
             suitIndex = battle.activeSuits.index(suit)
-            suitInterval.append(__soakNearby(suitIndex + 1, battle.activeSuits))
-            suitInterval.append(__soakNearby(suitIndex - 1, battle.activeSuits))
+            soakTracks.append(__soakNearby(suitIndex + 1, battle.activeSuits))
+            soakTracks.append(__soakNearby(suitIndex - 1, battle.activeSuits))
 
         showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=SQUIRT_TRACK, attackLevel=attackLevel)
         suitTrack.append(Wait(tContact))
@@ -198,10 +200,10 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpBonus, kbBonus, anim, died, lef
         if died:
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
-            suitTrack.append(Func(suit.loop, 'neutral'))
+            suitTrack.append(Func(suit.doNeutralAnim))
         if revived:
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        return Parallel(suitTrack, bonusTrack)
+        return Parallel(suitTrack, Sequence(Wait(tContact), soakTracks), bonusTrack)
     else:
         return MovieUtil.createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits)
 
@@ -224,7 +226,9 @@ def __soakSuit(suit, remove=0):
 
 def __soakNearby(suitIndex, suits):
     if len(suits) > suitIndex >= 0:
-        return Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex]))
+        return Parallel(Sequence(ActorInterval(suits[suitIndex], 'squirt-small-react'),
+                                 Func(suits[suitIndex].doSuitNeutral)),
+                        __soakSuit(suits[suitIndex]))
     else:
         return Sequence()
 

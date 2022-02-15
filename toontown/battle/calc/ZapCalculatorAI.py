@@ -24,7 +24,7 @@ class ZapCalculatorAI(DirectObject):
             return 0
 
         attack = self.battle.toonAttacks[attackIndex]
-        atkTrack, atkLevel = getActualTrackLevel(attack, self.notify)
+        atkTrack, atkLevel = getActualTrackLevel(attack)
 
         if currAtk > 0:
             if atkTrack == prevAtkTrack and attack[TOON_TGT_COL] == prevAttack[TOON_TGT_COL]:
@@ -52,12 +52,13 @@ class ZapCalculatorAI(DirectObject):
             self.notify.debug('MISS: Toon attack rolled' + str(randChoice) + 'to hit with an accuracy of' + str(acc))
             return 1
 
-    def calcAttackResults(self, attack, targets, toonId):
-        atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack, self.notify)
+    def calcAttackResults(self, attack, toonId):
+        atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack)
         toon = self.battle.getToon(toonId)
-        attack[TOON_HPBONUS_COL] = [-1 for _ in xrange(len(targets))]
         targetList = self.__calcJumpPositions(toonId)
+        suits = self.battle.activeSuits
         targetsHit = 0
+        attack[TOON_HPBONUS_COL] = [-1 for _ in xrange(len(suits))]
 
         prestige = toon.checkTrackPrestige(ZAP)
         propBonus = getToonPropBonus(self.battle, ZAP)
@@ -71,14 +72,14 @@ class ZapCalculatorAI(DirectObject):
         for i in xrange(len(targetList)):
             target = targetList[i]
 
-            if target not in targets:
+            if target not in suits:
                 self.notify.debug("The suit is not accessible!")
                 continue
 
             tgtPos = self.battle.activeSuits.index(target)
             attack[TOON_HPBONUS_COL][tgtPos] = i
 
-            baseDamage = doDamageCalc(self.battle, atkLevel, atkTrack, toon, PropAndPrestigeStack)
+            baseDamage = doDamageCalc(atkLevel, atkTrack, toon)
 
             targetsHit += target.getHP() > 0
 
@@ -101,7 +102,7 @@ class ZapCalculatorAI(DirectObject):
 
     def __calcJumpPositions(self, toonId):
         attack = self.battle.toonAttacks[toonId]
-        atkTrack, atkLevel = getActualTrackLevel(attack, self.notify)
+        atkTrack, atkLevel = getActualTrackLevel(attack)
         targetList = []
         if atkTrack == NPCSOS:
             return self.battle.activeSuits

@@ -78,7 +78,7 @@ class DistributedBattleBldg(DistributedBattleBase.DistributedBattleBase):
             suit.setState('Battle')
             suitIsLeader = 0
             oneSuitTrack = Sequence()
-            oneSuitTrack.append(Func(suit.loop, 'neutral'))
+            oneSuitTrack.append(Func(suit.doNeutralAnim))
             oneSuitTrack.append(Func(suit.headsUp, elevatorPos))
             if self.suits.index(suit) == leaderIndex:
                 suitLeader = suit

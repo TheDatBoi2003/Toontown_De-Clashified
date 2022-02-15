@@ -1800,14 +1800,14 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def applyTrackChoice(self, index, track):
         if self.trainingFrames[index] != -1:
-            self.notify.warning('Avatar %s attempted to add track to nonempty frame!' % (self.doId))
+            self.notify.warning('Avatar %s attempted to add track to nonempty frame!' % self.doId)
             return
         success = self.__calcTracks(track)
         if success:
             self.trainingFrames[index] = track
             self.b_setTrainingFrames(self.trainingFrames)
         else:
-            self.notify.warning('Avatar %s could not insert a frame, it was too much!' % (self.doId))
+            self.notify.warning('Avatar %s could not insert a frame, it was too much!' % self.doId)
 
     def __calcTracks(self, track=None):
         trackCounts = [0 for _ in xrange(ToontownBattleGlobals.MAX_TRACK_INDEX + 1)]

@@ -367,8 +367,7 @@ def getTrapDamage(trapLevel, toon, suit=None, execBonus=0, healthBonus=0):
     return int(damage)
 
 
-def getAvPropDamage(attackTrack, attackLevel, exp, prestige=False, propBonus=False,
-                    propAndPrestigeStack=False):
+def getAvPropDamage(attackTrack, attackLevel, exp):
     """
     ////////////////////////////////////////////////////////////////////
     // Function:   get the appropriate prop damage based on various

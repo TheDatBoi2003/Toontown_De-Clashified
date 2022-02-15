@@ -18,10 +18,11 @@ class TrapCalculatorAI(DirectObject):
     def cleanup(self):
         self.ignoreAll()
 
-    def calcAttackResults(self, attack, targets, toonId):
+    def calcAttackResults(self, attack, toonId):
         atkLevel = attack[TOON_LVL_COL]
         targetList = createToonTargetList(self.battle, toonId)
-        results = [0 for _ in xrange(len(targets))]
+        suits = self.battle.activeSuits
+        results = [0 for _ in xrange(len(suits))]
         trappedSuits = 0
 
         for target in targetList:
@@ -36,11 +37,11 @@ class TrapCalculatorAI(DirectObject):
             self.notify.debug('%d targets %s, result: %d' % (toonId, target, result))
 
             if result != 0:
-                if target not in targets:
+                if target not in suits:
                     self.notify.debug("The suit is not accessible!")
                     continue
 
-                results[targets.index(target)] = result
+                results[suits.index(target)] = result
 
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
         return trappedSuits > 0

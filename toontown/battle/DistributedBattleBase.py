@@ -906,7 +906,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                 else:
                     spos = Point3(suitPos[0], suitPos[1] - MovieUtil.SUIT_LURE_DISTANCE, suitPos[2])
                     suit.setPosHpr(self, spos, suitHpr)
-                suit.loop('neutral')
+                suit.doNeutralAnim()
 
         for toon in toons:
             if self.joiningToons.count(toon):

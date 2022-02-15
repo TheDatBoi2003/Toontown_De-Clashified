@@ -1,3 +1,5 @@
+from math import ceil
+
 from direct.showbase.DirectObject import DirectObject
 
 from toontown.battle.calc.BattleCalculatorGlobals import *
@@ -17,18 +19,29 @@ class HealCalculatorAI(DirectObject):
     def cleanup(self):
         self.ignoreAll()
 
-    def calcAttackResults(self, attack, targets, toonId):
-        _, atkLevel, atkHp = getActualTrackLevelHp(attack, self.notify)
+    def calcAttackResults(self, attack, toonId):
+        _, atkLevel, atkHp = getActualTrackLevelHp(attack)
         targetList = createToonTargetList(self.battle, toonId)
         toon = self.battle.getToon(toonId)
-        healing = doDamageCalc(self.battle, atkLevel, HEAL, toon, PropAndPrestigeStack)
-        if not attackHasHit(attack, self.notify, suit=0):
-            healing = healing * 0.2
+        healing = doDamageCalc(atkLevel, HEAL, toon)
+        prestige, propBonus = getToonPrestige(self.battle, toonId, HEAL), getToonPropBonus(self.battle, HEAL)
+        if not attackHasHit(attack, suit=0):
+            healing *= 0.2
         self.notify.debug('toon does ' + str(healing) + ' healing to toon(s)')
-        healing = healing / len(targetList)
+
+        toons = self.battle.activeToons
+        if prestige or propBonus:
+            if not (prestige and propBonus) or not PropAndPrestigeStack:
+                healAmt = int(ceil(healing * 0.5))
+            else:
+                healAmt = healing
+            attack[TOON_HP_COL][toons.index(toon)] = healAmt
+            self.notify.debug('Prestige Bonus: toon does %d self-healing' % healAmt)
+
+        healing /= len(targetList)
         self.notify.debug('Splitting heal among targets')
 
-        results = [0 for _ in xrange(len(targets))]
+        results = [0 for _ in xrange(len(toons))]
         healedToons = 0
         for target in targetList:
 
@@ -36,11 +49,11 @@ class HealCalculatorAI(DirectObject):
 
             self.notify.debug('%d targets %s, result: %d' % (toonId, target, healing))
 
-            if target not in targets:
+            if target not in toons:
                 self.notify.debug("The toon is not accessible!")
                 continue
 
-            results[targets.index(target)] = healing
+            results[toons.index(target)] = healing
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
         return healedToons > 0
 

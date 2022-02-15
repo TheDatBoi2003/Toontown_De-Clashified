@@ -16,15 +16,15 @@ def pickFromFreqList(freqList):
     randNum = random.randint(0, 99)
     count = 0
     index = 0
-    level = None
+    value = None
     for f in freqList:
         count = count + f
         if randNum < count:
-            level = index
+            value = index
             break
         index = index + 1
 
-    return level
+    return value
 
 
 def getActualFromRelativeLevel(name, relLevel):
