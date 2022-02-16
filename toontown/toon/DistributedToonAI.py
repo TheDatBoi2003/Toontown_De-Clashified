@@ -1802,14 +1802,27 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.trainingFrames[index] != -1:
             self.notify.warning('Avatar %s attempted to add track to nonempty frame!' % self.doId)
             return
-        success = self.__calcTracks(track)
+        success = self.__calcTracks(track=track)
         if success:
             self.trainingFrames[index] = track
             self.b_setTrainingFrames(self.trainingFrames)
         else:
             self.notify.warning('Avatar %s could not insert a frame, it was too much!' % self.doId)
 
-    def __calcTracks(self, track=None):
+    def applyRefund(self, index):
+        if self.trainingFrames[index] == -1:
+            self.notify.warning('Avatar %s attempted to refund an empty frame!' % self.doId)
+            return
+        success = self.__calcTracks(track=self.trainingFrames[index], refund=1)
+        if success:
+            if self.trainingFrames.count(self.trainingFrames[index]) > 1:
+                self.b_setRefundPoints(self.getRefundPoints() - 1)
+            self.trainingFrames[index] = -1
+            self.b_setTrainingFrames(self.trainingFrames)
+        else:
+            self.notify.warning('Avatar %s could not refund frame, it was not enough!' % self.doId)
+
+    def __calcTracks(self, track=None, refund=None):
         trackCounts = [0 for _ in xrange(ToontownBattleGlobals.MAX_TRACK_INDEX + 1)]
         for frame in self.trainingFrames:
             if frame >= 0:
@@ -1828,7 +1841,15 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         success = True
 
-        if track:
+        if refund and track:
+            trackCount = trackCounts[track]
+            if trackCount in (2, 3):
+                trackPrestige[track] = 0
+                if trackCount == 2:
+                    trackAccess[track] = 0
+            elif trackCount < 1:
+                success = False
+        elif track:
             trackCount = trackCounts[track]
             if trackCount in (1, 2):
                 trackAccess[track] = 1
@@ -1837,8 +1858,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             elif trackCount != 0:
                 success = False
 
-        self.b_setTrackAccess(trackAccess)
-        self.b_setTrackPrestige(trackPrestige)
+        if success:
+            self.b_setTrackAccess(trackAccess)
+            self.b_setTrackPrestige(trackPrestige)
         return success
 
     def b_setRefundPoints(self, points):

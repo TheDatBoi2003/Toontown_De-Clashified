@@ -352,7 +352,7 @@ def chooseNPCExitShot(exits, exitsDuration):
     return track
 
 
-def chooseSuitShot(attack, attackDuration):
+def chooseSuitShot(attack, attackDuration, cheat=0):
     groupStatus = attack['group']
     target = attack['target']
     if groupStatus == ATK_TGT_SINGLE:
@@ -493,12 +493,18 @@ def chooseSuitShot(attack, attackDuration):
         camTrack.append(defaultCamera(openShotDuration=1.2))
     elif name == WRITE_OFF:
         camTrack.append(defaultCamera())
+    elif name == WORKERS_COMPENSATION:
+        camTrack.append(defaultCamera(openShotDuration=4))
     else:
         notify.warning('unknown attack id in chooseSuitShot: %d using default cam' % name)
         camTrack.append(defaultCamera())
     pbpText = attack['playByPlayText']
-    displayName = TTLocalizer.SuitAttackNames[attack['name']]
-    pbpTrack = pbpText.getShowInterval(displayName, 3.5)
+    if not cheat:
+        displayName = TTLocalizer.SuitAttackNames[attack['name']]
+        pbpTrack = pbpText.getShowInterval(displayName, 3.5)
+    else:
+        displayName = TTLocalizer.SuitCheatNames[attack['name']][0]
+        pbpTrack = pbpText.getShowInterval(displayName, 3.5)
     return Parallel(camTrack, pbpTrack)
 
 

@@ -3,6 +3,7 @@ from direct.showbase.MessengerGlobal import messenger
 
 from toontown.battle.calc.BattleCalculatorGlobals import *
 
+NextMarks = [0.1, 0.15, 0.18, 0.2]
 
 class ThrowCalculatorAI(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('ThrowCalculatorAI')
@@ -37,15 +38,18 @@ class ThrowCalculatorAI(DirectObject):
             self.notify.debug('%d targets %s, result: %d' % (toonId, target, attackDamage))
 
             if prestige or propBonus:
-                amount = 0.08
                 markStatus = target.getStatus(MARKED_STATUS)
                 if markStatus:
                     if markStatus['rounds'] > 1:
-                        amount = markStatus['damage-mod'] + 0.04
-                    self.statusCalculator.removeStatus(target, markStatus)
-                if PropAndPrestigeStack and prestige and propBonus:
-                    amount += 0.04
-                self.__addMarkStatus(target, amount)
+                        stacks = markStatus['stacks']
+                        markBonus = NextMarks[stacks]
+                        self.statusCalculator.removeStatus(target, markStatus)
+                        self.__addMarkStatus(target, markBonus, stacks=stacks+1)
+                else:
+                    markBonus = NextMarks[0]
+                    if PropAndPrestigeStack and prestige and propBonus:
+                        markBonus += 0.03
+                    self.__addMarkStatus(target, markBonus)
 
             if target.getStatus(LURED_STATUS):
                 messenger.send('delayed-wake', [toonId, target])
@@ -55,11 +59,12 @@ class ThrowCalculatorAI(DirectObject):
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
         return targetsHit > 0
 
-    def __addMarkStatus(self, suit, amount):
-        markStatus = genSuitStatus(SOAKED_STATUS)
-        markStatus['damage-mod'] = amount
+    def __addMarkStatus(self, suit, markBonus, stacks=1):
+        markStatus = genSuitStatus(MARKED_STATUS)
+        markStatus['damage-mod'] = markBonus
+        markStatus['stacks'] = stacks
         suit.b_addStatus(markStatus)
-        self.notify.debug('%s now is marked (%f%%) for 2 rounds.' % (suit.doId, amount * 100))
+        self.notify.debug('%s now is marked (%f%%) for 2 rounds.' % (suit.doId, markBonus * 100))
         self.markedSuits.append(suit)
         messenger.send('mark-suit', [self.markedSuits, suit])
 

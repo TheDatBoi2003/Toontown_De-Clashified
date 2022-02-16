@@ -1,4 +1,5 @@
 from direct.showbase.DirectObject import DirectObject
+from direct.showbase.MessengerGlobal import messenger
 
 from toontown.battle.calc.BattleCalculatorGlobals import *
 
@@ -17,7 +18,7 @@ class SuitCalculatorAI(DirectObject):
         self.attack = None
         self.suitAtkStats = {}
         self.accept('init-round', self.__clearAttackers)
-        self.accept('suit-was-damaged', self.rememberToonAttack)
+        self.accept('toon-threat', self.rememberToonAttack)
 
     def cleanup(self):
         self.ignoreAll()
@@ -79,6 +80,14 @@ class SuitCalculatorAI(DirectObject):
             for toonId in self.attackers.keys():
                 if toonId not in self.battle.activeToons:
                     del self.attackers[toonId]
+
+    def hitSuit(self, attack, damage):
+        markedStatus = self.suit.getStatus(MARKED_STATUS)
+        if markedStatus and not (markedStatus['rounds'] == 2 and attack[TOON_TRACK_COL] == THROW):
+            damage *= 1 + markedStatus['damage-mod']
+            attack[TOON_HP_COL][self.battle.activeSuits.index(self.suit)] = damage
+        self.suit.setHP(self.suit.getHP() - damage)
+        messenger.send('suit-was-hit', [attack, damage])
 
     def removeAttacker(self, toonId):
         if not CLEAR_SUIT_ATTACKERS:

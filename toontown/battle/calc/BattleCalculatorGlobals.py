@@ -20,6 +20,8 @@ SUITS_WAKE_IMMEDIATELY = 1
 FIRST_TRAP_ONLY = 0
 KB_BONUS_LURED_FLAG = 0
 KB_BONUS_TGT_LURED = 1
+SpecialCalcDir = 'toontown.battle.calc.special'
+SpecialCalculators = {'foreman': 'ForemanCalculatorAI'}
 
 notify = DirectNotifyGlobal.directNotify.newCategory('BattleCalculatorGlobals')
 PropAndPrestigeStack = simbase.config.GetBool('prop-and-organic-bonus-stack', 0)

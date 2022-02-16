@@ -1,9 +1,9 @@
 - Only the first cog gets its actions caulculated
-- Knockback does not work on two cogs same track (throw only?)
 - When a gag kills, the movie ignores playing any toon-up clips
 - The zap movies sometimes prematurely jump to the death animation
-- 5+ cogs might be broken in BattleCalculatorAI
 - Going sad takes max toons to 120 laff???
+Low priority:
+- 5+ cogs might be broken in BattleCalculatorAI (5+ cogs are currently unused)
 - Toontorial with new camera is broken (just skip it for now)
 - New camera stuck in the ground after battle (difficult to fix)
 - With 2 instakill sounds, only the first goes off (not a serious bug)

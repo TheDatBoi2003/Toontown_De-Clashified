@@ -2618,7 +2618,7 @@ SuitSpinDoctorP = 'Spin Doctors'
 SuitLegalEagleP = 'Legal Eagles'
 SuitBigWigP = 'Big Wigs'
 SuitFaceoffDefaultTaunts = ['Boo!']
-SuitAttackDefaultTaunts = ['Take that!', 'Take a memo on this!']
+SuitAttackDefaultTaunts = ['Take a memo on this!']
 SuitAttackNames = {'Audit': 'Audit!',
                    'Bite': 'Bite!',
                    'BounceCheck': 'Bounce Check!',
@@ -2688,6 +2688,8 @@ SuitAttackNames = {'Audit': 'Audit!',
                    'Withdrawal': 'Withdrawal!',
                    'WhistleBlow': 'Whistle Blow!',
                    'WriteOff': 'Write Off!'}
+SuitAttackCheats = {'WorkersCompensation': ("Worker's Compensation!",
+                                            'The Foreman will get stronger with each cog destroyed!'),}
 SuitAttackTaunts = {'Audit': ["I believe your books don't balance.",
                               "Looks like you're in the red.",
                               'Let me help you with your books.',
@@ -3366,6 +3368,7 @@ SuitAttackTaunts = {'Audit': ["I believe your books don't balance.",
                                  "I'll shuffle your accounts around.",
                                  "You're about to suffer some losses.",
                                  'This is going to hurt your bottom line.']}
+SuitCheatTaunts = {'WorkersCompensation': ['Do you have any idea how much paperwork I will have to file after this?']}
 BuildingWaitingForVictors = ('Waiting for other players...',)
 ElevatorHopOff = 'Hop off'
 ElevatorStayOff = "If you hop off, you'll need to wait\nfor the elevator to leave or empty."
@@ -5110,7 +5113,8 @@ TrackPageAvailable = 'You have %d %s available.'
 TrackPageFrame = ['frame', 'frames']
 TrackPageFull = 'You have no open frames.'
 TrackPageFilmTitle = 'FRAME\nCOUNT: %d'
-TrackPageDone = 'FIN'
+TrackPageRefundCount = 'REFUND\nPOINTS: %d'
+TrackPageNoRefunds = 'NO\nREFUNDS'
 TrackPageBtn = 'Set Track'
 TrackSetTitle = 'Choose a Track'
 TrackSetInfo = "You can set this frame to a track you don't own.  " \
@@ -5119,6 +5123,10 @@ TrackSetInfo = "You can set this frame to a track you don't own.  " \
 TrackSetConfirmation = 'Do you want to set the frame to %s?'
 TrackSetLearnConfirmation = 'Do you want to learn the %s gag track?\nWARNING: You can only undo this with a refund point!'
 TrackSetPrestigeConfirmation = 'Do you want to prestige the %s gag track?\nWARNING: It would cost %d jellybeans to undo this!'
+TrackRefundMenu = 'Refund'
+TrackRefundPrestigePrompt = 'Refunding this point will remove prestige access.  Are you sure?'
+TrackRefundAccessPrompt = 'Refunding this point will remove access for the track.  Are you sure?'
+TrackRefundPrompt = 'Are you sure you want to unset this track?'
 QuestPageToonTasks = 'ToonTasks'
 QuestPageChoose = 'Choose'
 QuestPageLocked = 'Locked'
@@ -6109,8 +6117,8 @@ CagedToonDrop = ["The cage is being lowered, keep it up!",
 RescueToonName = 'Byers B. Ware'
 CagedToonName = 'Rain'
 RescueToonBreakOut = '...There! I knew that %s would come in handy.'
-RescueToonTools = ['Micro-Saw (as seen on tv)', 'pocket battering ram', 'retractable crowbar']
-RescueToonMinigame1 = "Now, I'll set up a pop-up toaster! It should supply plenty of pies."
+RescueToonTools = ['universal remote', 'pocket battering ram', 'retractable crowbar']
+RescueToonMinigame1 = "Now, I'll deploy a pop-up oven! It should supply plenty of pies."
 RescueToonMinigame2 = 'Catch as many as you can, but watch out for those Movers & Shakers!'
 RescueToonMinigame3 = "I'll round up your pies afterwards, and we'll see how to split them up."
 RescueToonGameComplete = "Well done! Now let's get Rain out of there..."

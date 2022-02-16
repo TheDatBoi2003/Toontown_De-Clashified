@@ -1257,6 +1257,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def hasTrackAccess(self, track):
         return self.trackArray[track]
 
+    def setRefundPoints(self, points):
+        self.refundPoints = points
+
     def setTrainingFrames(self, progress):
         self.trainingFrames = progress
         if hasattr(self, 'trackPage'):
@@ -1267,6 +1270,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def d_validateTrackChoice(self, track, index):
         self.sendUpdate('applyTrackChoice', [index, track])
+
+    def d_validateRefund(self, index):
+        self.sendUpdate('applyRefund', [index])
 
     def setTeleportAccess(self, teleportZoneArray):
         self.teleportZoneArray = teleportZoneArray

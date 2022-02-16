@@ -1276,6 +1276,9 @@ WITHDRAWAL = SuitAttacks.keys().index('Withdrawal')
 WHISTLE_BLOW = SuitAttacks.keys().index('WhistleBlow')
 WRITE_OFF = SuitAttacks.keys().index('WriteOff')
 
+SuitCheats = {'WorkersCompensation': ('finger-wag', ATK_TGT_SINGLE),}
+WORKERS_COMPENSATION = SuitCheats.keys().index('WorkersCompensation')
+
 
 def getFaceoffTaunt(suitName, doId):
     if suitName in SuitFaceoffTaunts:
@@ -1313,9 +1316,31 @@ def getAttackTaunt(attackName, index=None):
         return taunts[index]
     else:
         return random.choice(taunts)
+    
+def getCheatTauntIndex(cheatName):
+    if cheatName in SuitCheatTaunts:
+        taunts = SuitCheatTaunts[cheatName]
+        return random.randint(0, len(taunts) - 1)
+    else:
+        return 1
+
+
+def getCheatTaunt(cheatname, index=None):
+    if cheatname in SuitCheatTaunts:
+        taunts = SuitCheatTaunts[cheatname]
+    else:
+        taunts = TTLocalizer.SuitAttackDefaultTaunts
+    if index:
+        if index >= len(taunts):
+            notify.warning('index exceeds length of taunts list in getCheatTaunt')
+            return TTLocalizer.SuitAttackDefaultTaunts[0]
+        return taunts[index]
+    else:
+        return random.choice(taunts)
 
 
 SuitAttackTaunts = TTLocalizer.SuitAttackTaunts
+SuitCheatTaunts = TTLocalizer.SuitCheatTaunts
 
 TRAPPED_STATUS = 'trapped'
 LURED_STATUS = 'lured'
@@ -1327,8 +1352,8 @@ IMMUNE_STATUS = 'immune'
 SuitStatuses = [{'name': TRAPPED_STATUS, 'level': -1, 'damage': 0, 'toon': 0},
                 {'name': LURED_STATUS, 'rounds': 1, 'kbBonus': 0.5, 'decay': 100, 'toons': [], 'levels': []},
                 {'name': SOAKED_STATUS, 'rounds': 1, 'defense': -15},
-                {'name': MARKED_STATUS, 'rounds': 2, 'damage-mod': 0.08},
-                {'name': DMG_DOWN_STATUS, 'rounds': 1, 'accuracy-mod': 0.4},
+                {'name': MARKED_STATUS, 'rounds': 2, 'stacks': 0, 'damage-mod': 0.0},
+                {'name': DMG_DOWN_STATUS, 'rounds': 1, 'power-mod': 0.4},
                 {'name': IMMUNE_STATUS, 'rounds': 2}]
 ROUND_STATUSES = [LURED_STATUS, SOAKED_STATUS, MARKED_STATUS, DMG_DOWN_STATUS, IMMUNE_STATUS]
 
@@ -1355,7 +1380,7 @@ def makeStatusString(status):
     elif status['name'] == SOAKED_STATUS:
         dg.addInt16(status['defense'])
     elif status['name'] == MARKED_STATUS:
-        dg.addInt16(status['damage-mod'])
+        dg.addFloat32(status['damage-mod'])
 
     return dg.getMessage()
 
@@ -1375,5 +1400,5 @@ def getStatusFromString(statusString):
     elif status['name'] == SOAKED_STATUS:
         status['defense'] = dgi.getInt16()
     elif status['name'] == MARKED_STATUS:
-        status['damage-mod'] = dgi.getInt16()
+        status['damage-mod'] = dgi.getFloat32()
     return status

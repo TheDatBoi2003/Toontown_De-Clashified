@@ -1,6 +1,7 @@
 from math import ceil
 
 from direct.showbase.DirectObject import DirectObject
+from direct.showbase.MessengerGlobal import messenger
 
 from toontown.battle.calc.BattleCalculatorGlobals import *
 
@@ -57,15 +58,18 @@ class HealCalculatorAI(DirectObject):
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
         return healedToons > 0
 
-    def healToon(self, toon, attack, healing, position):
+    def healToon(self, attack, healing, toonId, position):
+        excess = 0
         if CAP_HEALS:
-            toonHp = self.getToonHp(toon)
-            toonMaxHp = self.getToonMaxHp(toon)
+            toonHp = self.getToonHp(toonId)
+            toonMaxHp = self.__getToonMaxHp(toonId)
             if toonHp + healing > toonMaxHp:
-                healing = toonMaxHp - toonHp
+                excess = toonHp + healing - toonMaxHp
+                healing -= self.excess
                 attack[TOON_HP_COL][position] = healing
-        self.toonHPAdjusts[toon] += healing
-        return healing
+        self.toonHPAdjusts[toonId] += healing
+        messenger.send('toon-healed', [attack, healing, toonId])
+        return excess
 
     def hurtToon(self, attack, toon):
         position = self.battle.activeToons.index(toon)
@@ -79,15 +83,15 @@ class HealCalculatorAI(DirectObject):
         self.toonHPAdjusts[toon] -= attack[SUIT_HP_COL][position]
         self.notify.debug('Toon %s now has %s health' % (toon, self.getToonHp(toon)))
 
-    def getToonHp(self, toonDoId):
-        toon = self.battle.getToon(toonDoId)
-        if toon and toonDoId in self.toonHPAdjusts:
-            return toon.hp + self.toonHPAdjusts[toonDoId]
+    def getToonHp(self, toonId):
+        toon = self.battle.getToon(toonId)
+        if toon and toonId in self.toonHPAdjusts:
+            return toon.hp + self.toonHPAdjusts[toonId]
         else:
             return 0
 
-    def getToonMaxHp(self, toonDoId):
-        toon = self.battle.getToon(toonDoId)
+    def __getToonMaxHp(self, toonId):
+        toon = self.battle.getToon(toonId)
         if toon:
             return toon.maxHp
         else:

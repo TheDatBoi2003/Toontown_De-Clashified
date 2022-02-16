@@ -992,6 +992,7 @@ dclass DistributedToon : DistributedPlayer {
   setInventory(blob = [0 * 7, 0 * 7, 0 * 7, 0 * 7, 1, 0 * 6, 1, 0 * 6, 0 * 7, 0 * 7]) required ownrecv db;
   setTrainingFrames(int8[] = [-1, -1, -1, -1, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2]) required ownrecv db;
   applyTrackChoice(uint8, uint8) airecv clsend;
+  applyRefund(uint8) airecv clsend;
   setMaxNPCFriends(uint16 = 16) required ownrecv db;
   setNPCFriendsDict(Friend[] = []) required ownrecv db;
   setDefaultShard(uint32 = 0) required ownrecv db;

@@ -1,3 +1,5 @@
+import importlib
+
 import toontown.battle.SuitBattleGlobals
 from DistributedBattleAI import *
 from toontown.battle import BattleExperienceAI
@@ -7,6 +9,7 @@ from toontown.battle.calc.HealCalculatorAI import *
 from toontown.battle.calc.LureCalculatorAI import *
 from toontown.battle.calc.SoundCalculatorAI import *
 from toontown.battle.calc.SquirtCalculatorAI import *
+from toontown.battle.calc import SuitCalculatorAI as DefaultSuitCalculatorAI
 from toontown.battle.calc.SuitCalculatorAI import *
 from toontown.battle.calc.ThrowCalculatorAI import *
 from toontown.battle.calc.TrapCalculatorAI import *
@@ -78,7 +81,12 @@ class BattleCalculatorAI(DirectObject):
         return luredSuits
 
     def createSuitCalc(self, suit):
-        self.suitCalculators[suit.getDoId()] = SuitCalculatorAI(self.battle, suit, self.healCalculator)
+        if suit.dna.name in SpecialCalculators:
+            # This will import the special SuitCalculator for this specific suit
+            calc = importlib.import_module(SpecialCalcDir + '.' + SpecialCalculators[suit.dna.name])
+        else:
+            calc = DefaultSuitCalculatorAI
+        self.suitCalculators[suit.getDoId()] = calc.SuitCalculatorAI(self.battle, suit, self.healCalculator)
 
     # BEGIN ROUND CALCULATIONS =========================================================================================
     # ==================================================================================================================
@@ -387,7 +395,7 @@ class BattleCalculatorAI(DirectObject):
                 result = result
 
             if atkTrack in HEALING_TRACKS:
-                targetsExist += self.healCalculator.getToonHp(target) > 0
+                targetsExist += self.healCalculator.__getToonHp(target) > 0
             else:
                 targetsExist += target.getHP() > 0
 
@@ -432,7 +440,7 @@ class BattleCalculatorAI(DirectObject):
             for suit in targets:
                 damageDone = getMostDamage(attack)
                 if damageDone > 0:
-                    messenger.send('suit-was-damaged', [attack[TOON_ID_COL], damageDone])
+                    messenger.send('toon-threat', [attack[TOON_ID_COL], damageDone])
                 if atkTrack == TRAP:
                     if suit in self.trapCalculator.trappedSuits:
                         trapInfo = suit.getStatus(TRAPPED_STATUS)
@@ -488,6 +496,7 @@ class BattleCalculatorAI(DirectObject):
             for position in xrange(len(targets)):
                 targetList = createToonTargetList(self.battle, toonId)
                 target = targets[position]
+                targetId = target.getDoId()
                 if hpBonus:
                     if target in targetList:
                         damageDone = attack[TOON_HPBONUS_COL][position]
@@ -503,18 +512,18 @@ class BattleCalculatorAI(DirectObject):
                 if damageDone <= 0 or self.immortalSuits:
                     continue
                 if track in BattleCalculatorGlobals.HEALING_TRACKS:
-                    totalDamages += self.healCalculator.healToon(target, attack, damageDone, position)
-                    continue
-
-                target.setHP(target.getHP() - damageDone)
-
-                targetId = target.getDoId()
-                if hpBonus:
-                    self.notify.debug(str(targetId) + ': suit takes ' + str(damageDone) + ' damage from HP-Bonus')
-                elif kbBonus:
-                    self.notify.debug(str(targetId) + ': suit takes ' + str(damageDone) + ' damage from KB-Bonus')
+                    excess = self.healCalculator.healToon(attack, damageDone, targetId, position)
+                    if excess:
+                        damageDone -= excess
+                    self.notify.debug(str(targetId) + ': toon takes ' + str(damageDone) + ' healing')
                 else:
-                    self.notify.debug(str(targetId) + ': suit takes ' + str(damageDone) + ' damage')
+                    self.suitCalculators[targetId].hitSuit(attack, damageDone)
+                    if hpBonus:
+                        self.notify.debug(str(targetId) + ': suit takes ' + str(damageDone) + ' damage from HP-Bonus')
+                    elif kbBonus:
+                        self.notify.debug(str(targetId) + ': suit takes ' + str(damageDone) + ' damage from KB-Bonus')
+                    else:
+                        self.notify.debug(str(targetId) + ': suit takes ' + str(damageDone) + ' damage')
                 totalDamages += damageDone
                 if target.getHP() <= 0:
                     if target.getSkeleRevives() >= 1:
@@ -524,6 +533,7 @@ class BattleCalculatorAI(DirectObject):
                         self.suitLeftBattle(target)
                         attack[SUIT_DIED_COL] = attack[SUIT_DIED_COL] | 1 << position
                         self.notify.debug('Suit ' + str(targetId) + ' bravely expired in combat')
+                        messenger.send('suit-killed', [target])
 
         return totalDamages
 

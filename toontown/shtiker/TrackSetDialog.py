@@ -21,7 +21,7 @@ class TrackSetDialog(DirectFrame, StateData.StateData):
                              image_scale=(1.6, 1, 1.2), image_pos=(0, 0, -0.05),
                              image_color=ToontownGlobals.GlobalDialogColor, text=TTLocalizer.TrackSetTitle,
                              text_scale=0.12, text_pos=(0, 0.4), borderWidth=(0.01, 0.01))
-        StateData.StateData.__init__(self, 'track-set-done')
+        StateData.StateData.__init__(self, 'close-track-selection')
 
         self.infoText = DirectLabel(parent=self, relief=None, scale=TTLocalizer.DSDintroText, pos=(-0.725, 0, 0.3),
                                     text=TTLocalizer.TrackSetInfo,
@@ -85,6 +85,12 @@ class TrackSetDialog(DirectFrame, StateData.StateData):
         self.applyDialog = None
         base.transitions.fadeScreen(0.5)
         self.frameNum = frameNum
+        trainingFrames = base.localAvatar.getTrainingFrames()
+        for i in xrange(len(Tracks)):
+            if trainingFrames.count(i) >= 3:
+                self.trackButtons[i]['state'] = DGG.DISABLED
+            else:
+                self.trackButtons[i]['state'] = DGG.NORMAL
         self.show()
         return
 

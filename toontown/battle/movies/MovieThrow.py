@@ -360,7 +360,6 @@ def __splatSuit(suit, level):
     splatTex = loader.loadTexture('phase_5/maps/' + splatDict[level] + '.png')
     splat = TextureStage(splatDict[level])
     splat.setMode(TextureStage.MDecal)
-    splat.setSavedResult()
     if suit.isSkeleton:
         suit.setTexture(splat, splatTex)
     else:
