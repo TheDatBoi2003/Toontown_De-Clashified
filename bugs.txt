@@ -1,4 +1,3 @@
-- Only the first cog gets its actions caulculated
 - When a gag kills, the movie ignores playing any toon-up clips
 - The zap movies sometimes prematurely jump to the death animation
 - Going sad takes max toons to 120 laff???
