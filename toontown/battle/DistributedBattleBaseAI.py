@@ -1276,7 +1276,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.joinableFsm.request('Joinable')
         self.runableFsm.request('Runable')
         for suit in self.activeSuits:
-            self.notify.info(suit.dna.name)
+            self.notify.debug(suit.dna.name)
         self.resetResponses()
         self.__requestAdjust()
         if not self.tutorialFlag:

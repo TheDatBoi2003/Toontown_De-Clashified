@@ -160,13 +160,13 @@ class LureCalculatorAI(DirectObject):
                 messenger.send('add-exp', [attack, LURE_TRACK, level, toonId])
 
     def __postToonStatusRounds(self):
-        for activeSuit in self.battle.activeSuits:
-            removedStatus = activeSuit.decStatusRounds(LURED_STATUS)
+        for suit in self.battle.activeSuits:
+            removedStatus = suit.decStatusRounds(LURED_STATUS)
             if removedStatus:
-                self.removeLureStatus(activeSuit, removedStatus)
+                self.removeLureStatus(suit, removedStatus)
             else:
-                return
                 # activeSuit.getStatus(LURED_STATUS)['decay'] -= 5 # This is lure decay in action
+                pass
 
     def __updateActiveToons(self):
         for suit in self.luredSuits:
