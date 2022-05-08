@@ -1217,6 +1217,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 self.toonAttacks[t] = getToonAttack(t)
             if self.toonAttacks[t][TOON_TRACK_COL] != NO_ATTACK:
                 self.addHelpfulToon(t)
+
         self.battleCalc.calculateRound()
         for t in self.activeToons:
             self.sendEarnedExperience(t)
@@ -1855,3 +1856,4 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
 
     def activateSuit(self, suit):
         self.activeSuits.append(suit)
+        self.battleCalc.createSuitCalc(suit)

@@ -50,6 +50,7 @@ class BattleCalculatorAI(DirectObject):
                                  ZAP: self.zapCalculator,
                                  THROW: self.throwCalculator,
                                  DROP: self.dropCalculator}
+        self.suitCalculators = {}
         self.toonAtkOrder = []
         self.toonSkillPtsGained = {}
         self.__clearBonuses()
@@ -79,13 +80,14 @@ class BattleCalculatorAI(DirectObject):
         self.notify.debug('Lured suits reported to battle: ' + repr(luredSuits))
         return luredSuits
 
-    def getSuitCalc(self, suit):
+    def createSuitCalc(self, suit):
         if suit.dna.name in SpecialCalculators:
             # This will import the special SuitCalculator for this specific suit
             calc = importlib.import_module(SpecialCalcDir + '.' + SpecialCalculators[suit.dna.name])
         else:
             calc = DefaultSuitCalculatorAI
-        return calc.SuitCalculatorAI(self.battle, suit, self.healCalculator)
+        for suit in self.battle.activeSuits:
+            self.suitCalculators[suit.getDoId()] = calc.SuitCalculatorAI(self.battle, suit, self.healCalculator)
 
     # BEGIN ROUND CALCULATIONS =========================================================================================
     # ==================================================================================================================
@@ -205,9 +207,8 @@ class BattleCalculatorAI(DirectObject):
     def __updateActiveToons(self):
         self.notify.debug('updateActiveToons()')
 
-        for suit in self.battle.activeSuits:
-            calculator = self.getSuitCalc(suit)
-            calculator.clearMissingAttackers()
+        for suitCalculator in self.suitCalculators.values():
+            suitCalculator.clearMissingAttackers()
 
         messenger.send('update-active-toons')
 
@@ -517,8 +518,7 @@ class BattleCalculatorAI(DirectObject):
                         damageDone -= excess
                     self.notify.debug(str(targetId) + ': toon takes ' + str(damageDone) + ' healing')
                 else:
-                    self.suitCalculator = self.getSuitCalc(target)
-                    self.suitCalculator.hitSuit(attack, damageDone)
+                    self.suitCalculators[targetId].hitSuit(attack, damageDone)
                     if hpBonus:
                         self.notify.debug(str(targetId) + ': suit takes ' + str(damageDone) + ' damage from HP-Bonus')
                     elif kbBonus:
@@ -688,9 +688,8 @@ class BattleCalculatorAI(DirectObject):
     # SUIT ATTACK SELECTION ============================================================================================
 
     def __calculateSuitAttacks(self):
-        for suit in self.battle.activeSuits:
-            self.suitCalculator = self.getSuitCalc(suit)
-            self.suitCalculator.calcSuitAttack()
+        for suitCalculator in self.suitCalculators.values():
+            suitCalculator.calcSuitAttack()
 
     # BATTLE ESCAPE FUNCTIONS ==========================================================================================
 
@@ -698,10 +697,9 @@ class BattleCalculatorAI(DirectObject):
         self.notify.debug('toonLeftBattle()' + str(toonId))
         if toonId in self.toonSkillPtsGained:
             del self.toonSkillPtsGained[toonId]
-        for suit in self.battle.activeSuits:
-            self.suitCalculator = self.getSuitCalc(suit)
-            self.suitCalculator.removeAttacker(toonId)
-            self.suitCalculator.removeAttackStats(toonId)
+        for suitCalculator in self.suitCalculators.values():
+            suitCalculator.removeAttacker(toonId)
+            suitCalculator.removeAttackStats(toonId)
 
         self.trapCalculator.clearTrapCreator(toonId)
 
@@ -712,9 +710,9 @@ class BattleCalculatorAI(DirectObject):
         self.trapCalculator.removeTrapStatus(suit)
         self.squirtCalculator.removeSoakStatus(suit)
         self.throwCalculator.removeMarkStatus(suit)
-        for suit in self.battle.activeSuits:
-            self.suitCalculator = self.getSuitCalc(suit)
-            self.suitCalculator.cleanup()
+        if suitId in self.suitCalculators:
+            self.suitCalculators[suitId].cleanup()
+            del self.suitCalculators[suitId]
 
     # VARIOUS PROPERTY GETTERS =========================================================================================
 
