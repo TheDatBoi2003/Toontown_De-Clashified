@@ -86,8 +86,15 @@ class BattleCalculatorAI(DirectObject):
             calc = importlib.import_module(SpecialCalcDir + '.' + SpecialCalculators[suit.dna.name])
         else:
             calc = DefaultSuitCalculatorAI
-        for suit in self.battle.activeSuits:
-            self.suitCalculators[suit.getDoId()] = calc.SuitCalculatorAI(self.battle, suit, self.healCalculator)
+        self.suitCalculators[suit.getDoId()] = calc.SuitCalculatorAI(self.battle, suit, self.healCalculator)
+
+    def getSuitCalc(self, suit):
+        if suit in self.battle.activeSuits:
+            suitId = suit.getDoId()
+            if suitId in self.suitCalculators.keys():
+                return self.suitCalculators[suitId]
+        return None
+
 
     # BEGIN ROUND CALCULATIONS =========================================================================================
     # ==================================================================================================================
@@ -518,7 +525,10 @@ class BattleCalculatorAI(DirectObject):
                         damageDone -= excess
                     self.notify.debug(str(targetId) + ': toon takes ' + str(damageDone) + ' healing')
                 else:
-                    self.suitCalculators[targetId].hitSuit(attack, damageDone)
+                    self.notify.info(self.suitCalculators.keys())
+                    calc = self.getSuitCalc(target)
+                    if calc:
+                        calc.hitSuit(attack, damageDone)
                     if hpBonus:
                         self.notify.debug(str(targetId) + ': suit takes ' + str(damageDone) + ' damage from HP-Bonus')
                     elif kbBonus:
@@ -688,8 +698,12 @@ class BattleCalculatorAI(DirectObject):
     # SUIT ATTACK SELECTION ============================================================================================
 
     def __calculateSuitAttacks(self):
-        for suitCalculator in self.suitCalculators.values():
-            suitCalculator.calcSuitAttack()
+        self.notify.info(self.suitCalculators.keys())
+
+        for suit in self.battle.activeSuits:
+            calc = self.getSuitCalc(suit)
+            if calc:
+                calc.calcSuitAttack()
 
     # BATTLE ESCAPE FUNCTIONS ==========================================================================================
 
@@ -710,9 +724,10 @@ class BattleCalculatorAI(DirectObject):
         self.trapCalculator.removeTrapStatus(suit)
         self.squirtCalculator.removeSoakStatus(suit)
         self.throwCalculator.removeMarkStatus(suit)
-        if suitId in self.suitCalculators:
+        if suitId in self.suitCalculators.keys():
             self.suitCalculators[suitId].cleanup()
             del self.suitCalculators[suitId]
+
 
     # VARIOUS PROPERTY GETTERS =========================================================================================
 
