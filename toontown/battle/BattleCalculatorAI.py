@@ -96,6 +96,13 @@ class BattleCalculatorAI(DirectObject):
         return None
 
 
+    def getSuitCalc(self, suit):
+        if suit in self.battle.activeSuits:
+            suitId = suit.getDoId()
+            if suitId in self.suitCalculators.keys():
+                return self.suitCalculators[suitId]
+        return None
+
     # BEGIN ROUND CALCULATIONS =========================================================================================
     # ==================================================================================================================
 
