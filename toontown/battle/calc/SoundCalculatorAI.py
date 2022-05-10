@@ -20,7 +20,7 @@ class SoundCalculatorAI(DirectObject):
         atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack)
         targetList = createToonTargetList(self.battle, toonId)
         toon = self.battle.getToon(toonId)
-        prestige, propBonus = toon.checkTrackPrestige(atkTrack), getToonPropBonus(self.battle, atkTrack)
+        prestige, propBonus = toon.getTrackPrestige(atkTrack), getToonPropBonus(self.battle, atkTrack)
         suits = self.battle.activeSuits
         results = [0 for _ in xrange(len(suits))]
         targetsHit = 0

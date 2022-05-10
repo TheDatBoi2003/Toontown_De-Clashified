@@ -3588,8 +3588,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def setTrackPrestige(self, trackArray):
         self.trackPrestige = trackArray
 
-    def checkTrackPrestige(self, track):
-        if track:
+    def getTrackPrestige(self, track):
+        if 0 <= track <= ToontownBattleGlobals.MAX_TRACK_INDEX:
             return self.trackPrestige[track]
         else:
             return None

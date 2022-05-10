@@ -101,7 +101,7 @@ def doDamageCalc(atkLevel, atkTrack, toon):
 def getToonPrestige(battle, toonId, track):
     toon = battle.getToon(toonId)
     if toon:
-        return toon.checkTrackPrestige(track)
+        return toon.getTrackPrestige(track)
     else:
         return False
 

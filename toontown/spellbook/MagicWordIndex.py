@@ -593,6 +593,21 @@ class Teleport(MagicWord):
 #
 #         return msg
 
+class SetRefundPoints(MagicWord):
+    aliases = ["refunds", "refundPoints", "refundPts"]
+    desc = "Grants all the gag tracks, with the option of leaving one out."
+    execLocation = MagicWordConfig.EXEC_LOC_SERVER
+    arguments = [("points", int, False, 99)]
+
+    def handleWord(self, invoker, avId, toon, *args):
+        points = args[0]
+
+        if not 0 <= points <= 99:
+            return "Invalid refund points! Must be between 0 and 99."
+
+        toon.b_setRefundPoints(points)
+        return "Set your refund points to %s" % (points)
+
 
 class Catalog(MagicWord):
     desc = "Gives the toon a new catalog."

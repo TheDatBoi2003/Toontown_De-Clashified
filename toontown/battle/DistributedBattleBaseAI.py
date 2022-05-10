@@ -363,13 +363,12 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 if track == HEAL:  # heal joke assignment
                     if toonAttack[TOON_LVL_COL] == 1:
                         toonAttack[TOON_HPBONUS_COL].append(random.randint(0, 10000))
-                elif track in SOS_TRACKS:
-                    target = toonAttack[TOON_TGT_COL]
-                elif track == HEAL:
                     if self.activeToons.count(toonAttack[TOON_TGT_COL]) != 0:
                         target = self.activeToons.index(toonAttack[TOON_TGT_COL])
                     else:
                         target = -1
+                elif track in SOS_TRACKS:
+                    target = toonAttack[TOON_TGT_COL]
                 elif suitIds.count(toonAttack[TOON_TGT_COL]) != 0:
                     target = suitIds.index(toonAttack[TOON_TGT_COL])
                 else:
@@ -1460,6 +1459,12 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                                     self.notify.warning('Invalid targetIndex %s in hps %s.' % (targetIndex, hps))
                                     hp = 0
                                 toonHpDict[toon.doId][0] += hp
+                        selfToon = self.getToon(toonId)
+                        if selfToon.getTrackPrestige(HEAL_TRACK):
+                            toonIndex = self.activeToons.index(toonId)
+                            toonHpDict[toonId][0] += hps[toonIndex]
+                            self.notify.debug('HEAL: toon healed self for hp: %d' % hps[toonIndex])
+
                     elif attackAffectsGroup(track, level, attack[TOON_TRACK_COL]) or track == ZAP:
                         for suit in self.activeSuits:
                             targetIndex = self.activeSuits.index(suit)

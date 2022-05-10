@@ -19,6 +19,7 @@ from toontown.toonbase.ToontownBattleGlobals import RAILROAD_LEVEL_INDEX
 
 class BattleCalculatorAI(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('BattleCalculatorAI')
+    notify.setDebug(True)
     toonsAlwaysHit = simbase.config.GetBool('toons-always-hit', 0)
     toonsAlwaysMiss = simbase.config.GetBool('toons-always-miss', 0)
     toonsAlways5050 = simbase.config.GetBool('toons-always-5050', 0)
@@ -491,8 +492,6 @@ class BattleCalculatorAI(DirectObject):
         if atkTrack != PETSOS and atkLevel < self.creditLevel:
             if atkTrack in [TRAP, LURE]:
                 pass
-            elif atkTrack == HEAL and damagesDone:
-                self.__addAttackExp(attack)
             elif damagesDone:
                 self.__addAttackExp(attack)
 
@@ -510,7 +509,6 @@ class BattleCalculatorAI(DirectObject):
             for position in xrange(len(targets)):
                 targetList = createToonTargetList(self.battle, toonId)
                 target = targets[position]
-                targetId = target.getDoId()
                 if hpBonus:
                     if target in targetList:
                         damageDone = attack[TOON_HPBONUS_COL][position]
@@ -526,12 +524,12 @@ class BattleCalculatorAI(DirectObject):
                 if damageDone <= 0 or self.immortalSuits:
                     continue
                 if track in BattleCalculatorGlobals.HEALING_TRACKS:
-                    excess = self.healCalculator.healToon(attack, damageDone, targetId, position)
+                    excess = self.healCalculator.healToon(attack, damageDone, target, position)
                     if excess:
                         damageDone -= excess
-                    self.notify.debug(str(targetId) + ': toon takes ' + str(damageDone) + ' healing')
+                    self.notify.debug(str(target) + ': toon takes ' + str(damageDone) + ' healing')
                 else:
-                    self.notify.info(self.suitCalculators.keys())
+                    targetId = target.getDoId()
                     calc = self.getSuitCalc(target)
                     if calc:
                         calc.hitSuit(attack, damageDone)
@@ -541,17 +539,16 @@ class BattleCalculatorAI(DirectObject):
                         self.notify.debug(str(targetId) + ': suit takes ' + str(damageDone) + ' damage from KB-Bonus')
                     else:
                         self.notify.debug(str(targetId) + ': suit takes ' + str(damageDone) + ' damage')
+                    if target.getHP() <= 0:
+                        if target.getSkeleRevives() >= 1:
+                            target.useSkeleRevive()
+                            attack[SUIT_REVIVE_COL] = attack[SUIT_REVIVE_COL] | 1 << position
+                        else:
+                            self.suitLeftBattle(target)
+                            attack[SUIT_DIED_COL] = attack[SUIT_DIED_COL] | 1 << position
+                            self.notify.debug('Suit ' + str(targetId) + ' bravely expired in combat')
+                            messenger.send('suit-killed', [target])
                 totalDamages += damageDone
-                if target.getHP() <= 0:
-                    if target.getSkeleRevives() >= 1:
-                        target.useSkeleRevive()
-                        attack[SUIT_REVIVE_COL] = attack[SUIT_REVIVE_COL] | 1 << position
-                    else:
-                        self.suitLeftBattle(target)
-                        attack[SUIT_DIED_COL] = attack[SUIT_DIED_COL] | 1 << position
-                        self.notify.debug('Suit ' + str(targetId) + ' bravely expired in combat')
-                        messenger.send('suit-killed', [target])
-
         return totalDamages
 
     # TOON DAMAGE BONUS CALCULATION ====================================================================================
@@ -597,7 +594,7 @@ class BattleCalculatorAI(DirectObject):
                             if attack[TOON_TRACK_COL] == DROP:
                                 numOrgs = 0
                                 for toonId in self.battle.activeToons:
-                                    if self.battle.getToon(toonId).checkTrackPrestige(DROP):
+                                    if self.battle.getToon(toonId).getTrackPrestige(DROP):
                                         numOrgs += 1
 
                                 attack[TOON_HPBONUS_COL][targetPos] = math.ceil(
@@ -704,8 +701,6 @@ class BattleCalculatorAI(DirectObject):
     # SUIT ATTACK SELECTION ============================================================================================
 
     def __calculateSuitAttacks(self):
-        self.notify.info(self.suitCalculators.keys())
-
         for suit in self.battle.activeSuits:
             calc = self.getSuitCalc(suit)
             if calc:
@@ -725,7 +720,7 @@ class BattleCalculatorAI(DirectObject):
 
     def suitLeftBattle(self, suit):
         suitId = suit.getDoId()
-        self.notify.info('suitLeftBattle(): ' + str(suitId))
+        self.notify.debug('suitLeftBattle(): ' + str(suitId))
         self.lureCalculator.removeLureStatus(suit)
         self.trapCalculator.removeTrapStatus(suit)
         self.squirtCalculator.removeSoakStatus(suit)

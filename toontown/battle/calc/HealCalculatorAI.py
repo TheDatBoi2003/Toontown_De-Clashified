@@ -8,6 +8,7 @@ from toontown.battle.calc.BattleCalculatorGlobals import *
 
 class HealCalculatorAI(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('HealCalculatorAI')
+    notify.setDebug(True)
 
     def __init__(self, battle, statusCalculator):
         DirectObject.__init__(self)
@@ -28,21 +29,22 @@ class HealCalculatorAI(DirectObject):
         prestige, propBonus = getToonPrestige(self.battle, toonId, HEAL), getToonPropBonus(self.battle, HEAL)
         if not attackHasHit(attack, suit=0):
             healing *= 0.2
-        self.notify.debug('toon does ' + str(healing) + ' healing to toon(s)')
+        self.notify.debug('toon does %d healing to toon(s)' % healing)
 
         toons = self.battle.activeToons
+        results = [0 for _ in xrange(len(toons))]
+
         if prestige or propBonus:
             if not (prestige and propBonus) or not PropAndPrestigeStack:
                 healAmt = int(ceil(healing * 0.5))
             else:
                 healAmt = healing
-            attack[TOON_HP_COL][toons.index(toon)] = healAmt
+            results[toons.index(toonId)] = healAmt
             self.notify.debug('Prestige Bonus: toon does %d self-healing' % healAmt)
 
         healing /= len(targetList)
         self.notify.debug('Splitting heal among targets')
 
-        results = [0 for _ in xrange(len(toons))]
         healedToons = 0
         for target in targetList:
 
@@ -56,6 +58,7 @@ class HealCalculatorAI(DirectObject):
 
             results[toons.index(target)] = healing
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
+        self.notify.debug(results)
         return healedToons > 0
 
     def healToon(self, attack, healing, toonId, position):
@@ -65,7 +68,7 @@ class HealCalculatorAI(DirectObject):
             toonMaxHp = self.__getToonMaxHp(toonId)
             if toonHp + healing > toonMaxHp:
                 excess = toonHp + healing - toonMaxHp
-                healing -= self.excess
+                healing -= excess
                 attack[TOON_HP_COL][position] = healing
         self.toonHPAdjusts[toonId] += healing
         messenger.send('toon-healed', [attack, healing, toonId])

@@ -313,7 +313,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         self.detailDataLabel.show()
         exp = self.toon.experience.getExp(track)
         damage = getAvPropDamage(track, level, exp)
-        prestigeBonus = self.toon.checkTrackPrestige(track)
+        prestigeBonus = self.toon.getTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         accuracy = AvPropAccuracy[track][level]
         damageBonusStr = ''
@@ -355,7 +355,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                                                  'bonus': damageBonusStr,
                                                  'singleOrGroup': self.getSingleGroupStr(track, level)})
         elif track is TRAP_TRACK:
-            if self.toon.checkTrackPrestige(track):
+            if self.toon.getTrackPrestige(track):
                 healthyDamage = getTrapDamage(level, self.toon, healthBonus=1)
                 execDamage = getTrapDamage(level, self.toon, execBonus=1, healthBonus=1)
                 healthyStr = 'Healthy Cog: %d|%d' % (healthyDamage, execDamage)
@@ -368,7 +368,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                                                  'healthy': healthyStr,
                                                  'singleOrGroup': self.getSingleGroupStr(track, level)})
         elif track is LURE_TRACK:
-            if self.toon.checkTrackPrestige(track):
+            if self.toon.getTrackPrestige(track):
                 knockback = 65
             else:
                 knockback = 50
@@ -377,7 +377,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
                                                  'bonus': knockback,
                                                  'singleOrGroup': self.getSingleGroupStr(track, level)})
         elif track is ZAP_TRACK:
-            if self.toon.checkTrackPrestige(track):
+            if self.toon.getTrackPrestige(track):
                 zapMultipliers = AvZapJumps[1]
             else:
                 zapMultipliers = AvZapJumps[0]
@@ -1092,7 +1092,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         return (curSkill, retVal)
 
     def makePressable(self, button, track):
-        prestige = self.toon.checkTrackPrestige(track)
+        prestige = self.toon.getTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
         if bonus:
@@ -1108,7 +1108,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
             button.configure(image_color=imageColor)
 
     def makeNoncreditPressable(self, button, track):
-        prestige = self.toon.checkTrackPrestige(track)
+        prestige = self.toon.getTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
         if bonus:
@@ -1124,14 +1124,14 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
             button.configure(image_color=imageColor)
 
     def makeDeletePressable(self, button, track):
-        prestige = self.toon.checkTrackPrestige(track)
+        prestige = self.toon.getTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=self.ShadowColor,
                          geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
         button.configure(image_color=self.DeletePressableImageColor)
 
     def makeUnpressable(self, button, track):
-        prestige = self.toon.checkTrackPrestige(track)
+        prestige = self.toon.getTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
         if bonus:
@@ -1143,7 +1143,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         button.configure(image_color=imageColor)
 
     def makeBookUnpressable(self, button, track):
-        prestige = self.toon.checkTrackPrestige(track)
+        prestige = self.toon.getTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
         if bonus:
@@ -1183,7 +1183,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     def updateButton(self, track, level):
         button = self.buttons[track][level]
         button['text'] = str(self.numItem(track, level))
-        prestige = self.toon.checkTrackPrestige(track)
+        prestige = self.toon.getTrackPrestige(track)
         propBonus = self.checkPropBonus(track)
         bonus = prestige or propBonus
         if bonus:

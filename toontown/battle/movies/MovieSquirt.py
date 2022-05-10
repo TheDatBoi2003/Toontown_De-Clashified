@@ -314,7 +314,7 @@ def __doFlower(squirt, delay, fShowStun):
         tracks.append(
             __getSuitTrack(suit, tContact, tSuitDodges, hp, hpBonus, kbBonus, 'squirt-small-react', died, leftSuits,
                            rightSuits, battle, fShowStun, attackLevel=0, revived=revived,
-                           prest=toon.checkTrackPrestige(SQUIRT_TRACK)))
+                           prest=toon.getTrackPrestige(SQUIRT_TRACK)))
     return tracks
 
 
@@ -368,7 +368,7 @@ def __doWaterGlass(squirt, delay, fShowStun):
         tracks.append(
             __getSuitTrack(suit, tContact, tSuitDodges, hp, hpBonus, kbBonus, 'squirt-small-react', died, leftSuits,
                            rightSuits, battle, fShowStun, attackLevel=1, revived=revived,
-                           prest=toon.checkTrackPrestige(SQUIRT_TRACK)))
+                           prest=toon.getTrackPrestige(SQUIRT_TRACK)))
     return tracks
 
 
@@ -419,7 +419,7 @@ def __doWaterGun(squirt, delay, fShowStun):
         tracks.append(
             __getSuitTrack(suit, tContact, tSuitDodges, hp, hpBonus, kbBonus, 'squirt-small-react', died, leftSuits,
                            rightSuits, battle, fShowStun, attackLevel=2, revived=revived,
-                           prest=toon.checkTrackPrestige(SQUIRT_TRACK)))
+                           prest=toon.getTrackPrestige(SQUIRT_TRACK)))
     return tracks
 
 
@@ -491,7 +491,7 @@ def __doWaterBalloon(squirt, delay, fShowStun):
         tracks.append(
             __getSuitTrack(suit, tContact, tSuitDodges, hp, hpBonus, kbBonus, 'squirt-small-react', died, leftSuits,
                            rightSuits, battle, fShowStun, attackLevel=3, revived=revived,
-                           prest=toon.checkTrackPrestige(SQUIRT_TRACK)))
+                           prest=toon.getTrackPrestige(SQUIRT_TRACK)))
     return tracks
 
 
@@ -545,7 +545,7 @@ def __doSeltzerBottle(squirt, delay, fShowStun):
         tracks.append(
             __getSuitTrack(suit, tContact, tSuitDodges, hp, hpBonus, kbBonus, 'squirt-small-react', died, leftSuits,
                            rightSuits, battle, fShowStun, attackLevel=4, revived=revived,
-                           prest=toon.checkTrackPrestige(SQUIRT_TRACK)))
+                           prest=toon.getTrackPrestige(SQUIRT_TRACK)))
     return tracks
 
 
@@ -634,7 +634,7 @@ def __doFireHose(squirt, delay, fShowStun):
         tracks.append(
             __getSuitTrack(suit, tContact, tSuitDodges, hp, hpBonus, kbBonus, 'squirt-small-react', died, leftSuits,
                            rightSuits, battle, fShowStun, attackLevel=5, revived=revived,
-                           prest=toon.checkTrackPrestige(SQUIRT_TRACK)))
+                           prest=toon.getTrackPrestige(SQUIRT_TRACK)))
     return tracks
 
 
@@ -706,7 +706,7 @@ def __doStormCloud(squirt, delay, fShowStun):
         tracks.append(
             __getSuitTrack(suit, tContact, tSuitDodges, hp, hpBonus, kbBonus, 'soak', died, leftSuits, rightSuits,
                            battle, fShowStun, beforeStun=2.6, afterStun=2.3, attackLevel=6, revived=revived,
-                           prest=toon.checkTrackPrestige(SQUIRT_TRACK)))
+                           prest=toon.getTrackPrestige(SQUIRT_TRACK)))
     return tracks
 
 
@@ -765,7 +765,7 @@ def __doGeyser(squirt, delay, fShowStun, uberClone=0):
                                __getSuitTrack(suit, tContact, tSuitDodges, hp, hpBonus, kbBonus, 'soak', died,
                                               leftSuits, rightSuits, battle, fShowStun, beforeStun=2.6,
                                               afterStun=2.3, attackLevel=7, uberRepeat=uberClone, revived=revived,
-                                              prest=toon.checkTrackPrestige(SQUIRT_TRACK))))
+                                              prest=toon.getTrackPrestige(SQUIRT_TRACK))))
 
     return tracks
 

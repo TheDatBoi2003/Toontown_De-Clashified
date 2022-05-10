@@ -48,33 +48,13 @@ def doDrops(drops):
         return None, None
     npcArrintervals, npcDepartures, npcToons = MovieNPCSOS.doNPCTeleports(drops)
     suitDropsDict = {}
-    groupDrops = []
     for drop in drops:
-        track = drop['track']
-        level = drop['level']
-        targets = drop['target']
-        if len(targets) == 1:
-            suitId = targets[0]['suit'].doId
-            if suitId in suitDropsDict:
-                suitDropsDict[suitId].append((drop, targets[0]))
-            else:
-                suitDropsDict[suitId] = [(drop, targets[0])]
-        elif level == SHIP_LEVEL_INDEX:
-            groupDrops.append(drop)
+        target = drop['target']
+        suitId = target['suit'].doId
+        if suitId in suitDropsDict:
+            suitDropsDict[suitId].append((drop, target))
         else:
-            for target in targets:
-                suitId = target['suit'].doId
-                if suitId in suitDropsDict:
-                    otherDrops = suitDropsDict[suitId]
-                    alreadyInList = 0
-                    for oDrop in otherDrops:
-                        if oDrop[0]['toon'] == drop['toon']:
-                            alreadyInList = 1
-
-                    if alreadyInList == 0:
-                        suitDropsDict[suitId].append((drop, target))
-                else:
-                    suitDropsDict[suitId] = [(drop, target)]
+            suitDropsDict[suitId] = [(drop, target)]
 
     suitDrops = MovieUtil.sortAttacks(suitDropsDict)
 
@@ -90,10 +70,6 @@ def doDrops(drops):
 
     dropTrack = Sequence(npcArrintervals, mainTrack, npcDepartures)
     camDuration = mainTrack.getDuration()
-    if groupDrops:
-        interval = __doGroupDrops(groupDrops)
-        dropTrack.append(interval)
-        camDuration += interval.getDuration()
     enterDuration = npcArrintervals.getDuration()
     exitDuration = npcDepartures.getDuration()
     camTrack = MovieCamera.chooseDropShot(drops, suitDropsDict, camDuration, enterDuration, exitDuration)
@@ -162,60 +138,6 @@ def __doSuitDrops(dropTargetPairs, npcs, npcDrops):
                 alreadyDodged = 1
 
     return toonTracks
-
-
-def __doGroupDrops(groupDrops):
-    toonTracks = Parallel()
-    delay = 0.0
-    alreadyDodged = 0
-    alreadyTeased = 0
-    for drop in groupDrops:
-        battle = drop['battle']
-        level = drop['level']
-        centerPos = calcAvgSuitPos(drop)
-        targets = drop['target']
-        numTargets = len(targets)
-        closestTarget = -1
-        nearestDistance = 100000.0
-        for i in xrange(numTargets):
-            suit = drop['target'][i]['suit']
-            suitPos = suit.getPos(battle)
-            displacement = Vec3(centerPos)
-            displacement -= suitPos
-            distance = displacement.lengthSquared()
-            if distance < nearestDistance:
-                closestTarget = i
-                nearestDistance = distance
-
-        lastDrop = groupDrops.index(drop) == len(groupDrops) - 1
-        track = __dropGroupObject(drop, delay, closestTarget, alreadyDodged, alreadyTeased, lastDrop)
-        if track:
-            toonTracks.append(track)
-            delay = delay + TOON_DROP_SUIT_DELAY
-        hp = drop['target'][closestTarget]['hp']
-        if hp <= 0:
-            if level > ANVIL_LEVEL_INDEX:
-                alreadyTeased = 1
-            else:
-                alreadyDodged = 1
-
-    return toonTracks
-
-
-def __dropGroupObject(drop, delay, closestTarget, alreadyDodged, alreadyTeased, lastDrop=0):
-    level = drop['level']
-    objName = objects[level]
-    target = drop['target'][closestTarget]
-    npcDrops = {}
-    npcs = []
-    returnedParallel = __dropObject(drop, delay, objName, level, target, npcDrops, lastDrop)
-    for i in xrange(len(drop['target'])):
-        target = drop['target'][i]
-        suitTrack = __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, target, npcs, lastDrop)
-        if suitTrack:
-            returnedParallel.append(suitTrack)
-
-    return returnedParallel
 
 
 def __dropObjectForSingle(drop, delay, objName, level, alreadyDodged, alreadyTeased, npcs, target, npcDrops, lastDrop=0):

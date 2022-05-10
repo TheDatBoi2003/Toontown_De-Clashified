@@ -555,12 +555,11 @@ class Movie(DirectObject.DirectObject):
                     attackDict['toonId'] = toonId
                     attackDict['petId'] = petId
                 if track == SOS:
-                    targetId = toonAttack[TOON_TGT_COL]
-                    if targetId == base.localAvatar.doId:
+                    if toonAttack[TOON_TGT_COL] == base.localAvatar.doId:
                         target = base.localAvatar
                         attackDict['targetType'] = 'callee'
                     elif toon == base.localAvatar:
-                        target = base.cr.identifyAvatar(targetId)
+                        target = base.cr.identifyAvatar(toonAttack[TOON_TGT_COL])
                         attackDict['targetType'] = 'caller'
                     else:
                         target = None
@@ -604,10 +603,10 @@ class Movie(DirectObject.DirectObject):
                         if len(targets) > 0:
                             attackDict['target'] = targets
                 elif track == HEAL:
+                    targets = []
                     if levelAffectsGroup(HEAL, level):
-                        targets = []
                         for toon in toons:
-                            if toon != toonId and toon != -1:
+                            if toon != -1 and toon != toonId:
                                 target = self.battle.findToon(toon)
                                 if target is None:
                                     continue
@@ -615,23 +614,22 @@ class Movie(DirectObject.DirectObject):
                                 self.notify.debug(
                                     'HEAL: toon: %d healed for hp: %d' % (target.doId, hps[toons.index(toon)]))
                                 targets.append(toonDict)
-
-                        if len(targets) > 0:
-                            attackDict['target'] = targets
-                        else:
-                            targetGone = 1
                     else:
                         targetIndex = toonAttack[TOON_TGT_COL]
-                        if targetIndex < 0:
-                            targetGone = 1
-                        else:
-                            targetId = toons[targetIndex]
-                            target = self.battle.findToon(targetId)
-                            if target is not None:
-                                toonDict = {'toon': target, 'hp': hps[targetIndex]}
-                                attackDict['target'] = toonDict
-                            else:
-                                targetGone = 1
+                        target = self.battle.findToon(toons[targetIndex])
+                        if target:
+                            toonDict = {'toon': target, 'hp': hps[targetIndex]}
+                            targets.append(toonDict)
+                    if len(targets) > 0:
+                        selfTarget = self.battle.findToon(toonId)
+                        if selfTarget.getTrackPrestige(HEAL_TRACK):
+                            toonDict = {'toon': selfTarget, 'hp': hps[toons.index(toonId)]}
+                            self.notify.debug('HEAL: self for hp: %d' % (hps[toons.index(toonId)]))
+                            targets.append(toonDict)
+
+                        attackDict['target'] = targets
+                    else:
+                        targetGone = 1
                 elif attackAffectsGroup(track, level, toonAttack[TOON_TRACK_COL]):
                     targets = []
                     for suit in suits:
@@ -725,10 +723,7 @@ class Movie(DirectObject.DirectObject):
                             pass
                         if suitDict['died'] != 0:
                             pass
-                        if track == DROP or track == TRAP:
-                            attackDict['target'] = [suitDict]
-                        else:
-                            attackDict['target'] = suitDict
+                        attackDict['target'] = suitDict
                 attackDict['sidestep'] = toonAttack[TOON_MISSED_COL]
                 if 'npcId' in attackDict:
                     attackDict['sidestep'] = 0

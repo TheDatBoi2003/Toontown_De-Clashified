@@ -60,7 +60,7 @@ class ZapCalculatorAI(DirectObject):
         targetsHit = 0
         attack[TOON_HPBONUS_COL] = [-1 for _ in xrange(len(suits))]
 
-        prestige = toon.checkTrackPrestige(ZAP)
+        prestige = toon.getTrackPrestige(ZAP)
         propBonus = getToonPropBonus(self.battle, ZAP)
         if PropAndPrestigeStack and prestige and propBonus:
             soakBonuses = AvZapJumps[2]

@@ -325,7 +325,7 @@ def __throwPie(throw, delay, hitCount):
             suitInterval = ActorInterval(suit, 'pie-small-react')
         suitResponseTrack.append(Wait(delay + tPieHitsSuit))
         suitResponseTrack.append(showDamage)
-        if toon.checkTrackPrestige(THROW_TRACK):
+        if toon.getTrackPrestige(THROW_TRACK):
             suitResponseTrack.append(Func(__splatSuit, suit, level))
         suitResponseTrack.append(Func(suit.updateHealthBar, hp))
         suitResponseTrack.append(suitInterval)

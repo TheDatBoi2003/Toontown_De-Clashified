@@ -358,7 +358,7 @@ AvPropTarget = (0, 1, 0, 2, 1, 1, 1, 1)
 def getTrapDamage(trapLevel, toon, suit=None, execBonus=0, healthBonus=0):
     if suit:
         execBonus = suit.isExecutive
-        healthBonus = toon.checkTrackPrestige(TRAP_TRACK) and suit.currHP >= suit.maxHP / 2
+        healthBonus = toon.getTrackPrestige(TRAP_TRACK) and suit.currHP >= suit.maxHP / 2
     damage = getAvPropDamage(TRAP_TRACK, trapLevel, toon.experience.getExp(TRAP_TRACK))
     if healthBonus:
         damage += math.ceil(damage * TRAP_HEALTH_BONUS)

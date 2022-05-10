@@ -83,7 +83,7 @@ class SquirtCalculatorAI(DirectObject):
         targets.append(target)
         activeSuits = self.battle.activeSuits
         suitIndex = activeSuits.index(target)
-        if toon.checkTrackPrestige(SQUIRT):
+        if toon.getTrackPrestige(SQUIRT):
             if suitIndex - 1 >= 0:
                 targets.append(activeSuits[suitIndex - 1])
             if suitIndex + 1 < len(activeSuits):

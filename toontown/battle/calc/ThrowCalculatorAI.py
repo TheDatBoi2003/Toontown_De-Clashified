@@ -23,7 +23,7 @@ class ThrowCalculatorAI(DirectObject):
         targetList = createToonTargetList(self.battle, toonId)
         suits = self.battle.activeSuits
         toon = self.battle.getToon(toonId)
-        prestige, propBonus = toon.checkTrackPrestige(atkTrack), getToonPropBonus(self.battle, atkTrack)
+        prestige, propBonus = toon.getTrackPrestige(atkTrack), getToonPropBonus(self.battle, atkTrack)
         results = [0 for _ in xrange(len(suits))]
         targetsHit = 0
         for target in targetList:

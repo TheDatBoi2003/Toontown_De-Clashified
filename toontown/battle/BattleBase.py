@@ -88,16 +88,7 @@ def attackAffectsGroup(track, level, type=None):
 
 
 def getToonAttack(toonId, track=NO_ATTACK, level=-1, target=-1):
-    return [toonId,
-            track,
-            level,
-            target,
-            [],
-            0,
-            [],
-            [],
-            0,
-            0]
+    return [toonId, track, level, target, [], 0, [], [], 0, 0]
 
 
 def getDefaultSuitAttacks():
