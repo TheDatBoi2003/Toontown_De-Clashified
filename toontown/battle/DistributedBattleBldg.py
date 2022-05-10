@@ -59,17 +59,13 @@ class DistributedBattleBldg(DistributedBattleBase.DistributedBattleBase):
             self.notify.warning('__faceOff(): no toons.')
             return
         elevatorPos = self.toons[0].getPos()
-        if len(self.suits) == 1:
-            leaderIndex = 0
-        elif self.bossBattle == 1:
-            leaderIndex = 1
-        else:
-            maxTypeNum = -1
+        leaderIndex = 0
+        if len(self.suits) > 1:
+            maxSuitLevel = -1
             for suit in self.suits:
-                suitTypeNum = SuitDNA.getSuitType(suit.dna.name)
-                if maxTypeNum < suitTypeNum:
-                    maxTypeNum = suitTypeNum
-                    leaderIndex = self.suits.index(suit)
+                if maxSuitLevel < suit.level:
+                    levels = [suit.level for suit in self.suits]
+                    leaderIndex = levels.index(max(levels))
 
         delay = FACEOFF_TAUNT_T
         suitTrack = Parallel()

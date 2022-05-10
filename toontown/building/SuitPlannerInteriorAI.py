@@ -38,7 +38,6 @@ class SuitPlannerInteriorAI:
 
     def _genSuitInfos(self, numFloors, bldgLevel, bldgTrack, maxLvlMod=0, maxSuits=SuitBattleGlobals.MAX_SUIT_CAPACITY):
         self.suitInfos = []
-        self.bossSpot = -1
         self.notify.debug('\n\ngenerating suitsInfos with numFloors (' + str(numFloors) + ') bldgLevel (' + str(bldgLevel) + '+1) and bldgTrack (' + str(bldgTrack) + ')')
         for currFloor in xrange(numFloors):
             infoDict = {}
@@ -49,16 +48,6 @@ class SuitPlannerInteriorAI:
                 numActive = min(self.dbg_nSuits1stRound, maxActive)
             else:
                 numActive = random.randint(1, maxActive)
-            if currFloor + 1 == numFloors and len(lvls) > 1:
-                origBossSpot = len(lvls) - 1
-                if numActive == 1:
-                    newBossSpot = 0
-                else:
-                    newBossSpot = lvls.index(max(lvls[:numActive]))
-                tmp = lvls[newBossSpot]
-                lvls[newBossSpot] = lvls[origBossSpot]
-                lvls[origBossSpot] = tmp
-                self.bossSpot = newBossSpot
             bldgInfo = SuitBuildingGlobals.SuitBuildingInfo[bldgLevel]
             if len(bldgInfo) > SuitBuildingGlobals.SUIT_BLDG_INFO_REVIVES:
                 revives = bldgInfo[SuitBuildingGlobals.SUIT_BLDG_INFO_REVIVES][0]
@@ -117,11 +106,11 @@ class SuitPlannerInteriorAI:
             lvlList.append(newLvl)
             lvlPool -= newLvl
 
+        lvlList.sort(cmp)
         if currFloor + 1 == numFloors:
             bossLvlRange = bldgInfo[SuitBuildingGlobals.SUIT_BLDG_INFO_BOSS_LVLS]
             newLvl = random.randint(bossLvlRange[0] + maxLvlMod, bossLvlRange[1] + maxLvlMod)
-            lvlList.append(newLvl)
-        lvlList.sort(cmp)
+            lvlList[:0] = [newLvl]
         self.notify.debug('LevelList: ' + repr(lvlList))
         return lvlList
 
@@ -146,23 +135,11 @@ class SuitPlannerInteriorAI:
         if skel:
             newSuit.setSkelecog(1)
         if random.random() <= exeChance:
-            newSuit.b_setExecutive(1)
+            newSuit.setExecutive(1)
         newSuit.setSkeleRevives(revives)
         newSuit.generateWithRequired(suitZone)
         newSuit.node().setName('suit-%s' % newSuit.doId)
         return newSuit
-
-    def myPrint(self):
-        self.notify.info('Generated suits for building: ')
-        for currInfo in suitInfos:
-            whichSuitInfo = suitInfos.index(currInfo) + 1
-            self.notify.debug(' Floor ' + str(whichSuitInfo) + ' has ' + str(len(currInfo[0])) + ' active suits.')
-            for currActive in xrange(len(currInfo[0])):
-                self.notify.debug('  Active suit ' + str(currActive + 1) + ' is of type ' + str(currInfo[0][currActive][0]) + ' and of track ' + str(currInfo[0][currActive][1]) + ' and of level ' + str(currInfo[0][currActive][2]))
-
-            self.notify.debug(' Floor ' + str(whichSuitInfo) + ' has ' + str(len(currInfo[1])) + ' reserve suits.')
-            for currReserve in xrange(len(currInfo[1])):
-                self.notify.debug('  Reserve suit ' + str(currReserve + 1) + ' is of type ' + str(currInfo[1][currReserve][0]) + ' and of track ' + str(currInfo[1][currReserve][1]) + ' and of lvel ' + str(currInfo[1][currReserve][2]) + ' and has ' + str(currInfo[1][currReserve][3]) + '% join restriction.')
 
     def genFloorSuits(self, floor, exeChance=SuitBuildingGlobals.BLDG_EXE_CHANCE):
         suitHandles = {}

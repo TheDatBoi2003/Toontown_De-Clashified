@@ -117,6 +117,7 @@ def getSuitAttack(suitName, suitLevel, attackNum=-1):
 
 HIGHEST_SUIT_LVL = 19
 MAX_SUIT_CAPACITY = 8
+MAX_JOINING = 4
 SUIT_CAPACITY = 4
 EXE_HP_MOD = 0.5
 EXE_DMG_MOD = 0.2

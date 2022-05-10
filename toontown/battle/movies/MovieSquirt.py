@@ -227,7 +227,7 @@ def __soakSuit(suit, remove=0):
 def __soakNearby(suitIndex, suits):
     if len(suits) > suitIndex >= 0:
         return Parallel(Sequence(ActorInterval(suits[suitIndex], 'squirt-small-react'),
-                                 Func(suits[suitIndex].doSuitNeutral)),
+                                 Func(suits[suitIndex].doNeutralAnim)),
                         __soakSuit(suits[suitIndex]))
     else:
         return Sequence()

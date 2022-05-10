@@ -241,12 +241,13 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
         suitHandles = self.bldg.planner.genFloorSuits(self.currentFloor)
         self.suits = suitHandles['activeSuits']
         self.activeSuits = []
-        bossSpot = self.bldg.planner.bossSpot
         for suit in self.suits:
             self.activeSuits.append(suit)
 
-        if self.currentFloor == self.topFloor and bossSpot != -1:
-            self.activeSuits[bossSpot].b_setExecutive(1)
+        if self.currentFloor == self.topFloor:
+            levels = [suit.level for suit in self.activeSuits]
+            leaderIndex = levels.index(max(levels))
+            self.activeSuits[leaderIndex].b_setExecutive(1)
 
         self.reserveSuits = suitHandles['reserveSuits']
         self.d_setToons()
@@ -316,7 +317,7 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
             self.joinedReserves = []
             hpPercent = 100 - totalHp / totalMaxHp * 100.0
             for info in self.reserveSuits:
-                if info[1] <= hpPercent and len(self.activeSuits) < SuitBattleGlobals.MAX_SUIT_CAPACITY:
+                if info[1] <= hpPercent and len(self.activeSuits) < SuitBattleGlobals.MAX_SUIT_CAPACITY and len(self.joinedReserves) < SuitBattleGlobals.MAX_JOINING:
                     self.suits.append(info[0])
                     self.activeSuits.append(info[0])
                     self.joinedReserves.append(info)

@@ -24,7 +24,7 @@ from toontown.pets import DistributedPetProxyAI
 class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleBaseAI')
 
-    def __init__(self, air, zoneId, finishCallback=None, maxSuits=4, bossBattle=0, tutorialFlag=0,
+    def __init__(self, air, zoneId, finishCallback=None, maxSuits=SUIT_CAPACITY, bossBattle=0, tutorialFlag=0,
                  interactivePropTrackBonus=-1):
         DistributedObjectAI.DistributedObjectAI.__init__(self, air)
         self.serialNum = 0

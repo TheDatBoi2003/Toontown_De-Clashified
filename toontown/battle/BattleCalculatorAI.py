@@ -19,7 +19,6 @@ from toontown.toonbase.ToontownBattleGlobals import RAILROAD_LEVEL_INDEX
 
 class BattleCalculatorAI(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('BattleCalculatorAI')
-    notify.setDebug(True)
     toonsAlwaysHit = simbase.config.GetBool('toons-always-hit', 0)
     toonsAlwaysMiss = simbase.config.GetBool('toons-always-miss', 0)
     toonsAlways5050 = simbase.config.GetBool('toons-always-5050', 0)
