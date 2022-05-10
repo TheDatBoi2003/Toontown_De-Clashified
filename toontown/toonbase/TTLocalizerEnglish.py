@@ -919,9 +919,9 @@ QuestDialogDict = {160: {GREETING: '',
                                  '...a Refund Point!\x07'
                                  "What's a Refund Point, you might ask?\x07"
                                  "You can use this Refund Point to undo one choice you've previously made.\x07"
-                                 'If you refund a track, you will also lose half of the experience in said track.\x07'
+                                 'If you refund a track, you will still keep the experience gained for the track.\x07'
                                  'These refund points are only available from specific toontasks.\x07'
-                                 "Otherwise, you'll have to spend 20,000 jellybeans per frame to refund.\x07"
+                                 "Otherwise, you'll have to spend 5,000 jellybeans per frame to refund.\x07"
                                  'Think carefully when you choose your gags!'},
                    2201: {
                        QUEST: 'Those sneaky Cogs are at it again.\x07_toNpcName_ has reported another missing item. Stop by and see if you can straighten it out._where_'},

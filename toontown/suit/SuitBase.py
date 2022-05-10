@@ -61,10 +61,7 @@ class SuitBase:
         return self.isExecutive
 
     def getExecutiveTitle(self):
-        if self.getExecutive() == 1:
-            return TTLocalizer.SuitExecutiveTitle
-        else:
-            return ''
+        return TTLocalizer.SuitExecutiveTitle if self.getExecutive() else ''
 
     def setSkelecog(self, flag):
         self.isSkelecog = flag

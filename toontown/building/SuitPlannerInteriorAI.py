@@ -54,7 +54,7 @@ class SuitPlannerInteriorAI:
                 if numActive == 1:
                     newBossSpot = 0
                 else:
-                    newBossSpot = 1
+                    newBossSpot = lvls.index(max(lvls[:numActive]))
                 tmp = lvls[newBossSpot]
                 lvls[newBossSpot] = lvls[origBossSpot]
                 lvls[origBossSpot] = tmp
@@ -125,29 +125,28 @@ class SuitPlannerInteriorAI:
         self.notify.debug('LevelList: ' + repr(lvlList))
         return lvlList
 
-    def __setupSuitInfo(self, suit, bldgTrack, suitLevel, exeChance):
+    def __setupSuitInfo(self, suit, bldgTrack, suitLevel):
         suitName, skeleton = simbase.air.suitInvasionManager.getInvadingCog()
         dna = SuitDNA.SuitDNA()
         if suitName and self.respectInvasions:
             suitData = SuitBattleGlobals.getSuitDataFromName(suitName)
-            suitType = SuitDNA.getSuitType(suitName)
             bldgTrack = SuitDNA.getSuitDept(suitName)
             suitLevel = min(max(suitLevel, suitData['level']), len(suitData['hp'])-1)
             dna.newSuit(suitName)
         else:
             dna.newSuitRandom(suitLevel, bldgTrack)
-            suitType = SuitDNA.getSuitType(dna.name)
         suit.dna = dna
-        self.notify.debug('Creating suit type ' + suit.dna.name + ' of level ' + str(suitLevel) + ' from type ' + str(suitType) + ' and track ' + str(bldgTrack))
         suit.setLevel(suitLevel)
-        suit.b_setExecutive(random.random() <= exeChance)
+        self.notify.debug('Creating suit %s from level %d from depot %s' % (suit.dna.name, suitLevel, bldgTrack))
         return skeleton
 
-    def __genSuitObject(self, suitZone, suitType, bldgTrack, suitLevel, exeChance, revives=0):
+    def __genSuitObject(self, suitZone, bldgTrack, suitLevel, exeChance, revives=0):
         newSuit = DistributedSuitAI.DistributedSuitAI(simbase.air, None)
-        skel = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, exeChance)
+        skel = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel)
         if skel:
             newSuit.setSkelecog(1)
+        if random.random() <= exeChance:
+            newSuit.b_setExecutive(1)
         newSuit.setSkeleRevives(revives)
         newSuit.generateWithRequired(suitZone)
         newSuit.node().setName('suit-%s' % newSuit.doId)
@@ -170,13 +169,13 @@ class SuitPlannerInteriorAI:
         floorInfo = self.suitInfos[floor]
         activeSuits = []
         for activeSuitInfo in floorInfo['activeSuits']:
-            suit = self.__genSuitObject(self.zoneId, activeSuitInfo['type'], activeSuitInfo['track'], activeSuitInfo['level'], exeChance, activeSuitInfo['revives'])
+            suit = self.__genSuitObject(self.zoneId, activeSuitInfo['track'], activeSuitInfo['level'], exeChance, activeSuitInfo['revives'])
             activeSuits.append(suit)
 
         suitHandles['activeSuits'] = activeSuits
         reserveSuits = []
         for reserveSuitInfo in floorInfo['reserveSuits']:
-            suit = self.__genSuitObject(self.zoneId, reserveSuitInfo['type'], reserveSuitInfo['track'], reserveSuitInfo['level'], exeChance, reserveSuitInfo['revives'])
+            suit = self.__genSuitObject(self.zoneId, reserveSuitInfo['track'], reserveSuitInfo['level'], exeChance, reserveSuitInfo['revives'])
             reserveSuits.append((suit, reserveSuitInfo['joinChance']))
 
         suitHandles['reserveSuits'] = reserveSuits

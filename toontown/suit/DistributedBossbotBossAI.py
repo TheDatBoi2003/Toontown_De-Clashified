@@ -345,30 +345,30 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         diners = []
         for i in xrange(len(self.notDeadList)):
             if simbase.config.GetBool('bossbot-boss-cheat', 0):
-                suit = self.__genSuitObject(self.zoneId, 2, 'c', 2, 0)
+                suit = self.__genSuitObject(self.zoneId, 'c', 2, 0)
             else:
                 info = self.notDeadList[i]
                 suitType = info[2] - 4
                 suitLevel = info[2]
-                suit = self.__genSuitObject(self.zoneId, suitType, 'c', suitLevel, 1)
+                suit = self.__genSuitObject(self.zoneId, 'c', suitLevel, 1)
             diners.append((suit, 100))
 
         active = []
         for i in xrange(2):
             if simbase.config.GetBool('bossbot-boss-cheat', 0):
-                suit = self.__genSuitObject(self.zoneId, 2, 'c', 2, 0)
+                suit = self.__genSuitObject(self.zoneId, 'c', 2, 0)
             else:
                 suitType = 8
                 suitLevel = 12
-                suit = self.__genSuitObject(self.zoneId, suitType, 'c', suitLevel, 1)
+                suit = self.__genSuitObject(self.zoneId, 'c', suitLevel, 1)
             active.append(suit)
 
         return {'activeSuits': active,
                 'reserveSuits': diners}
 
-    def __genSuitObject(self, suitZone, suitType, bldgTrack, suitLevel, revives=0):
+    def __genSuitObject(self, suitZone, bldgTrack, suitLevel, revives=0):
         newSuit = DistributedSuitAI.DistributedSuitAI(simbase.air, None)
-        skel = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, suitType)
+        skel = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel)
         if skel:
             newSuit.setSkelecog(1)
         newSuit.setSkeleRevives(revives)
@@ -376,12 +376,11 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         newSuit.node().setName('suit-%s' % newSuit.doId)
         return newSuit
 
-    def __setupSuitInfo(self, suit, bldgTrack, suitLevel, suitType):
+    def __setupSuitInfo(self, suit, bldgTrack, suitLevel):
         dna = SuitDNA.SuitDNA()
         dna.newSuitRandom(suitLevel, bldgTrack)
         suit.dna = dna
-        self.notify.debug('Creating suit type %s of level %d from type %d and track %c' %
-                          (suit.dna.name, suitLevel, suitType, bldgTrack))
+        self.notify.debug('Creating suit %s from level %d and depot %s' % (suit.dna.name, suitLevel, bldgTrack))
         suit.setLevel(suitLevel)
         return False
 
