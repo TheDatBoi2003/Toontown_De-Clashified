@@ -503,11 +503,11 @@ QuestsItemDict = {1: ['Pair of Glasses', 'Pairs of Glasses', 'a '],
                   21: ['Lead Battery', 'Lead Batteries', 'a '],
                   110: ['TIP Clothing Ticket', 'Clothing Tickets', 'a '],
                   1000: ['Clothing Ticket', 'Clothing Tickets', 'a '],
-                  1100: ['Research Paper', 'Research Papers', 'a '],
-                  1101: ['Package', 'Packages', 'a '],
-                  1102: ['Sellbot HQ Report', 'Sellbot HQ Reports', 'a '],
-                  1103: ['Production Notice', 'Production Notices', 'a '],
-                  1104: ['Chilly Report', 'Chilly Reports', 'a '],
+                  1300: ['Research Paper', 'Research Papers', 'a '],
+                  1301: ['Package', 'Packages', 'a '],
+                  1302: ['Sellbot HQ Report', 'Sellbot HQ Reports', 'a '],
+                  1303: ['Production Notice', 'Production Notices', 'a '],
+                  1304: ['Chilly Report', 'Chilly Reports', 'a '],
                   1401: ['Checklist', 'Checklists', 'a '],
                   2001: ['Inner Tube', 'Inner Tubes', 'an '],
                   2002: ['Monocle Prescription', 'Monocle Prescriptions', 'a '],
@@ -636,68 +636,46 @@ QuestDialog_3225 = {
     QUEST: "Oh, thanks for coming, _avName_!\x07The Cogs in the neighborhood frightened away my delivery person.\x07I don't have anyone to deliver this salad to _toNpcName_!\x07Can you do it for me? Thanks so much!_where_"}
 QuestDialog_2910 = {
     QUEST: 'Back so soon?\x07Great job on the spring.\x07The final item is a counter weight.\x07Stop by and see _toNpcName_ and bring back whatever you can get._where_'}
-QuestDialogDict = {160: {GREETING: '',
-                         QUEST: "Ok, now I think you are ready for something more rewarding.\x07If you can defeat 3 Bossbots I'll give you a little bonus.",
-                         INCOMPLETE_PROGRESS: TheCogs + ' are out in the streets, through the tunnels.',
-                         INCOMPLETE_WRONG_NPC: 'Good job defeating those Cogs. Now go to the Toon Headquarters for your next step!',
-                         COMPLETE: QuestsDefaultComplete,
-                         LEAVING: QuestsDefaultLeaving},
-                   161: {GREETING: '',
-                         QUEST: "Ok, now I think you are ready for something more rewarding.\x07Come back after you defeat 3 Lawbots and I'll have a little something for you.",
-                         INCOMPLETE_PROGRESS: TheCogs + ' are out in the streets, through the tunnels.',
-                         INCOMPLETE_WRONG_NPC: 'Good job defeating those Cogs. Now go to the Toon Headquarters for your next step!',
-                         COMPLETE: QuestsDefaultComplete,
-                         LEAVING: QuestsDefaultLeaving},
-                   162: {GREETING: '',
-                         QUEST: 'Ok, now I think you are ready for something more rewarding.\x07Defeat 3 Cashbots and come back here to claim the bounty.',
-                         INCOMPLETE_PROGRESS: TheCogs + ' are out in the streets, through the tunnels.',
-                         INCOMPLETE_WRONG_NPC: 'Good job defeating those Cogs. Now go to the Toon Headquarters for your next step!',
-                         COMPLETE: QuestsDefaultComplete,
-                         LEAVING: QuestsDefaultLeaving},
-                   163: {GREETING: '',
-                         QUEST: "Ok, now I think you are ready for something more rewarding.\x07Come see us after you defeat 3 Sellbots and we'll hook you up.",
-                         INCOMPLETE_PROGRESS: TheCogs + ' are out in the streets, through the tunnels.',
-                         INCOMPLETE_WRONG_NPC: 'Good job defeating those Cogs. Now go to the Toon Headquarters for your next step!',
-                         COMPLETE: QuestsDefaultComplete,
-                         LEAVING: QuestsDefaultLeaving},
-                   164: {
-                       QUEST: 'You look like you could use some new gags.\x07Go see %s, maybe he can help you out._where_' % Flippy},
-                   165: {
-                       QUEST: 'Hi there.\x07Looks like you need to practice training your gags.\x07Every time you hit a Cog with one of your gags, your experience increases.\x07When you get enough experience, you will be able to use an even better gag.\x07Go practice your gags by defeating 4 Cogs.'},
-                   166: {
-                       QUEST: 'Nice work defeating those Cogs.\x07You know, the Cogs come in four different types.\x07They are Lawbots, Cashbots, Sellbots, and Bossbots.\x07You can tell them apart by their coloring and their name labels.\x07For practice go defeat 4 Bossbots.'},
-                   167: {
-                       QUEST: 'Nice work defeating those Cogs.\x07You know, the Cogs come in four different types.\x07They are Lawbots, Cashbots, Sellbots, and Bossbots.\x07You can tell them apart by their coloring and their name labels.\x07For practice go defeat 4 Lawbots.'},
-                   168: {
-                       QUEST: 'Nice work defeating those Cogs.\x07You know, the Cogs come in four different types.\x07They are Lawbots, Cashbots, Sellbots, and Bossbots.\x07You can tell them apart by their coloring and their name labels.\x07For practice go defeat 4 Sellbots.'},
-                   169: {
-                       QUEST: 'Nice work defeating those Cogs.\x07You know, the Cogs come in four different types.\x07They are Lawbots, Cashbots, Sellbots, and Bossbots.\x07You can tell them apart by their coloring and their name labels.\x07For practice go defeat 4 Cashbots.'},
-                   170: {
-                       QUEST: 'Nice work, now you know the difference between the 4 types of Cogs.\x07'
-                              'I think you are ready to start training for more gag tracks.\x07'
-                              'Go talk to _toNpcName_ about training frames - he will teach you the ropes._where_'},
-                   171: {
-                       QUEST: 'Nice work, now you know the difference between the 4 types of Cogs.\x07'
-                              'I think you are ready to start training for more gag tracks.\x07'
-                              'Go talk to _toNpcName_ about training frames - he will teach you the ropes._where_'},
-                   172: {
-                       QUEST: 'Nice work, now you know the difference between the 4 types of Cogs.\x07'
-                              'I think you are ready to start training for more gag tracks.\x07'
-                              'Go talk to _toNpcName_ about training frames - she will teach you the ropes._where_'},
-                   175: {GREETING: '',
+QuestDialogDict = {104: {GREETING: '',
                          QUEST: "Did you know you have your very own Toon house?\x07Clarabelle Cow runs a phone catalog where you can order furniture to decorate your house.\x07You can also buy SpeedChat phrases, clothing, and other fun things!\x07I'll tell Clarabelle to send you your first catalog now.\x07You get a catalog with new items every week!\x07Go to your home and use your phone to call Clarabelle.",
                          INCOMPLETE_PROGRESS: 'Go home and use your phone to call Clarabelle.',
                          COMPLETE: 'Hope you have fun ordering things from Clarabelle!\x07I just finished redecorating my house. It looks Toontastic!\x07Keep doing ToonTasks to get more rewards!',
                          LEAVING: QuestsDefaultLeaving},
-                   400: {QUEST: 'Your gags are great, but you should consider collecting some training frames.\x07'
-                                'Training frames will allow you to unlock even more tracks!\x07'
-                                'If you wanted to, you could even spend a frame to prestige a track you own.\x07'
+                   120: {
+                       QUEST: 'You look like you could use some new gags.\x07Go see %s, maybe he can help you out._where_' % Flippy},
+                   121: {
+                       QUEST: "Hey! Have obtained any new gags yet?\x07Every time you hit a Cog with one of your gags, your experience increases.\x07When you get enough experience, you will be able to use an even better gag.\x07Go practice your gags by defeating 4 Cogs."},
+                   122: {
+                       QUEST: 'Nice work defeating those Cogs.\x07You know, the Cogs come in four different types.\x07They are Lawbots, Cashbots, Sellbots, and Bossbots.\x07You can tell them apart by their coloring and their name labels.\x07For practice go defeat 4 Bossbots.'},
+                   123: {
+                       QUEST: 'Nice work defeating those Cogs.\x07You know, the Cogs come in four different types.\x07They are Lawbots, Cashbots, Sellbots, and Bossbots.\x07You can tell them apart by their coloring and their name labels.\x07For practice go defeat 4 Lawbots.'},
+                   124: {
+                       QUEST: 'Nice work defeating those Cogs.\x07You know, the Cogs come in four different types.\x07They are Lawbots, Cashbots, Sellbots, and Bossbots.\x07You can tell them apart by their coloring and their name labels.\x07For practice go defeat 4 Sellbots.'},
+                   125: {
+                       QUEST: 'Nice work defeating those Cogs.\x07You know, the Cogs come in four different types.\x07They are Lawbots, Cashbots, Sellbots, and Bossbots.\x07You can tell them apart by their coloring and their name labels.\x07For practice go defeat 4 Cashbots.'},
+                   126: {
+                       QUEST: 'Nice work, now you know the difference between the 4 types of Cogs.\x07'
+                              'I think you are ready to start training for more gag tracks.\x07'
+                              'Go talk to _toNpcName_ about training frames - he will teach you the ropes._where_'},
+                   127: {
+                       QUEST: 'Nice work, now you know the difference between the 4 types of Cogs.\x07'
+                              'I think you are ready to start training for more gag tracks.\x07'
+                              'Go talk to _toNpcName_ about training frames - he will teach you the ropes._where_'},
+                   128: {
+                       QUEST: 'Nice work, now you know the difference between the 4 types of Cogs.\x07'
+                              'I think you are ready to start training for more gag tracks.\x07'
+                              'Go talk to _toNpcName_ about training frames - she will teach you the ropes._where_'},
+                   400: {QUEST: 'Hello, _avName_. Are you ready to collect some training frames?\x07'
+                                'You can unlock your next track with just two of them!\x07'
+                                'If you use a third training frame for a track, it will gain prestige.\x07'
+                                'A track prestige will add new abilities to the gags of that track!\x07'
                                 'As you complete tasks, more training frames will become available.\x07'
-                                'Just so you know, it takes two training frames to learn a new track.\x07'
-                                "Pick carefully.  Once you redeem a new track or prestige, it's expensive to refund.\x07"
-                                'Go talk to an HQ Officer for a reward.',
-                         COMPLETE: 'Now you should know about the ins-and-outs of training frames!\x07'
-                                   'Here is another laff boost to keep you going.',
+                                "Keep in mind that you won't be able to take points back until later.\x07"
+                                'Go talk to _toNpcName_ to obtain your first training frame.',
+                         COMPLETE: 'Now that you know how training frames work, here is your first one.\x07'
+                                   'Well, since you started with two for each track, this is actually your fifth one.\x07'
+                                   'If you do some big favors for toons around town, you may unlock even more!\x07'
+                                   'When you are ready for some new tasks, go talk to an HQ Officer or shopkeeper.',
                          LEAVING: QuestsDefaultLeaving},
                    1039: {QUEST: 'Visit _toNpcName_ if you want to get around town more easily._where_'},
                    1040: {QUEST: 'Visit _toNpcName_ if you want to get around town more easily._where_'},
@@ -886,20 +864,20 @@ QuestDialogDict = {160: {GREETING: '',
                           COMPLETE: 'Thank you, _avName_, This is perfect!\x07'
                                     'A big battery and some seltzer bottles. this will surely cause a big SHOCK!\x07'
                                     "Here, you can have this frame, I won't be needing it any time soon."},
-                   1100: {QUEST: '_toNpcName_ is writing an important research paper and wants your help.\x07'
+                   1300: {QUEST: '_toNpcName_ is writing an important research paper and wants your help.\x07'
                                  'You can find him at the Toontown School House.'},
-                   1101: {
+                   1301: {
                        QUEST: 'Good to see you again, _avName_. I heard you were about to leave for ' + lBoatyard + '!\x07'
-                                                                                                                    'Before you go, I would like help researching some of the tougher cogs in Toontown Central.\x07'
-                                                                                                                    'Defeat about 5 or so of the level 4 ones, and then come back to me.',
+                              'Before you go, I would like help researching some of the tougher cogs in Toontown Central.\x07'
+                              'Defeat about 5 or so of the level 4 ones, and then come back to me.',
                        INCOMPLETE_PROGRESS: "Having trouble finding level 4 cogs?\x07"
                                             "You should go to Loopy Lane.  It's the only street they seem to roam.",
                        LEAVING: ''},
-                   1102: {GREETING: '',
+                   1302: {GREETING: '',
                           QUEST: "Excellent! Toon HQ would like to see this report.\x07"
                                  "I'm sure they will give you something nice in return.",
                           LEAVING: ''},
-                   1103: {
+                   1303: {
                        QUEST: "Did you obtain the Professor's report?\x07"
                               '...\"When fighting a bigger cog, be sure to carry more gags.\"\x07'
                               "Insightful as always. Go return to _toNpcName_ with this bonus.",
@@ -1666,7 +1644,7 @@ QuestDialogDict = {160: {GREETING: '',
                           QUEST: 'Is it cold in here, or is it just me?\x07'
                                  "...Yes, I'm aware that it's snowing outside.\x07"
                                  "I'm quite familiar with the temperature here, but I need actual data for my research.\x07"
-                                 'Could you take a temperature sensor from a cog on this street?'},
+                                 'Could you collect temperature sensors from cogs on this street?'},
                    5315: {GREETING: 'Here, hand me that sensor.',
                           LEAVING: 'Good Luck!',
                           QUEST: '...So the exact temperature outside is 20 degrees Fahrenheit...\x07'
@@ -5313,17 +5291,13 @@ InventoryPass = 'PASS'
 InventoryFire = 'FIRE'
 InventoryClickToAttack = 'Click a\ngag to\nattack'
 InventoryDamageBonus = ' (+%s)'
-NPCForceAcknowledgeMessage = "You must ride the trolley before leaving.\n\n\n\n\n\n\n\n\nYou can find the trolley next to Goofy's Gag Shop."
-NPCForceAcknowledgeMessage2 = 'You must return to Toon Headquarters before leaving.\n\n\n\n\n\n\n\n\n\nToon Headquarters is located near the center of the playground.'
-NPCForceAcknowledgeMessage3 = "Remember to ride the trolley.\n\n\n\n\n\n\n\nYou can find the trolley next to Goofy's Gag Shop."
-NPCForceAcknowledgeMessage4 = 'Congratulations!  You found and rode the trolley!\n\n\n\n\n\n\n\n\n\nNow report back to Toon Headquarters.'
-NPCForceAcknowledgeMessage5 = "Don't forget your ToonTask!\n\n\n\n\n\n\n\n\n\n\nYou can find Cogs to defeat on the other side of tunnels like this."
-NPCForceAcknowledgeMessage6 = 'Great job defeating those Cogs!\n\n\n\n\n\n\n\n\nHead back to Toon Headquarters as soon as possible.'
-NPCForceAcknowledgeMessage7Retro = "Don't forget to make a friend!\n\n\n\n\n\n\nClick on another player and use the New Friend button."
-NPCForceAcknowledgeMessage8Retro = 'Great! You made a new friend!\n\n\n\n\n\n\n\n\nYou should go back at Toon Headquarters now.'
-NPCForceAcknowledgeMessage9 = 'Good job using the phone!\n\n\n\n\n\n\n\n\nReturn to Toon Headquarters to claim your reward.'
-NPCForceAcknowledgeMessage7 = "You are a cheater!\n\n\n\n\n\n\nHey! Cut it out! You might see something you're not supposed to!"
-NPCForceAcknowledgeMessage8 = '\n\n\nAnd now I see\nWith eyes serene\nThe very heart\nOf the machine'
+NPCForceAcknowledgeMessage = "You must ride the trolley before leaving. You can find the trolley next to the Gag Shop."
+NPCForceAcknowledgeMessage2 = 'You must return to Toon Headquarters before leaving.'
+NPCForceAcknowledgeMessage3 = "Remember to ride the trolley. You can find the trolley next to the Gag Shop."
+NPCForceAcknowledgeMessage4 = 'Congratulations! You found and rode the trolley! Now report back to Toon Headquarters.'
+NPCForceAcknowledgeMessage5 = "Don't forget your ToonTask! You can find Cogs to defeat on the other side of tunnels."
+NPCForceAcknowledgeMessage6 = 'Great job defeating those Cogs! Head back to Toon Headquarters as soon as possible.'
+NPCForceAcknowledgeMessage7 = 'Good job using the phone! Return to Toon Headquarters to claim your reward.'
 ToonSleepString = '. . . ZZZ . . .'
 MovieTutorialReward1 = 'You received 1 Throw point! When you get 10, you will get a new gag!'
 MovieTutorialReward2 = 'You received 1 Squirt point! When you get 10, you will get a new gag!'
@@ -5864,14 +5838,14 @@ PickStartingGags = 'Choose  Your\nStarting  Gags'
 NameToonTitle = 'Choose  Your  Name'
 TrackTitles = ['Toon-Up', 'Trap', 'Lure', 'Sound', 'Squirt', 'Zap', 'Throw', 'Drop']
 TrackAvailable = ['You want this track?', 'You can only select 2 tracks.']
-TrackInfos = ['Restore the laff points of other toons!',
-              'Set up a powerful attack, then Lure a cog onto it!',
-              'Stuns enemies, making them easier targets, but has low accuracy!',
-              'Deals a small amount of damage to all the enemies!',
-              'A high damage, average accuracy attack, reliable for defeating strong enemies!',
-              'An average damage, high accuracy attack that will soak its target!',
-              'High damage potential, and hits up to three, but only on soaked targets!',
-              'A powerful attack with stronger combos, but low accuracy!']
+TrackInfos = ['Perform for your friends!\nA good joke will make them laugh harder.',
+              "Makes your enemies 'fall' for a powerful trick!\nOnly works with lure.",
+              'Draw your targets close to you, stunning and making them easier to hit!',
+              'Annoy everyone with various loud noises.\nWorks great with friends!',
+              'Weak but highly accurate splash that will leave a lasting soak!',
+              'If your targets are soaked, they will be shocked by a powerful chain!',
+              'The most iconic prank!\nPelt others with various baked goods.',
+              'Difficult to land, but effective when combined with other gags!']
 CreateYourToonHead = "Click the 'head' arrows to pick different animals."
 MakeAToonClickForNextScreen = 'Click the arrow below to go to the next screen.'
 PickClothes = 'Click the arrows to pick clothes!'
@@ -6073,19 +6047,6 @@ QuestScriptGagShop_5 = "Here's a peek at the advanced throw and squirt gags..."
 QuestScriptGagShop_6 = "When you're done buying gags, click this button to return to the Playground."
 QuestScriptGagShop_7 = 'Normally you can use this button to play another Trolley Game...'
 QuestScriptGagShop_8 = "...but there's no time for another game right now. You're needed in Toon HQ!"
-QuestScript120_1 = "Good job finding the trolley!\x07By the way, have you met Banker Bob?\x07He has quite a sweet tooth.\x07Why don't you introduce yourself by taking him this candy bar as a gift."
-QuestScript120_2 = 'Banker Bob is over in the Toontown Bank.'
-QuestScript121_1 = "Yum, thank you for the Candy Bar.\x07Say, if you can help me, I'll give you a reward.\x07Those Cogs stole the keys to my safe. Defeat Cogs to find a stolen key.\x07When you find a key, bring it back to me."
-QuestScript130_1 = 'Good job finding the trolley!\x07By the way, I received a package for Professor Pete today.\x07It must be his new chalk he ordered.\x07Can you please take it to him?\x07He is over in the school house.'
-QuestScript131_1 = 'Oh, thanks for the chalk.\x07What?!?\x07Those Cogs stole my blackboard. Defeat Cogs to find my stolen blackboard.\x07When you find it, bring it back to me.'
-QuestScript140_1 = 'Good job finding the trolley!\x07By the way, I have this friend, Librarian Larry, who is quite a book worm.\x07I picked this book up for him last time I was over in ' + lBoatyard + '.\x07Could you take it over to him, he is usually in the Library.'
-QuestScript141_1 = 'Oh, yes, this book almost completes my collection.\x07Let me see...\x07Uh oh...\x07Now where did I put my glasses?\x07I had them just before those Cogs took over my building.\x07Defeat Cogs to find my stolen glasses.\x07When you find them, bring them back to me for a reward.'
-QuestScript145_1 = 'I see you had no problem with the trolley!\x07Listen, the Cogs have stolen our blackboard eraser.\x07Go into the streets and fight Cogs until you recover the eraser.\x07To reach the streets go through one of the tunnels like this:'
-QuestScript145_2 = "When you find our eraser, bring it back here.\x07Don't forget, if you need gags, ride the trolley.\x07Also, if you need to recover Laff points, collect ice cream cones in the Playground."
-QuestScript150_1 = 'Great work!\x07Toontown is more fun when you have friends!'
-QuestScript150_2 = 'To make friends, find another player, and use the New Friend button.'
-QuestScript150_3 = 'Once you have made a friend, come back here.'
-QuestScript150_4 = 'Some tasks are too difficult to do alone!'
 MissingKeySanityCheck = 'Ignore me'
 SellbotBossName = 'The Director'
 CashbotBossName = 'C. F. O.'

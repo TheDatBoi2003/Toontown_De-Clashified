@@ -68,10 +68,10 @@ FINALE_TIER = 19
 ELDER_TIER = 20
 LOOPING_FINAL_TIER = ELDER_TIER
 VISIT_QUEST_ID = 1000
-TROLLEY_QUEST_ID = 110
-FIRST_COG_QUEST_ID = 145
-FRIEND_QUEST_ID = 150
-PHONE_QUEST_ID = 175
+TUTORIAL_QUEST_ID = 101
+TROLLEY_QUEST_ID = 102
+FIRST_COG_QUEST_ID = 103
+PHONE_QUEST_ID = 104
 NEWBIE_HP = 25
 from toontown.toonbase.ToontownGlobals import FT_FullSuit, FT_Leg, FT_Arm, FT_Torso, MaxTrainingFrames
 
@@ -1855,19 +1855,10 @@ def isQuestJustForFun(questId, rewardId):
         return False
 
 
-NoRewardTierZeroQuests = (101,
-                          110,
-                          121,
-                          131,
-                          141,
-                          145,
-                          150,
-                          160,
-                          161,
-                          162,
-                          163)
-RewardTierZeroQuests = ()
-PreCatalogQuestIds = NoRewardTierZeroQuests + RewardTierZeroQuests
+PreCatalogQuestIds = [TUTORIAL_QUEST_ID, TROLLEY_QUEST_ID, FIRST_COG_QUEST_ID]
+NoRewardTierZeroQuests = PreCatalogQuestIds + [PHONE_QUEST_ID]
+RewardTierZeroQuests = []
+TierZeroQuests = NoRewardTierZeroQuests + RewardTierZeroQuests
 QuestDict = {
     # Quest ID : ( tier, start, (questDesc), fromNpc, toNpc, reward, nextQuest, dialog )
     # some quests have 'OBSOLETE' for their reward; this is for obsolete quests
@@ -1875,59 +1866,42 @@ QuestDict = {
     # quest from being assigned to users in the future
 
     # This is the tutorial quest
-    101: (TT_TIER, Start, (CogQuest, Anywhere, 1, 'f'), Any, ToonHQ, NA, 110, DefaultDialog),
+    TUTORIAL_QUEST_ID: (TT_TIER, Start, (VisitQuest,), Any, 2001, NA, TROLLEY_QUEST_ID, DefaultDialog),
 
-    # 103: (TT_TIER, Cont, (DeliverItemQuest, 1), 2018, 2001, NA, 110, DefaultDialog),
+    # This is the trolley quest, tutorial toons will have to complete this before they leave the playground
+    TROLLEY_QUEST_ID: (TT_TIER, Cont, (TrolleyQuest,), Any, ToonHQ, NA, FIRST_COG_QUEST_ID, DefaultDialog),
 
-    # skip the delivery quest for now...
-    110: (TT_TIER, Cont, (TrolleyQuest,), Any, ToonHQ, NA, 145, DefaultDialog),
-
-    # 111-144 are available
-
-    # This quest replaces the deliver item quests
-    145: (
-        TT_TIER, Cont, (RecoverItemQuest, ToontownGlobals.ToontownCentral, 1, 20, VeryEasy, Any, 'type'), ToonHQ,
-        ToonHQ,
-        NA, 175, DefaultDialog),
-
-    # These are now bypassed, but left in as obsolete
-    # because some players on the live site might still be working on them
-    150: (TT_TIER, OBSOLETE, (FriendQuest,), Same, Same, NA, 175, DefaultDialog),
-
-    160: (TT_TIER, OBSOLETE, (CogTrackQuest, ToontownGlobals.ToontownCentral, 3, 'c'), Same, ToonHQ, NA, 175,
-          TTLocalizer.QuestDialogDict[160]),
-    161: (TT_TIER, OBSOLETE, (CogTrackQuest, ToontownGlobals.ToontownCentral, 3, 'l'), Same, ToonHQ, NA, 175,
-          TTLocalizer.QuestDialogDict[161]),
-    162: (TT_TIER, OBSOLETE, (CogTrackQuest, ToontownGlobals.ToontownCentral, 3, 's'), Same, ToonHQ, NA, 175,
-          TTLocalizer.QuestDialogDict[162]),
-    163: (TT_TIER, OBSOLETE, (CogTrackQuest, ToontownGlobals.ToontownCentral, 3, 'm'), Same, ToonHQ, NA, 175,
-          TTLocalizer.QuestDialogDict[163]),
-
-    # If you change this questID (175) make sure you change the constant PHONE_QUEST_ID
-    175: (TT_TIER, Cont, (PhoneQuest,), Same, ToonHQ, 100, NA,
-          TTLocalizer.QuestDialogDict[175]),
+    # This is the first combat task, toons can  now go to the streets
+    FIRST_COG_QUEST_ID: (TT_TIER, Cont,
+                         (RecoverItemQuest, ToontownGlobals.ToontownCentral, 1, 20, VeryEasy, Any, 'type'),
+                         ToonHQ, ToonHQ, NA, PHONE_QUEST_ID, DefaultDialog),
 
     # First catalog will be delivered here
+    # Also, final tutorial quest
+    PHONE_QUEST_ID: (TT_TIER, Cont, (PhoneQuest,), Same, ToonHQ, 100, NA, TTLocalizer.QuestDialogDict[PHONE_QUEST_ID]),
+
+    # 105-119 are available
 
     # visiting quest 1000 is special
     # VISIT_QUEST_ID : ( 1, 1, (VisitQuest,), Any, Any, NA, NA, DefaultDialog),
 
-    164: (TT_TIER + 1, Start, (VisitQuest,), Any, 2001, NA, 165,
-          TTLocalizer.QuestDialogDict[164]),
-    165: (TT_TIER + 1, Start, (CogQuest, Anywhere, 4, Any), 2001, Same, NA, (166, 167, 168, 169),
-          TTLocalizer.QuestDialogDict[165]),
-    166: (TT_TIER + 1, Cont, (CogTrackQuest, Anywhere, 4, 'c'), Same, Same, NA, (170, 171, 172),
-          TTLocalizer.QuestDialogDict[166]),
-    167: (TT_TIER + 1, Cont, (CogTrackQuest, Anywhere, 4, 'l'), Same, Same, NA, (170, 171, 172),
-          TTLocalizer.QuestDialogDict[167]),
-    168: (TT_TIER + 1, Cont, (CogTrackQuest, Anywhere, 4, 's'), Same, Same, NA, (170, 171, 172),
-          TTLocalizer.QuestDialogDict[168]),
-    169: (TT_TIER + 1, Cont, (CogTrackQuest, Anywhere, 4, 'm'), Same, Same, NA, (170, 171, 172),
-          TTLocalizer.QuestDialogDict[169]),
-    170: (TT_TIER + 1, Cont, (VisitQuest,), Same, 2005, NA, 400, TTLocalizer.QuestDialogDict[170]),
-    171: (TT_TIER + 1, Cont, (VisitQuest,), Same, 2311, NA, 400, TTLocalizer.QuestDialogDict[171]),
-    172: (TT_TIER + 1, Cont, (VisitQuest,), Same, 2119, NA, 400, TTLocalizer.QuestDialogDict[172]),
-    400: (TT_TIER + 1, Cont, (VisitQuest,), Same, ToonHQ, 100, NA, TTLocalizer.QuestDialogDict[400]),
+    # Training frames quest
+    120: (TT_TIER + 1, Start, (VisitQuest,), Any, 2001, NA, 121,
+          TTLocalizer.QuestDialogDict[120]),
+    121: (TT_TIER + 1, Start, (CogQuest, Anywhere, 4, Any), 2001, Same, NA, (122, 123, 124, 125),
+          TTLocalizer.QuestDialogDict[121]),
+    122: (TT_TIER + 1, Cont, (CogTrackQuest, Anywhere, 4, 'c'), Same, Same, NA, (126, 127, 128),
+          TTLocalizer.QuestDialogDict[122]),
+    123: (TT_TIER + 1, Cont, (CogTrackQuest, Anywhere, 4, 'l'), Same, Same, NA, (126, 127, 128),
+          TTLocalizer.QuestDialogDict[123]),
+    124: (TT_TIER + 1, Cont, (CogTrackQuest, Anywhere, 4, 's'), Same, Same, NA, (126, 127, 128),
+          TTLocalizer.QuestDialogDict[124]),
+    125: (TT_TIER + 1, Cont, (CogTrackQuest, Anywhere, 4, 'm'), Same, Same, NA, (126, 127, 128),
+          TTLocalizer.QuestDialogDict[125]),
+    126: (TT_TIER + 1, Cont, (VisitQuest,), Same, 2005, NA, 400, TTLocalizer.QuestDialogDict[126]),
+    127: (TT_TIER + 1, Cont, (VisitQuest,), Same, 2311, NA, 400, TTLocalizer.QuestDialogDict[127]),
+    128: (TT_TIER + 1, Cont, (VisitQuest,), Same, 2119, NA, 400, TTLocalizer.QuestDialogDict[128]),
+    400: (TT_TIER + 1, Cont, (VisitQuest,), Same, 2001, 801, NA, TTLocalizer.QuestDialogDict[400]),
 
     # Toontown central
     1001: (
@@ -1948,10 +1922,10 @@ QuestDict = {
     1011: (TT_TIER + 2, Start, (CogQuest, Anywhere, 2, 'cc'), Any, ToonHQ, Any, NA, DefaultDialog),
     1012: (TT_TIER + 2, Start, (CogQuest, Anywhere, 2, 'tm'), Any, ToonHQ, Any, NA, DefaultDialog),
 
-    1013: (TT_TIER + 2, Start, (CogQuest, Anywhere, 4, 'f'), Any, ToonHQ, Any, NA, DefaultDialog),
-    1014: (TT_TIER + 2, Start, (CogQuest, Anywhere, 4, 'p'), Any, ToonHQ, Any, NA, DefaultDialog),
-    1015: (TT_TIER + 2, Start, (CogQuest, Anywhere, 4, 'bf'), Any, ToonHQ, Any, NA, DefaultDialog),
-    1016: (TT_TIER + 2, Start, (CogQuest, Anywhere, 4, 'b'), Any, ToonHQ, Any, NA, DefaultDialog),
+    1013: (TT_TIER + 2, Start, (CogQuest, Anywhere, 3, 'f'), Any, ToonHQ, Any, NA, DefaultDialog),
+    1014: (TT_TIER + 2, Start, (CogQuest, Anywhere, 3, 'bf'), Any, ToonHQ, Any, NA, DefaultDialog),
+    1015: (TT_TIER + 2, Start, (CogQuest, Anywhere, 3, 'sc'), Any, ToonHQ, Any, NA, DefaultDialog),
+    1016: (TT_TIER + 2, Start, (CogQuest, Anywhere, 3, 'cc'), Any, ToonHQ, Any, NA, DefaultDialog),
 
     1017: (TT_TIER + 2, Start, (CogQuest, Anywhere, 1, 'ym'), Any, ToonHQ, Any, NA, DefaultDialog),
     1018: (TT_TIER + 2, Start, (CogQuest, Anywhere, 1, 'nd'), Any, ToonHQ, Any, NA, DefaultDialog),
@@ -2014,7 +1988,7 @@ QuestDict = {
         TT_TIER + 2, Start, (CogTrackQuest, ToontownGlobals.ToontownCentral, 5, 'l'), Any, ToonHQ, Any, NA,
         DefaultDialog),
 
-    # More random quests for TT_TIER+2 are found after 1100.
+    # Next are NPC Quests. More random quests for TTC are found after 1100.
 
     # Help out Loopy Lane.  For a reward, you get teleport access to TTC.
     1039: (TT_TIER + 3, Start, (VisitQuest,), Any, 2135, NA, (1041, 1042, 1043),
@@ -2130,20 +2104,6 @@ QuestDict = {
     1091: (TT_TIER + 2, Start, (CogLevelQuest, ToontownGlobals.ToontownCentral, 8, 2), 2119, ToonHQ, 101, NA,
            TTLocalizer.QuestDialogDict[1091]),
 
-    # T.P. Rolle could use a more practical joke. Reward is Track Frame #1
-    1093: (TT_TIER + 2, Start, (VisitQuest,), Any, 2124, NA, 1094, TTLocalizer.QuestDialogDict[1093]),
-    1094: (TT_TIER + 2, Start, (VisitQuest,), 2124, 2215, NA, 1095, TTLocalizer.QuestDialogDict[1094]),
-    1095: (TT_TIER + 2, Cont, (VisitQuest,), Same, 2130, NA, 1096, TTLocalizer.QuestDialogDict[1095]),
-    1096: (TT_TIER + 2, Cont, (RecoverItemQuest, Anywhere, 1, 21, Hard, 2, 'level'), Same, 2124, 801, NA,
-           TTLocalizer.QuestDialogDict[1096]),
-
-    # Professor Pete wants you to defeat some cogs before you leave.  Reward: carry 30 gags
-    1100: (TT_TIER + 3, Start, (VisitQuest,), Any, 2003, NA, 1101, TTLocalizer.QuestDialogDict[1100]),
-    1101: (TT_TIER + 3, Start, (CogLevelQuest, ToontownGlobals.ToontownCentral, 5, 4), 2003, Same, NA, 1102,
-           TTLocalizer.QuestDialogDict[1101]),
-    1102: (TT_TIER + 3, Cont, (DeliverItemQuest, 1100), Same, ToonHQ, NA, 1103, TTLocalizer.QuestDialogDict[1102]),
-    1103: (TT_TIER + 3, Cont, (DeliverItemQuest, 1101), Same, 2003, 201, NA, TTLocalizer.QuestDialogDict[1103]),
-
     # More random quests for TT_TIER+2
     1105: (TT_TIER + 2, Start, (CogQuest, Anywhere, 2, 'f'), Any, ToonHQ, Any, NA, DefaultDialog),
     1106: (TT_TIER + 2, Start, (CogQuest, Anywhere, 2, 'p'), Any, ToonHQ, Any, NA, DefaultDialog),
@@ -2163,6 +2123,13 @@ QuestDict = {
     1210: (TT_TIER + 3, Start, (CogQuest, Anywhere, 4, 'pp'), Any, ToonHQ, Any, NA, DefaultDialog),
     1211: (TT_TIER + 3, Start, (CogQuest, Anywhere, 4, 'cc'), Any, ToonHQ, Any, NA, DefaultDialog),
     1212: (TT_TIER + 3, Start, (CogQuest, Anywhere, 4, 'tm'), Any, ToonHQ, Any, NA, DefaultDialog),
+
+    # Professor Pete wants you to defeat some cogs before you leave.  Reward: carry 30 gags
+    1300: (TT_TIER + 3, Start, (VisitQuest,), Any, 2003, NA, 1301, TTLocalizer.QuestDialogDict[1300]),
+    1301: (TT_TIER + 3, Start, (CogLevelQuest, ToontownGlobals.ToontownCentral, 5, 4), 2003, Same, NA, 1302,
+           TTLocalizer.QuestDialogDict[1301]),
+    1302: (TT_TIER + 3, Cont, (DeliverItemQuest, 1300), Same, ToonHQ, NA, 1303, TTLocalizer.QuestDialogDict[1302]),
+    1303: (TT_TIER + 3, Cont, (DeliverItemQuest, 1301), Same, 2003, 201, NA, TTLocalizer.QuestDialogDict[1303]),
 
     # Donald's Dock
     1400: (DD_TIER, Start, (VisitQuest,), Any, 1328, NA, 1401, TTLocalizer.QuestDialogDict[1400]),
@@ -2678,7 +2645,7 @@ QuestDict = {
     # Reward: Carry 50 Gags
     3268: (DG_TIER + 1, Start, (CogQuest, ToontownGlobals.SellbotHQ, 25, Any), Any, ToonHQ, NA, 3269,
            TTLocalizer.QuestDialogDict[3268]),
-    3269: (DG_TIER + 1, Cont, (DeliverItemQuest, 1102), Same, 2003, 205, NA, TTLocalizer.QuestDialogDict[3269]),
+    3269: (DG_TIER + 1, Cont, (DeliverItemQuest, 1302), Same, 2003, 205, NA, TTLocalizer.QuestDialogDict[3269]),
 
     # Next DG_TIER id: 3270-3999
 
@@ -2850,7 +2817,7 @@ QuestDict = {
     # Defeat 3 Cog buildings, then deliver the production notice to Professor Pete.  Reward: 60 Max Carry
     4225: (MM_TIER + 2, Start, (BuildingQuest, Anywhere, 3, Any, 1), Any, ToonHQ, NA, 4226,
            TTLocalizer.QuestDialogDict[4225]),
-    4226: (MM_TIER + 2, Cont, (DeliverItemQuest, 1103), Same, 2003, 207, NA,
+    4226: (MM_TIER + 2, Cont, (DeliverItemQuest, 1303), Same, 2003, 207, NA,
            TTLocalizer.QuestDialogDict[4226]),
 
     # 902: Training Frame #8
@@ -3287,8 +3254,7 @@ QuestDict = {
     # March Harry is scared the Lawbots are going to sue him. He asks you to take out several
     # of them on his street. When this doesn't appease him he sends you too Hysterical Harry
     # to get an alibi for him. When you return with it, he rewards you with max quest = 4.
-    5308: (BR_TIER + 1, Start, (VisitQuest,), Any, 3312, NA, 5309,
-           TTLocalizer.QuestDialogDict[5308]),
+    5308: (BR_TIER + 1, Start, (VisitQuest,), Any, 3312, NA, 5309, TTLocalizer.QuestDialogDict[5308]),
     5309: (BR_TIER + 1, Start, (CogTrackQuest, ToontownGlobals.PolarPlace, 30, 'l'), Same, Same, NA, 5310,
            TTLocalizer.QuestDialogDict[5309]),
     5310: (BR_TIER + 1, Cont, (VisitQuest,), Same, 3113, NA, 5311,
@@ -3301,13 +3267,12 @@ QuestDict = {
     # Professor Flake wants to research the temperature difference inside and outside Lawbot HQ.
     # Defeat some Polar Place cogs, and then some Lawbot HQ cogs.
     # Turn in the report to Professor Pete. Reward: max carry = 70
-    5313: (BR_TIER + 2, Start, (CogQuest, ToontownGlobals.PolarPlace, 15, Any), Any, 3310, NA, 5314, DefaultDialog),
-    5314: (
-        BR_TIER + 2, Cont, (RecoverItemQuest, ToontownGlobals.PolarPlace, 1, 3027, Medium, Any), Same, Same, NA, 5315,
-        DefaultDialog),
-    5315: (BR_TIER + 2, Cont, (RecoverItemQuest, ToontownGlobals.LawbotHQ, 15, 3027, Medium, Any), Same, Same, NA, 5316,
-           DefaultDialog),
-    5316: (BR_TIER + 2, Cont, (DeliverItemQuest, 1104), Any, 2003, 209, NA, DefaultDialog),
+    5313: (BR_TIER + 2, Start, (VisitQuest,), Any, 3310, NA, 5314, TTLocalizer.QuestDialogDict[5313]),
+    5314: (BR_TIER + 2, Cont, (RecoverItemQuest, ToontownGlobals.PolarPlace, 5, 3027, Hard, Any), Same, Same, NA, 5315,
+           TTLocalizer.QuestDialogDict[5314]),
+    5315: (BR_TIER + 2, Cont, (RecoverItemQuest, ToontownGlobals.LawbotHQ, 15, 3027, Easy, Any), Same, Same, NA, 5316,
+           TTLocalizer.QuestDialogDict[5315]),
+    5316: (BR_TIER + 2, Cont, (DeliverItemQuest, 1304), Any, 2003, 209, NA, DefaultDialog),
 
     # It's time for the final challenge.  Return to Lil Oldman for him to
     # review your progress.  Before you can begin, you must eat, Oldman asks 
@@ -4973,12 +4938,11 @@ def getOptionalRewardsInTier(tier):
 
 
 RequiredRewardTrackDict = {TT_TIER: (100,),
-                           TT_TIER + 1: (100,),
+                           TT_TIER + 1: (801,),
                            TT_TIER + 2: (100,
                                          500,
                                          101,
-                                         200,
-                                         801),
+                                         200),
                            TT_TIER + 3: (101,
                                          300,
                                          102,
@@ -5313,14 +5277,6 @@ def avatarHasFirstCogQuest(av):
 
 
 def avatarHasCompletedFirstCogQuest(av):
-    return av.quests[0][4] > 0
-
-
-def avatarHasFriendQuest(av):
-    return len(av.quests) == 1 and av.quests[0][0] == FRIEND_QUEST_ID
-
-
-def avatarHasCompletedFriendQuest(av):
     return av.quests[0][4] > 0
 
 

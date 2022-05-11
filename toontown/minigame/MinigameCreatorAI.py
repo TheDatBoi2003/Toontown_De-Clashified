@@ -123,7 +123,7 @@ def createMinigame(air, playerArray, trolleyZone, minigameZone = None, previousG
             toons.append(toon)
 
     for toon in toons:
-        simbase.air.questManager.toonPlayedMinigame(toon, toons)
+        simbase.air.questManager.toonPlayedMinigame(toon)
 
     retVal = {}
     retVal['minigameZone'] = minigameZone
