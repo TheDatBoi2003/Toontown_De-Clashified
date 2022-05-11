@@ -19,4 +19,4 @@ class NewbiePurchaseManagerAI(PurchaseManagerAI.PurchaseManagerAI):
     def handlePlayerLeaving(self, avId):
         toon = self.air.doId2do.get(avId)
         if toon:
-            self.air.questManager.toonRodeTrolleyFirstTime(toon)
+            self.air.questManager.toonPlayedMinigame(toon)

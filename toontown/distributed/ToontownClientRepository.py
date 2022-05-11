@@ -446,9 +446,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         OTPClientRepository.OTPClientRepository.enterWaitOnEnterResponses(self, shardId, hoodId, zoneId, avId)
 
     def enterSkipTutorialRequest(self, hoodId, zoneId, avId):
-        self.handlerArgs = {'hoodId': hoodId,
-         'zoneId': zoneId,
-         'avId': avId}
+        self.handlerArgs = {'hoodId': hoodId, 'zoneId': zoneId, 'avId': avId}
         self.__requestSkipTutorial(hoodId, zoneId, avId)
 
     def __requestSkipTutorial(self, hoodId, zoneId, avId):

@@ -1067,7 +1067,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
     def refreshOnscreenButtons(self):
         self.bFriendsList.hide()
         self.hideFurnitureGui()
-        clarabelleHidden = 1
         self.ignore(ToontownGlobals.FriendsListHotkey)
         if self.friendsListButtonActive and self.friendsListButtonObscured <= 0:
             self.bFriendsList.show()

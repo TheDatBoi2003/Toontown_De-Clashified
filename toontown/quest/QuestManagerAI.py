@@ -9,8 +9,7 @@ class QuestManagerAI:
     def __init__(self, air):
         self.air = air
 
-    def toonPlayedMinigame(self, toon, toons):
-        # toons is never used. Sad!
+    def toonPlayedMinigame(self, toon):
         for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
             if isinstance(quest, Quests.TrolleyQuest):
                 self.__incrementQuestProgress(toon.quests[index])
@@ -200,22 +199,6 @@ class QuestManagerAI:
     def completeQuest(self, toon, questId):
         toon.toonUp(toon.getMaxHp())
         toon.removeQuest(questId)
-
-    def toonRodeTrolleyFirstTime(self, toon):
-        # For this, we just call toonPlayedMinigame with the toon.
-        # And for toons, we just pass in an empty list. Not like
-        # it matters anyway, as that argument is never used.
-        self.toonPlayedMinigame(toon, [])
-
-    def removeClothingTicket(self, toon, npc):
-        for index, quest in enumerate(self.__toonQuestsList2Quests(toon.quests)):
-            questId, fromNpcId, toNpcId, rewardId, toonProgress = toon.quests[index]
-            isComplete = quest.getCompletionStatus(toon, toon.quests[index], npc)
-            if isComplete == Quests.COMPLETE:
-                toon.removeQuest(questId)
-                return True
-
-        return False
 
     def giveReward(self, toon, rewardId):
         reward = Quests.getReward(rewardId)

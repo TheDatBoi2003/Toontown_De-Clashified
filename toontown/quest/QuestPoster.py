@@ -301,10 +301,10 @@ class QuestPoster(DirectFrame):
             reward = Quests.getReward(transformedReward)
         else:
             reward = Quests.getReward(rewardId)
-        if reward and questId not in Quests.NoRewardTierZeroQuests:
-            rewardString = reward.getPosterString()
-        else:
+        if not reward or questId in Quests.NoRewardTierZeroQuests:
             rewardString = ''
+        else:
+            rewardString = reward.getPosterString()
         self.rewardText['text'] = rewardString
         self.fitLabel(self.rewardText)
         if Quests.isQuestJustForFun(questId, rewardId):

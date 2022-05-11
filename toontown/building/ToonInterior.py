@@ -1,4 +1,6 @@
 from panda3d.core import *
+
+from toontown.quest import Quests
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.hood import Place
@@ -11,7 +13,6 @@ from direct.task import Task
 from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
-from toontown.toon import NPCForceAcknowledge
 from toontown.toon import HealthForceAcknowledge
 
 class ToonInterior(Place.Place):
@@ -56,8 +57,7 @@ class ToonInterior(Place.Place):
           'teleportOut',
           'doorOut']),
          State.State('DFAReject', self.enterDFAReject, self.exitDFAReject, ['walk']),
-         State.State('NPCFA', self.enterNPCFA, self.exitNPCFA, ['NPCFAReject', 'HFA', 'teleportOut']),
-         State.State('NPCFAReject', self.enterNPCFAReject, self.exitNPCFAReject, ['walk']),
+         State.State('NPCFA', self.enterNPCFA, self.exitNPCFA, ['walk', 'HFA', 'teleportOut']),
          State.State('HFA', self.enterHFA, self.exitHFA, ['HFAReject', 'teleportOut', 'tunnelOut']),
          State.State('HFAReject', self.enterHFAReject, self.exitHFAReject, ['walk']),
          State.State('doorIn', self.enterDoorIn, self.exitDoorIn, ['walk']),
@@ -133,30 +133,23 @@ class ToonInterior(Place.Place):
             self.notify.error('Unknown done status for DownloadForceAcknowledge: ' + `doneStatus`)
 
     def enterNPCFA(self, requestStatus):
-        self.acceptOnce(self.npcfaDoneEvent, self.enterNPCFACallback, [requestStatus])
-        self.npcfa = NPCForceAcknowledge.NPCForceAcknowledge(self.npcfaDoneEvent)
-        self.npcfa.enter()
+        doneStatus = {}
+        questHistory = base.localAvatar.getQuestHistory()
+        if questHistory != [] and questHistory != [1000] and questHistory != [101, 110]:
+            self.fsm.request('HFA', [requestStatus])
+        elif len(base.localAvatar.quests) != 1 or base.localAvatar.quests[0][0] != Quests.TROLLEY_QUEST_ID:
+            self.fsm.request('HFA', [requestStatus])
+        else:
+            base.localAvatar.b_setAnimState('neutral', 1)
+            self.doneStatus = doneStatus
+            if not Quests.avatarHasCompletedTrolleyQuest(base.localAvatar):
+                msg = TTLocalizer.NPCForceAcknowledgeMessage
+            else:
+                msg = TTLocalizer.NPCForceAcknowledgeMessage2
+            base.localAvatar.setSystemMessage(0, msg)
+            self.fsm.request('walk')
 
     def exitNPCFA(self):
-        self.ignore(self.npcfaDoneEvent)
-
-    def enterNPCFACallback(self, requestStatus, doneStatus):
-        self.npcfa.exit()
-        del self.npcfa
-        if doneStatus['mode'] == 'complete':
-            outHow = {'teleportIn': 'teleportOut',
-             'tunnelIn': 'tunnelOut',
-             'doorIn': 'doorOut'}
-            self.fsm.request(outHow[requestStatus['how']], [requestStatus])
-        elif doneStatus['mode'] == 'incomplete':
-            self.fsm.request('NPCFAReject')
-        else:
-            self.notify.error('Unknown done status for NPCForceAcknowledge: ' + `doneStatus`)
-
-    def enterNPCFAReject(self):
-        self.fsm.request('walk')
-
-    def exitNPCFAReject(self):
         pass
 
     def enterHFA(self, requestStatus):

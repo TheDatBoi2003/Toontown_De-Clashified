@@ -3,7 +3,7 @@ import importlib
 import toontown.battle.SuitBattleGlobals
 from DistributedBattleAI import *
 from toontown.battle import BattleExperienceAI
-from toontown.battle.calc import BattleCalculatorGlobals
+from toontown.battle.calc import BattleCalculatorGlobals as BCG
 from toontown.battle.calc.DropCalculatorAI import *
 from toontown.battle.calc.HealCalculatorAI import *
 from toontown.battle.calc.LureCalculatorAI import *
@@ -193,21 +193,20 @@ class BattleCalculatorAI(DirectObject):
             attack = self.battle.toonAttacks[toonId]
             atkTrack = getActualTrack(attack)
             if atkTrack not in [NO_ATTACK, SOS, NPCSOS]:
-                self.notify.debug('Calculating attack for toon: %d' % toonId)
-                isFirstOfCurrentTrack = not currTrack or atkTrack == currTrack
-                if SUITS_WAKE_IMMEDIATELY and not isFirstOfCurrentTrack:
+                if BCG.SUITS_WAKE_IMMEDIATELY and currTrack and atkTrack != currTrack:
                     self.lureCalculator.wakeDelayedLures()
                 currTrack = atkTrack
+                self.notify.debug('Calculating attack for toon: %d' % toonId)
                 self.__calcToonAttackHp(toonId)
                 attackIdx = self.toonAtkOrder.index(toonId)
                 self.__handleBonus(attackIdx)
                 lastAttack = attackIdx >= len(self.toonAtkOrder) - 1
-                if attackHasHit(attack, suit=0) and atkTrack in [THROW, SQUIRT, DROP]:
+                if attackHasHit(attack, suit=0) and atkTrack in [THROW, SQUIRT, SOUND, ZAP]:
                     if lastAttack:
                         self.lureCalculator.wakeSuitFromAttack(self, toonId)
                     else:
                         messenger.send('delayed-wake', [toonId])
-                if lastAttack:
+                if attackIdx >= len(self.toonAtkOrder) - 1:
                     self.lureCalculator.wakeDelayedLures()
 
         messenger.send('pre-bonuses', [self.toonAtkOrder])
@@ -331,8 +330,8 @@ class BattleCalculatorAI(DirectObject):
 
         if numPrevHits > 0:
             self.notify.debug('ACC BONUS: toon attack received accuracy bonus of ' +
-                              str(BattleCalculatorGlobals.AccuracyBonuses[numPrevHits]) + ' from previous attack')
-        return BattleCalculatorGlobals.AccuracyBonuses[numPrevHits]
+                              str(BCG.AccuracyBonuses[numPrevHits]) + ' from previous attack')
+        return BCG.AccuracyBonuses[numPrevHits]
 
     def __findHighestTrackBonus(self, atkTrack, attack, trackExp):
         for currOtherAtk in self.toonAtkOrder:
@@ -401,27 +400,25 @@ class BattleCalculatorAI(DirectObject):
             elif atkTrack == FIRE:
                 result = 0
                 if target:
-                    costToFire = 1
+                    costToFire = target.level // 3
                     abilityToFire = toon.getPinkSlips()
                     toon.removePinkSlips(costToFire)
                     if costToFire <= abilityToFire:
                         target.skeleRevives = 0
                         result = target.getHP()
-                result = result
 
             if atkTrack in HEALING_TRACKS:
-                targetsExist += self.healCalculator.__getToonHp(target) > 0
+                targetsExist += self.healCalculator.getToonHp(target) > 0
             else:
                 targetsExist += target.getHP() > 0
 
             self.notify.debug('%d targets %s, result: %d' % (toonId, target, result))
 
             if result != 0:
-                if target not in targets:
+                if target in targets:
+                    results[targets.index(target)] = result
+                else:
                     self.notify.debug("The target is not accessible!")
-                    continue
-
-                results[targets.index(target)] = result
         attack[TOON_HP_COL] = results  # <--------  THIS IS THE ATTACK OUTPUT!
         return targetsExist
 
@@ -502,7 +499,7 @@ class BattleCalculatorAI(DirectObject):
         attack = self.battle.toonAttacks[toonId]
         track = getActualTrack(attack)
         if track not in [NO_ATTACK, SOS, TRAP, NPCSOS]:
-            if track in BattleCalculatorGlobals.HEALING_TRACKS:
+            if track in BCG.HEALING_TRACKS:
                 targets = self.battle.activeToons
             else:
                 targets = self.battle.activeSuits
@@ -523,7 +520,7 @@ class BattleCalculatorAI(DirectObject):
                     damageDone = attack[TOON_HP_COL][position]
                 if damageDone <= 0 or self.immortalSuits:
                     continue
-                if track in BattleCalculatorGlobals.HEALING_TRACKS:
+                if track in BCG.HEALING_TRACKS:
                     excess = self.healCalculator.healToon(attack, damageDone, target, position)
                     if excess:
                         damageDone -= excess
@@ -598,11 +595,11 @@ class BattleCalculatorAI(DirectObject):
                                         numOrgs += 1
 
                                 attack[TOON_HPBONUS_COL][targetPos] = math.ceil(
-                                    totalDamages * (BattleCalculatorGlobals.DropDamageBonuses[numOrgs][
+                                    totalDamages * (BCG.DropDamageBonuses[numOrgs][
                                                         attackCount - 1] * 0.01))
                             else:
                                 attack[TOON_HPBONUS_COL][targetPos] = math.ceil(
-                                    totalDamages * (BattleCalculatorGlobals.DamageBonuses[attackCount - 1] * 0.01))
+                                    totalDamages * (BCG.DamageBonuses[attackCount - 1] * 0.01))
                             self.notify.debug('Applying hp bonus to track ' +
                                               str(attack[TOON_TRACK_COL]) + ' of ' +
                                               str(attack[TOON_HPBONUS_COL][targetPos]))
