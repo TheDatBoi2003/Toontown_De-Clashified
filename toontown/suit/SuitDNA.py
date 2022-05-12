@@ -89,7 +89,7 @@ suitCTypes = ['f',
 suitNamesByDept = {'c': ['f', 'p', 'ym', 'mm', 'ds', 'hh', 'cr', 'tbc'],
                     'l': ['bf', 'b', 'dt', 'ac', 'bs', 'sd', 'le', 'bw'],
                     'm': ['sc', 'pp', 'tw', 'bc', 'nc', 'mb', 'ls', 'rb'],
-                    's': ['cc', 'tm', 'nd', 'gh', 'ms', 'tf', 'm', 'mh', 'fc', 'af', 'ps', 'tr', 'gk', 'fm']}
+                    's': ['cc', 'tm', 'nd', 'gh', 'ms', 'tf', 'm', 'mh', 'fc', 'ps', 'af', 'tr', 'gk', 'fm']}
 specialNamesByDept = {'s': ['foreman']}
 suitDepts = ['c',
              'l',

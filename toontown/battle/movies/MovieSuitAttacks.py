@@ -4043,8 +4043,8 @@ def doWhistleBlow(attack):
     suit = attack['suit']
     whistle = globalPropPool.getProp('whistle')
     suitTrack = getSuitTrack(attack)
-    whistleTransforms = [Point3(0.0, 0.0, -0.5), VBase3(180.0, 90.0, 0.0), (0.0, 0.0, 0.0)]
-    whistleScaleTrack = Sequence(Wait(0.25), LerpScaleInterval(whistle, 0.25, Point3(0.2, 0.2, 0.2)),
+    whistleTransforms = [Point3(0.0, 0.0, -0.55), VBase3(200.0, 90.0, 0.0), (0.0, 0.0, 0.0)]
+    whistleScaleTrack = Sequence(Wait(0.25), LerpScaleInterval(whistle, 0.25, Point3(0.1, 0.1, 0.1)),
                                  Wait(1.1), LerpScaleInterval(whistle, 0.12, Point3(0.0, 0.0, 0.0)))
     whistleMoveTrack = Sequence(LerpPosInterval(whistle, 0.5, Point3(0, 2.5, -0.5)),
                                 Wait(1.4), LerpPosInterval(whistle, 0.4, Point3(0, 0.0, -0.5)))

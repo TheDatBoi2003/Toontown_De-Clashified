@@ -655,7 +655,9 @@ class Suit(Avatar.Avatar):
             self.setHeight(7.61)
         elif dna.name in ('mh', 'foreman'):
             self.scale = 7.0 / aSize
+            accTransforms = ((0.0, 0.36, 0.52), (180.0, 0.0, 0.0), (0.6, 0.6, 0.6))
             self.handColor = VBase4(0.92, 0.89, 0.88, 1.0)
+            # self.generateAccessory('narrowGlasses', 'narrowGlassesPurple', accType='mask', transforms=accTransforms) this currently crashes the game for some reason
             self.generateBody()
             self.generateHead('yesman')
             self.setHeight(8.95)
@@ -667,40 +669,42 @@ class Suit(Avatar.Avatar):
             self.headTexture = 'forecaster.jpg'
             self.generateHead('coldcaller')
             self.setHeight(4.75)
-        elif dna.name == 'af':
-            self.scale = 4.4 / aSize
-            self.handColor = VBase4(1.0, 0.87, 0.7, 1.0)
-            self.headColor = VBase4(1.0, 0.85, 0.75, 1.0)
-            self.generateBody()
-            self.generateHead('yesman')
-            self.setHeight(5.4)
         elif dna.name == 'ps':
-            self.scale = 4.5 / cSize
+            self.scale = 4.2 / cSize
             self.handColor = VBase4(0.9, 0.6, 0.6, 1.0)
-            transforms = ((0.0, 0.0, 0.48), (180.0, 340.0, 0.0), (0.4, 0.4, 0.3))
+            accTransforms = ((0.0, 0.0, 0.48), (180.0, 340.0, 0.0), (0.4, 0.4, 0.3))
             self.generateBody()
             self.headTexture = 'prospector.jpg'
             self.generateHead('tightwad')
-            self.generateAccessory('cowboyHat', 'prospectorHat', transforms=transforms)
+            self.generateAccessory('cowboyHat', 'prospectorHat', transforms=accTransforms)
             self.setHeight(6.1)
+        elif dna.name == 'af':
+            self.scale = 4.5 / aSize
+            self.handColor = VBase4(0.93, 0.75, 0.75, 1.0)
+            accTransforms = ((0.0, 0.1, 0.62), (180.0, 10.0, 0.0), (0.35, 0.4, 0.3))
+            self.generateBody()
+            self.headTexture = 'affiliate.jpg'
+            self.generateHead('coldcaller', 'c')
+            self.generateAccessory('dorkGlasses', 'affGlasses', accType='mask', transforms=accTransforms)
+            self.setHeight(5.6)
         elif dna.name == 'tr':
             self.scale = 4.8 / aSize
             self.handColor = VBase4(0.9, 0.9, 0.9, 1.0)
-            self.headColor = VBase4(0.8, 0.77, 0.72, 1.0)
-            transforms = ((0.0, 0.05, 1.0), (180.0, 0.0, 0.0), (0.35, 0.35, 0.5))
+            accTransforms = ((0.0, 0.05, 0.9), (180.0, 340.0, 0.0), (0.35, 0.35, 0.5))
             self.generateBody()
+            self.headTexture = 'traffic-manager.jpg'
             self.generateHead('telemarketer', 'b')
-            self.generateAccessory('bobbyHat', 'bobbyHat', transforms=transforms)
+            self.generateAccessory('bobbyHat', 'bobbyHatTraffic', transforms=accTransforms)
             self.setHeight(6.65)
         elif dna.name == 'gk':
             self.scale = 5.65 / cSize
             self.handColor = VBase4(0.68, 0.6, 0.5, 1.0)
             self.headColor = VBase4(0.6, 0.55, 0.47, 1.0)
-            transforms = ((0.0, 0.1, 0.87), (180.0, 0.0, 0.0), (0.55, 0.48, 0.45))
+            accTransforms = ((0.0, 0.1, 0.87), (180.0, 0.0, 0.0), (0.55, 0.48, 0.45))
             self.generateBody()
             self.headTexture = 'gatekeeper.jpg'
             self.generateHead('coldcaller')
-            self.generateAccessory('policeHat', 'policeHat', transforms=transforms)
+            self.generateAccessory('policeHat', transforms=accTransforms)
             self.setHeight(7.4)
         elif dna.name == 'fm':
             self.scale = 5.8 / bSize
