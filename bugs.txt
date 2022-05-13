@@ -1,4 +1,8 @@
-- New camera stuck in the ground after battle (difficult to fix)
+Testing:
+- CogPageManagerAI.py crashes when a boss is defeated due to missing the key 'isSkelecog' (Tested on The Director so far)
+Unresolved:
+- Mr. Hollywood's shades crashes clients (it loads the model, but won't instance it for some reason)
+- New camera sometimes stuck in the ground after battle (difficult to fix)
 Low priority:
 - The zap movies sometimes prematurely jump to the death animation (just a visual bug)
 - Tutorial with new camera is broken (skipped for now, develop new tutorial later)

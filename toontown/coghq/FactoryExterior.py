@@ -63,7 +63,8 @@ class FactoryExterior(BattlePlace.BattlePlace):
         self.zoneId = requestStatus['zoneId']
         BattlePlace.BattlePlace.enter(self)
         self.fsm.enterInitialState()
-        base.playMusic(self.loader.music, looping=1, volume=0.8)
+        self.loader.resetMusic(self.zoneId)
+        base.playMusic(self.loader.music, looping=1)
         self.loader.geom.reparentTo(render)
         self.nodeList = [self.loader.geom]
         self.loader.hood.startSky()

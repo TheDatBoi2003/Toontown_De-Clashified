@@ -24,9 +24,16 @@ class BossbotCogHQLoader(CogHQLoader.CogHQLoader):
             state = self.fsm.getStateNamed(stateName)
             state.addTransition('countryClubInterior')
 
-        self.musicFile = random.choice(['phase_12/audio/bgm/Bossbot_Entry_v1.ogg', 'phase_12/audio/bgm/Bossbot_Entry_v2.ogg', 'phase_12/audio/bgm/Bossbot_Entry_v3.ogg'])
+        self.musicDict = {ToontownGlobals.BossbotHQ: random.choice(['phase_12/audio/bgm/Bossbot_Entry_v1.ogg',
+                                                                    'phase_12/audio/bgm/Bossbot_Entry_v2.ogg',
+                                                                    'phase_12/audio/bgm/Bossbot_Entry_v3.ogg']),
+                          ToontownGlobals.BossbotLobby: random.choice(['phase_12/audio/bgm/Bossbot_Entry_v1.ogg',
+                                                                       'phase_12/audio/bgm/Bossbot_Entry_v2.ogg',
+                                                                       'phase_12/audio/bgm/Bossbot_Entry_v3.ogg'])}
+        self.musicFile = random.choice(['phase_12/audio/bgm/Bossbot_Entry_v1.ogg',
+                                        'phase_12/audio/bgm/Bossbot_Entry_v2.ogg',
+                                        'phase_12/audio/bgm/Bossbot_Entry_v3.ogg'])
         self.cogHQExteriorModelPath = 'phase_12/models/bossbotHQ/CogGolfHub'
-        self.factoryExteriorModelPath = 'phase_11/models/lawbotHQ/LB_DA_Lobby'
         self.cogHQLobbyModelPath = 'phase_12/models/bossbotHQ/CogGolfCourtyard'
         self.geom = None
         return

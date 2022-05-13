@@ -27,6 +27,9 @@ class LawbotCogHQLoader(CogHQLoader.CogHQLoader):
             state = self.fsm.getStateNamed(stateName)
             state.addTransition('factoryExterior')
 
+        self.musicDict = {ToontownGlobals.LawbotHQ: 'phase_11/audio/bgm/LB_courtyard.ogg',
+                          ToontownGlobals.LawbotLobby: 'phase_11/audio/bgm/LB_courtyard.ogg',
+                          ToontownGlobals.LawbotOfficeExt: 'phase_11/audio/bgm/LB_courtyard.ogg'}
         self.musicFile = 'phase_11/audio/bgm/LB_courtyard.ogg'
         self.cogHQExteriorModelPath = 'phase_11/models/lawbotHQ/LawbotPlaza'
         self.factoryExteriorModelPath = 'phase_11/models/lawbotHQ/LB_DA_Lobby'

@@ -46,7 +46,8 @@ class CogHQLobby(Place.Place):
         self.zoneId = requestStatus['zoneId']
         Place.Place.enter(self)
         self.fsm.enterInitialState()
-        base.playMusic(self.loader.music, looping=1, volume=0.8)
+        self.loader.resetMusic(self.zoneId)
+        base.playMusic(self.loader.music, looping=1)
         self.loader.geom.reparentTo(render)
         self.accept('doorDoneEvent', self.handleDoorDoneEvent)
         self.accept('DistributedDoor_doorTrigger', self.handleDoorTrigger)

@@ -66,7 +66,7 @@ class CogHQExterior(BattlePlace.BattlePlace):
         self.zoneId = requestStatus['zoneId']
         BattlePlace.BattlePlace.enter(self)
         self.fsm.enterInitialState()
-        self.loader.resetMusic()
+        self.loader.resetMusic(self.zoneId)
         base.playMusic(self.loader.music, looping=1)
         self.loader.geom.reparentTo(render)
         self.nodeList = [self.loader.geom]
