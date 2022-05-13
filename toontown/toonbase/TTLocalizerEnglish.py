@@ -2002,11 +2002,11 @@ QuestDialogDict = {104: {GREETING: '',
                    8512: {GREETING: '',
                           LEAVING: '',
                           QUEST: "Not too bad, recruit.\x07"
-                                 "Next up, I want you to board the elevator to the Cashbot Bullion Mint."},
+                                 "Next up, I want you to board the elevator to the Cashbot Dollar Mint."},
                    8513: {GREETING: '',
                           LEAVING: '',
                           QUEST: "Good work, _avName_!\x07"
-                                 "Now, go enter the District Attorney's Office, section D."},
+                                 "Now, go enter the District Attorney's Office, section C."},
                    8514: {GREETING: '',
                           LEAVING: '',
                           QUEST: "Very good!  Now, for Bossbot HQ.\x07"
@@ -2020,7 +2020,7 @@ QuestDialogDict = {104: {GREETING: '',
                           COMPLETE: "Good to see you again, _avName_!\x07"
                                     "Oh, a recommendation letter from Whispering Willow!\x07"
                                     "Are YOU toon enough to be in the Toon Resistance?\x07"
-                                    "Welcome to the team, Ranger _avName_!\x07"
+                                    "Yes? Then welcome to the team, Ranger _avName_!\x07"
                                     "As an honorary member, have another track frame."},
 
                    9990: {QUEST: "Lord Lowdenclear has a special task for the best of the best.\x07"

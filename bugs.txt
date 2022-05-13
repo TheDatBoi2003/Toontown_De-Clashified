@@ -1,5 +1,6 @@
 Testing:
 - CogPageManagerAI.py crashes when a boss is defeated due to missing the key 'isSkelecog' (Tested on The Director so far)
+- Test the new taskline to make sure everything works correctly (use magic words to skip annoying parts)
 Unresolved:
 - Mr. Hollywood's shades crashes clients (it loads the model, but won't instance it for some reason)
 - New camera sometimes stuck in the ground after battle (difficult to fix)
