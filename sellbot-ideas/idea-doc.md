@@ -34,7 +34,7 @@ The Cog Factories have halted production of cogs to shift to Oil production only
 **Lava Storage Room -> West Storage Room**  
 **Oil Room -> Distillation Room**
 
-### Back Entrance and Rooms
+### Back Entrance and New Rooms
 
 A new entrance has been added, making the number of entrances total 3 and allowing each suit part to be divided like the other facilities.  The Back entrance has more cogs level 7 and 8, and the warehouse/silos have level 9 cogs.  The new rooms are as follows:
 
@@ -55,7 +55,7 @@ Some restock barrels have been changed:
 All gag barrels give 4-6 gags.  
 Jellybean barrels give 75-100 jellybeans each.
 
-#### Routes
+### New Routes
 
 Defeating the Factory Foreman itself no longer drops suit parts.  Instead, to obtain a piece, the toons must clear all the cogs in a section of the factory, and then make it to the end.  The part type depends on the factory section:  
 **Front Entrance:**  
@@ -143,7 +143,8 @@ The toons enter the executive penthouse, where they will take the elevator to th
 When they arrive, Byers B. Ware meets the group at the front door, letting them know about the Marketing Director's expenses meeting.  Byers found a crate of pies in cold storage, and he has to reheat them in his portable oven.   Before entering, the toons are alerted to Rain's capture yet again.  Rain tells them to continue on and that she will find a way out as usual.  
 The Director welcomes the executives into his place, where he reveals the graphs showing the level of cog success in the takeover.  While the Director is distracted in his presentation, Byers sneaks over to the oven to bake some pies.  The beeping noises alert Bravecog soon enough, and he calls on the other executives in the room to attack the toons.
 
-**First battle:** The toons are split into 4 groups of 2.  One executive will fly into action at a time. All of the toons must defeat 3 level 12.exes, 2 level 15.exes, and a level 18.exe per group, all of which are immune to fires and sues. Regular cogs level 8-11, 9-14, and then 10-16 will periodically fly into battle based on the executive cog.
+### First battle  
+The toons are split into 4 groups of 2.  One executive will fly into action at a time. All of the toons must defeat 3 level 12.exes, 2 level 15.exes, and a level 18.exe per group, all of which are immune to fires and sues. Regular cogs level 8-11, 9-14, and then 10-16 will periodically fly into battle based on the executive cog.
 
 The Director, spectating the incompetency of his workers, begins moving toward a button on the wall, which he slams out of frustration.  He remarks on the toons' gall to waltz into his office when he was about to present his latest line of Sellbot managers.  A hatch opens in the ceiling, and the marketing team flies in from above.
 
@@ -216,7 +217,6 @@ Dig Up, 38
 - It becomes harder to break the Datamining process with sound combo damage if Astroturfer’s around since he will deal even more damage if hit with sound.  
 - Snake Glare will help Data Miner's process finish faster.  The mining process finishing will trigger Quick Oil, but not when you break it.  
 
-——
 ### Catching game  
 Once the marketing team is defeated, Cold Callers surround the oven, fill it with hot air, and it begins spitting out burning pies.  Pies on fire hurt for 2 laff points, but toasted pies are salvageable.  While this happens, a few First-Movers stomp around to trip up toons in a bigger area.  Getting shaken deals 6 laff points.  
 Collecting toasted pies increases the supply meter by 5.  The demand meter will decrease by 2 points a second, but if the toon gets hit, it increases by double the amount of damage taken.  The supply and demand meters both have a total of 100 points.  
