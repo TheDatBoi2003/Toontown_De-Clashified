@@ -21,9 +21,9 @@ Bravecog: “You’ve got it, Bob!  I'll fill you in on my future successes with
 Robert:  “Oh, and get those head joints checked out. They don't seem as flexible as they used to.”
 Bravecog: “What? Nobody has told me all this time! I guess I'll have to take a visit to the new production plant myself.”
 ```
-# Factory Rework
+## Factory Rework
 
-## Modified Rooms
+### Modified Rooms
 
 The Cog Factories have halted production of cogs to shift to Oil production only.  As a result, rooms have been repurposed to fit the theme.
 
@@ -34,7 +34,7 @@ The Cog Factories have halted production of cogs to shift to Oil production only
 **Lava Storage Room -> West Storage Room**  
 **Oil Room -> Distillation Room**
 
-## Back Entrance/Rooms
+### Back Entrance/Rooms
 
 A new entrance has been added, making the number of entrances total 3 and allowing each suit part to be divided like the other facilities.  The Back entrance has more cogs level 7 and 8, and the warehouse/silos have level 9 cogs.  The new rooms are as follows:
 
@@ -63,13 +63,12 @@ Defeating the Factory Foreman itself no longer drops suit parts.  Instead, to ob
 **Back Entrance:** Defeat the cogs in the Refinery Room, Shipment Room, Desalting Room, and Warehouse to unlock the Warehouse Storage Room, where the Torso Parts are stored.   
 *NOTE: Toons can opt to clear multiple sections to retrieve multiple suit parts at once.*
 
-# VP Reworked--Now The Director of Marketing (DM)
+## VP Reworked--Now The Director of Marketing (DM)
 
 The toons enter the Marketing Director’s office, where they find Byers B. Ware trying to free Rain from her cage without getting caught.
 
-## Byers B. Ware
-
-The bright red bear the accompaies the toons. A resourceful rookie in the toon resistance, Byers carries portable gadgets from TV commercials with varying degrees of success (literally in some cases).
+**Byers B. Ware**  
+The bright red bear that accompaies the toons. A resourceful rookie in the toon resistance, Byers carries portable gadgets from TV commercials with varying degrees of success (literally in some cases).
 
 The Director is holding a virtual proposal meeting with an unknown benefactor in which he is offering shipments of Oil & Gas.  The benefactor points behind Bravecog and notes that his captive is acting squirmy.  He turns around to see Byers climbing a retractable ladder that eventually falls over.  As Byers breaks into a sprint, the Director locks him into another cage.  The toons in disguise approach the Marketing Director only to be unwittingly called out by Byers.  The Director scoffs at the toons once revealed, and then calls in cogs to attack them.
 
@@ -130,7 +129,7 @@ She has a few directives to offer for each specialist promotion:
 - Gatekeeper - Keeping Records - Rolodex Nameplate
 - First-Mover - Top of The Charts - Reward: 1 point laff boost
 
-# Overclocked Director (ODM)
+## Overclocked Director (ODM)
 
 The toons enter the executive penthouse, where they will take the elevator to the Marketing Director’s Suite.
 
@@ -141,8 +140,8 @@ The Director welcomes the executives into his place, where he reveals the graphs
 
 The Director, spectating the incompetency of his workers, begins moving toward a button on the wall, which he slams out of frustration.  He remarks on the toons' gall to waltz into his office when he was about to present his latest line of Sellbot managers.  A hatch opens in the ceiling, and the marketing team flies in from above.
 
-## The Blitz Campaign Team:  
-### Blitz Campaigner (30.mgr, 2900)  
+### The Blitz Campaign Team:  
+#### Blitz Campaigner (30.mgr, 2900)  
 Blake Broker is the definition of trigger-happy when it comes to business deals. He is eager to go out and share news about trendy products, but won’t stop to hear what you have to say.  Can you catch up to him?  
 “You were bound to find me—I’m going everywhere!”  
 Blitz Campaigner always attacks twice per turn, once if he's lured.  
@@ -156,7 +155,7 @@ Rolodex, 18
 Paradigm Shift, 16  
 Buzz Word, 17
 
-### Astroturfer (20.mgr, 2120/1060/530/280/140/70/35)  
+#### Astroturfer (20.mgr, 2120/1060/530/280/140/70/35)  
 Allen Aggregate is set to be the most popular cog out there—according to himself.  When he isn’t lost in his own social circle, he’s advocating for the company’s top grossing products.  Good luck trying to get a hold of him!  
 “I've got my own friends on the line.”  
 He stops taking damage at half his HP and can only be lured for 2 rounds.  
@@ -170,7 +169,7 @@ Synergy, 20
 Hot Air, 30  
 Mumbo Jumbo, 23
 
-### Snake-Oil Salesman (25.mgr, 2750)  
+#### Snake-Oil Salesman (25.mgr, 2750)  
 Distant relative to a certain infamous money launderer, Silvester Sidewinder is a more honest trader.  He is true to his name and will supply his own prime oil to all needy cogs.  His gratuitousness may quickly become overwhelming.  
 “This cure-all will keep cogs in tip-top shape.”  
 He will immediately attack toons who attack him directly, plus he can only be lured for 2 rounds.  
@@ -184,7 +183,7 @@ Glower Power, 35
 Double Talk, 32  
 Evil Eye, 33
 
-### Data Miner (25.mgr, 2800)  
+#### Data Miner (25.mgr, 2800)  
 Darrel Dealbreaker spends long periods of time planning ahead, trying to account for all the variables.  This makes him formidable in the world of network tunneling and data analysis.  If you’re his next target, get ready for a world of pain!  
 "Request received: identify toons, then dispose of them."  
 He only attacks a toon with a mining process, but he can be lured for only 2 rounds.  
@@ -207,13 +206,13 @@ Dig Up, 38
 - Snake Glare will help Data Miner's process finish faster.  The mining process finishing will trigger Quick Oil, but not when you break it.  
 
 ——
-## Catching game:  
+### Catching game:  
 Once the marketing team is defeated, Cold Callers surround the oven, fill it with hot air, and it begins spitting out burning pies.  Pies on fire hurt for 2 laff points, but toasted pies are salvageable.  While this happens, a few First-Movers stomp around to trip up toons in a bigger area.  Getting shaken deals 6 laff points.  
 Collecting toasted pies increases the supply meter by 5.  The demand meter will decrease by 2 points a second, but if the toon gets hit, it increases by double the amount of damage taken.  The supply and demand meters both have a total of 100 points.  
 
 The Director gives one final warning, saying he will bring the storm if they try to do anything funny.  Rain enters the room, planting a wedding cake tree in a nearby flower pot.  Finally, the Director, having enough of the toony nonsense, snaps and dozens of cogs fly in from the ceiling hatches to swarm the toons.
 
-## The Final Fight:  
+### The Final Fight:  
 **Objective:**  Similar to the normal Director fight, send him flying off the platform, only this time, many more obstacles are in the way.
 
 **Gags:**  Toons start with burnt fruit pies (40 damage, 20 knock back, 1 laff point) that can be reloaded by visiting the fridge.  Based on the number of pies the toon recovered from the catch game, they can throw 15-30 burnt pies per reload.  
