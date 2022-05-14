@@ -2,7 +2,7 @@
 
 Toons have broken into Sellbot HQ time after time, and from the resulting security concerns, the Chairman plans to relocate the Cogs production line.  He then informs Bravecog of his new role in the business:
 
-(Bravecog - VP, Robert - Chairman)  
+*(Bravecog - VP, Robert - Chairman)*  
 ```Bravecog:  “Why are you halting cog production in the factory?  The Oil reserves here wont dry out for another five centuries!”
 Robert: “The C.O.O. has informed me that you’ve been unable to stop the toons for years now.  I’d prefer to keep the production of my most valuable assets away from pesky toons.”
 Bravecog: “Well, my supply of Sellbots can only do so much.  Why do the others get the strongest henchmen?”
@@ -34,7 +34,7 @@ The Cog Factories have halted production of cogs to shift to Oil production only
 **Lava Storage Room -> West Storage Room**  
 **Oil Room -> Distillation Room**
 
-### Back Entrance/Rooms
+### Back Entrance and Rooms
 
 A new entrance has been added, making the number of entrances total 3 and allowing each suit part to be divided like the other facilities.  The Back entrance has more cogs level 7 and 8, and the warehouse/silos have level 9 cogs.  The new rooms are as follows:
 
@@ -46,21 +46,24 @@ A new entrance has been added, making the number of entrances total 3 and allowi
 **Warehouse Storage Room** - Same layout as other storage rooms, can only be opened once all the Back Entrance cogs are cleared.  The door is located between the Warehouse silo doors
 
 Some restock barrels have been changed:  
-Lobby hall: Throw Barrel  
-East Storage Room: Lure and Zap Barrels, Jellybean Barrel, Laff Barrel, Leg Part Barrel  
-Stomper Alley: Squirt and Laff Barrel  
-West Storage Room: Sound and Drop Barrels, Jellybean Barrel, Laff Barrel, Arm Part Barrel  
-Surveillance Alley: 2 Laff Barrels  
-Warehouse Storage Room: Trap and Toon-Up Barrels, Jellybean Barrel, Laff Barrel, Torso Part Barrel  
+**Lobby hall:** Throw Barrel  
+**East Storage Room:** Lure and Zap Barrels, Jellybean Barrel, Laff Barrel, Leg Part Barrel  
+**Stomper Alley:** Squirt and Laff Barrel  
+**West Storage Room:** Sound and Drop Barrels, Jellybean Barrel, Laff Barrel, Arm Part Barrel  
+**Surveillance Alley:** 2 Laff Barrels  
+**Warehouse Storage Room:** Trap and Toon-Up Barrels, Jellybean Barrel, Laff Barrel, Torso Part Barrel  
 All gag barrels give 4-6 gags.  
 Jellybean barrels give 75-100 jellybeans each.
 
-**Routes**
+#### Routes
 
 Defeating the Factory Foreman itself no longer drops suit parts.  Instead, to obtain a piece, the toons must clear all the cogs in a section of the factory, and then make it to the end.  The part type depends on the factory section:  
-**Front Entrance:** Defeat the cogs in the Foyer, Gear Room, and Boiler Room to unlock the East Oil Processor, where the Leg Parts are stored.  
-**Side Entrance:** Defeat the cogs in the Duct Room, Pipe Room, Gauge Room, and Distillation Room to unlock the West Oil Processor, where the Arm Parts are stored.  
-**Back Entrance:** Defeat the cogs in the Refinery Room, Shipment Room, Desalting Room, and Warehouse to unlock the Warehouse Storage Room, where the Torso Parts are stored.   
+**Front Entrance:**  
+Defeat the cogs in the Foyer, Gear Room, and Boiler Room to unlock the East Oil Processor, where the Leg Parts are stored.  
+**Side Entrance:**  
+Defeat the cogs in the Duct Room, Pipe Room, Gauge Room, and Distillation Room to unlock the West Oil Processor, where the Arm Parts are stored.  
+**Back Entrance:**  
+Defeat the cogs in the Refinery Room, Shipment Room, Desalting Room, and Warehouse to unlock the Warehouse Storage Room, where the Torso Parts are stored.   
 *NOTE: Toons can opt to clear multiple sections to retrieve multiple suit parts at once.*
 
 ## VP Reworked--Now The Director of Marketing (DM)
@@ -72,33 +75,37 @@ The bright red bear that accompaies the toons. A resourceful rookie in the toon 
 
 The Director is holding a virtual proposal meeting with an unknown benefactor in which he is offering shipments of Oil & Gas.  The benefactor points behind Bravecog and notes that his captive is acting squirmy.  He turns around to see Byers climbing a retractable ladder that eventually falls over.  As Byers breaks into a sprint, the Director locks him into another cage.  The toons in disguise approach the Marketing Director only to be unwittingly called out by Byers.  The Director scoffs at the toons once revealed, and then calls in cogs to attack them.
 
-### Fight 1:  
+### Fight 1  
 Like the original VP, it features cogs level 5-11/12/13 depending on tier.
 
 The VP makes his way to the elevator to block the exit.  As he does so, Byers uses one of his portable gadgets to break free from his cage.  He tells the toons he's got a supply of pies ready for collecting.
 
-### Catching Game:  
+### Catching Game  
 Byers Brings tosses out a portable pie launcher and the toons flock to collect some pastries.  Shakers stomp in to trip toons up as they run around, dealing 4 damage on contact.  Collecting cake slices will increase the supply meter by 2, which affects the amount of cakes the toon gets per reload.  
 If the toons collect any pies, it will decrease the demand meter by 5 and increase the supply meter by 5.  Demand will affect how much a pie costs in the final round.  
 The supply and demand meter sizes increase in size depending on tier. (20/40/60)
 
 Byers tosses down his portable fridge to store the cakes and pies, and the Director calls for express shipments: mini-skelecogs.
 
-### Fight 2:  
+### Fight 2  
 As in the VP, toons will have to fight level 7-11/12/13 skelecogs depending on tier.  
 Sometimes, a level 5.exe Affiliate mini-skelecog with 50 HP will exit VP’s hatch and take a fifth spot.  They have extra defense, but only deal 1-4 damage.  Using sound or zap tends to be the easiest way to remove them.
 
 The Director is fed up with toons and their antics and tells them that if they want their friends back, they’ll have to go through him.  Rain and Byers then explain how they can push the MD out of his balcony.
 
-### The Final Fight:
+### The Final Fight
 
-**Objective:**  Similar to the original, send him flying off the platform, only with some obstacles are in the way.
+**Objective:**  
+Similar to the original, send him flying off the platform, only with some obstacles are in the way.
 
-**Gags:**  Toons can collect their gags by walking up to the cooler.  They can always grab cake slices (35 damage, 18 knock back, 2 laff points) in batches of 20-45 depending on the supply level.  They can also collect fruit pies (50 damage, 25 knock back, 3 laff points) by trading in price tags.  Pies will cost 1-to-5 price tags each depending on the demand level for that toon.
+**Gags:**  
+Toons can collect their gags by walking up to the cooler.  They can always grab cake slices (35 damage, 18 knock back, 2 laff points) in batches of 20-45 depending on the supply level.  They can also collect fruit pies (50 damage, 25 knock back, 3 laff points) by trading in price tags.  Pies will cost 1-to-5 price tags each depending on the demand level for that toon.
 
-**Cogs:**  Regular Cogs will defend the Director by hovering low and swooping towards toons below.  Enough throw gags will defeat them and make them drop treasures, and give the attacker price tags.  The more HP the cog has, the better the drops.
+**Cogs:**  
+Regular Cogs will defend the Director by hovering low and swooping towards toons below.  Enough throw gags will defeat them and make them drop treasures, and give the attacker price tags.  The more HP the cog has, the better the drops.
 
-**The Director:**  (1500/2000/2500 HP + obstacles)  
+**The Director:**  
+(1500/2000/2500 HP + obstacles)  
 He is immune to damage, but by hitting his undercarriage, he gets stunned.  Until he does get stunned, he will do the following:  
 - He could spin to release a rain of gears.  He first does this when waking up.  
 - He throws a set of gears that target a single toon.
@@ -117,7 +124,7 @@ Rain gives her SOS card (Tier 3 only)
 (Boosters increase the number of Byers SOS cards by 1)
 
 ## Sellbot Directives  
-### Secretary Billie  
+**Secretary Billie**  
 Billie is a special lv. 16.mgr Name Dropper-type with silver jewelry and black hair.  She is a big-time collector of names, and keeps a rolodex full of numbers to call.  She often redirects lines throughout the company.  In her spare time, she practices calligraphy, hoping to master the art.  In the business, this talent leads to her being great at replicating her higher-up’s signatures to expedite signing contracts and paperwork.
 
 She has a few directives to offer for each specialist promotion:
@@ -140,8 +147,9 @@ The Director welcomes the executives into his place, where he reveals the graphs
 
 The Director, spectating the incompetency of his workers, begins moving toward a button on the wall, which he slams out of frustration.  He remarks on the toons' gall to waltz into his office when he was about to present his latest line of Sellbot managers.  A hatch opens in the ceiling, and the marketing team flies in from above.
 
-### The Blitz Campaign Team:  
-#### Blitz Campaigner (30.mgr, 2900)  
+### The Blitz Campaign Team  
+**Blitz Campaigner**  
+(30.mgr, 2900)  
 Blake Broker is the definition of trigger-happy when it comes to business deals. He is eager to go out and share news about trendy products, but won’t stop to hear what you have to say.  Can you catch up to him?  
 “You were bound to find me—I’m going everywhere!”  
 Blitz Campaigner always attacks twice per turn, once if he's lured.  
@@ -155,7 +163,8 @@ Rolodex, 18
 Paradigm Shift, 16  
 Buzz Word, 17
 
-#### Astroturfer (20.mgr, 2120/1060/530/280/140/70/35)  
+**Astroturfer**  
+(20.mgr, 2120/1060/530/280/140/70/35)  
 Allen Aggregate is set to be the most popular cog out there—according to himself.  When he isn’t lost in his own social circle, he’s advocating for the company’s top grossing products.  Good luck trying to get a hold of him!  
 “I've got my own friends on the line.”  
 He stops taking damage at half his HP and can only be lured for 2 rounds.  
@@ -167,9 +176,10 @@ Attacks:
 Filibuster, 25  
 Synergy, 20  
 Hot Air, 30  
-Mumbo Jumbo, 23
+Mumbo Jumbo, 23  
 
-#### Snake-Oil Salesman (25.mgr, 2750)  
+**Snake-Oil Salesman**  
+(25.mgr, 2750)  
 Distant relative to a certain infamous money launderer, Silvester Sidewinder is a more honest trader.  He is true to his name and will supply his own prime oil to all needy cogs.  His gratuitousness may quickly become overwhelming.  
 “This cure-all will keep cogs in tip-top shape.”  
 He will immediately attack toons who attack him directly, plus he can only be lured for 2 rounds.  
@@ -183,7 +193,8 @@ Glower Power, 35
 Double Talk, 32  
 Evil Eye, 33
 
-#### Data Miner (25.mgr, 2800)  
+**Data Miner**  
+(25.mgr, 2800)  
 Darrel Dealbreaker spends long periods of time planning ahead, trying to account for all the variables.  This makes him formidable in the world of network tunneling and data analysis.  If you’re his next target, get ready for a world of pain!  
 "Request received: identify toons, then dispose of them."  
 He only attacks a toon with a mining process, but he can be lured for only 2 rounds.  
@@ -206,25 +217,29 @@ Dig Up, 38
 - Snake Glare will help Data Miner's process finish faster.  The mining process finishing will trigger Quick Oil, but not when you break it.  
 
 ——
-### Catching game:  
+### Catching game  
 Once the marketing team is defeated, Cold Callers surround the oven, fill it with hot air, and it begins spitting out burning pies.  Pies on fire hurt for 2 laff points, but toasted pies are salvageable.  While this happens, a few First-Movers stomp around to trip up toons in a bigger area.  Getting shaken deals 6 laff points.  
 Collecting toasted pies increases the supply meter by 5.  The demand meter will decrease by 2 points a second, but if the toon gets hit, it increases by double the amount of damage taken.  The supply and demand meters both have a total of 100 points.  
 
 The Director gives one final warning, saying he will bring the storm if they try to do anything funny.  Rain enters the room, planting a wedding cake tree in a nearby flower pot.  Finally, the Director, having enough of the toony nonsense, snaps and dozens of cogs fly in from the ceiling hatches to swarm the toons.
 
-### The Final Fight:  
-**Objective:**  Similar to the normal Director fight, send him flying off the platform, only this time, many more obstacles are in the way.
+### The Final Fight  
+**Objective:**  
+Similar to the normal Director fight, send him flying off the platform, only this time, many more obstacles are in the way.
 
-**Gags:**  Toons start with burnt fruit pies (40 damage, 20 knock back, 1 laff point) that can be reloaded by visiting the fridge.  Based on the number of pies the toon recovered from the catch game, they can throw 15-30 burnt pies per reload.  
+**Gags:**  
+Toons start with burnt fruit pies (40 damage, 20 knock back, 1 laff point) that can be reloaded by visiting the fridge.  Based on the number of pies the toon recovered from the catch game, they can throw 15-30 burnt pies per reload.  
 They can also collect cream pies (90 damage, 45 knock back, 3 laff points) from the fridge at the cost of 1-5 price tags depending on their demand level.  Cream Pies will cost more price tags the more they’re obtained.  
 If all toons obtain enough price tags from defeated cogs, toons can go collect a wedding cake from the tree (170 damage, 85 knock back, 40 laff points).  Wedding cakes fly through cogs and will also “mark for laff” any cogs when hit for 30 seconds.  If a wedding cake hits the Director, it will extend his next stun time by 5 seconds.  
 Byers will pick up and move the fridge as toons advance.
 
-**Cogs:**  Regular Cogs will defend the Director by diving towards the toons from high above.  Enough throw gags will defeat them and make them drop price tags and treasures.  
+**Cogs:**  
+Regular Cogs will defend the Director by diving towards the toons from high above.  Enough throw gags will defeat them and make them drop price tags and treasures.  
 Field Specialists stay up high and drop an explosive oil drum on toons below.  
 Operations Analysts will fly in to protect the Director's undercarriage when he recovers, but they do not drop price tags or treasures.
 
-**The Director:** (3000 HP + LOTS of obstacles)  
+**The Director:**  
+(3000 HP + LOTS of obstacles)  
 He uses spruced-up versions of his attacks from the original fight:  
 - He will jump 1/2/3 times, depending on how close he is to the final edge (Warning comes in 2 yellow/3 red !s above the toon.)
 - He throws a spread of gears that can hit multiple toons.
