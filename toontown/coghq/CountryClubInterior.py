@@ -17,11 +17,11 @@ from toontown.building import Elevator
 import random
 
 CountryClubSoundtracks = {ToontownGlobals.BossbotCountryClubIntA: ['phase_12/audio/bgm/BB_golf_front.ogg',
-                                                     'phase_12/audio/bgm/BB_golf_encntr.ogg'],
+                                                     'phase_12/audio/bgm/BB_golf_front_encntr.ogg'],
                    ToontownGlobals.BossbotCountryClubIntB: ['phase_12/audio/bgm/BB_golf_middle.ogg',
-                                                     'phase_12/audio/bgm/BB_golf_encntr.ogg'],
+                                                     'phase_12/audio/bgm/BB_golf_middle_encntr.ogg'],
                    ToontownGlobals.BossbotCountryClubIntC: ['phase_12/audio/bgm/BB_golf_back.ogg',
-                                                     'phase_12/audio/bgm/BB_golf_encntr.ogg']}
+                                                     'phase_12/audio/bgm/BB_golf_back_encntr.ogg']}
 
 class CountryClubInterior(BattlePlace.BattlePlace):
     notify = DirectNotifyGlobal.directNotify.newCategory('CountryClubInterior')
