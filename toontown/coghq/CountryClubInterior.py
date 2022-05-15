@@ -16,6 +16,13 @@ from toontown.coghq import DistributedCountryClub
 from toontown.building import Elevator
 import random
 
+CountryClubSoundtracks = {ToontownGlobals.CashbotMintIntA: ['phase_12/audio/bgm/BB_golf_front.ogg',
+                                                     'phase_12/audio/bgm/BB_golf_encntr.ogg'],
+                   ToontownGlobals.CashbotMintIntB: ['phase_12/audio/bgm/BB_golf_middle.ogg',
+                                                     'phase_12/audio/bgm/BB_golf_encntr.ogg'],
+                   ToontownGlobals.CashbotMintIntC: ['phase_12/audio/bgm/BB_golf_back.ogg',
+                                                     'phase_12/audio/bgm/BB_golf_encntr.ogg']}
+
 class CountryClubInterior(BattlePlace.BattlePlace):
     notify = DirectNotifyGlobal.directNotify.newCategory('CountryClubInterior')
 
@@ -72,8 +79,9 @@ class CountryClubInterior(BattlePlace.BattlePlace):
     def load(self):
         self.parentFSM.getStateNamed('countryClubInterior').addChild(self.fsm)
         BattlePlace.BattlePlace.load(self)
-        musicName = random.choice(['phase_12/audio/bgm/Bossbot_Factory_v1.ogg', 'phase_12/audio/bgm/Bossbot_Factory_v2.ogg', 'phase_12/audio/bgm/Bossbot_Factory_v3.ogg'])
-        self.music = base.loader.loadMusic(musicName)
+        self.countryMusic = base.loader.loadMusic(CountryClubSoundtracks[self.zoneId][0])
+        self.music = base.loader.loadMusic(self.countryMusic)
+        self.loader.setBattleMusic(CountryClubSoundtracks[self.zoneId][1])
 
     def unload(self):
         self.parentFSM.getStateNamed('countryClubInterior').removeChild(self.fsm)
