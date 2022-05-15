@@ -16,11 +16,11 @@ from toontown.coghq import DistributedCountryClub
 from toontown.building import Elevator
 import random
 
-CountryClubSoundtracks = {ToontownGlobals.CashbotMintIntA: ['phase_12/audio/bgm/BB_golf_front.ogg',
+CountryClubSoundtracks = {ToontownGlobals.BossbotCountryClubIntA: ['phase_12/audio/bgm/BB_golf_front.ogg',
                                                      'phase_12/audio/bgm/BB_golf_encntr.ogg'],
-                   ToontownGlobals.CashbotMintIntB: ['phase_12/audio/bgm/BB_golf_middle.ogg',
+                   ToontownGlobals.BossbotCountryClubIntB: ['phase_12/audio/bgm/BB_golf_middle.ogg',
                                                      'phase_12/audio/bgm/BB_golf_encntr.ogg'],
-                   ToontownGlobals.CashbotMintIntC: ['phase_12/audio/bgm/BB_golf_back.ogg',
+                   ToontownGlobals.BossbotCountryClubIntC: ['phase_12/audio/bgm/BB_golf_back.ogg',
                                                      'phase_12/audio/bgm/BB_golf_encntr.ogg']}
 
 class CountryClubInterior(BattlePlace.BattlePlace):
