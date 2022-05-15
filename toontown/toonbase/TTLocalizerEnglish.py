@@ -6075,6 +6075,7 @@ CagedToonDrop = ["The cage is being lowered, keep it up!",
                  'Great work!',
                  'Just a few more to go!',
                  "Okay, let's finish this!"]
+DinerToonName = "Salt 'n Pupper"
 RescueToonName = 'Byers B. Ware'
 CagedToonName = 'Rain'
 RescueToonBreakOut = '...There! I knew that %s would come in handy.'
@@ -6097,6 +6098,13 @@ RescueToonStrategy3 = "Bring me some cog-bucks, and I'll trade them for some cak
 CagedToonStrategy1 = "To stop the Director, we'll pelt him with pies until he falls off the edge."
 CagedToonStrategy2 = "Hit him in the undercarriage to stun him, and then send him flying!"
 CagedToonStrategy3 = 'Good luck!'
+GigglesIntro = "There you are! I'm glad you made it, and just in time too."
+GigglesIntro1 = "The C.E.O is hosting a banquet for the highest executives, we will need to crash it!"
+GigglesIntro2 = "I've learned my lesson on waiter costume building! You, will intrude the banquet and halt any diners."
+GigglesIntro3 = "How you may ask? Fruit Pie Shakes!"
+GigglesIntroServing = "I will be serving the Shakes while giggles here finds a way to take down the C.E.O!"
+GigglesIntro4 = "Now toons, lets get out there and give them a meal they won't stop laughing about!"
+CEOIntro = "Finaly, What took you so long? Now get Serving!"
 BossBattleNeedMoreGags = "You've run out of throw gags!"
 BossBattleHowToGetSlices = 'Run into the cooler to collect some slices.'
 BossBattleHowToThrow = 'Press %s/%s to throw!'

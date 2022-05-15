@@ -77,13 +77,16 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
     def enterElevator(self):
         DistributedBossCogAI.DistributedBossCogAI.enterElevator(self)
-        self.makeBattleOneBattles()
+        #self.makeBattleOneBattles()
 
     def enterIntroduction(self):
         self.arenaSide = None
-        self.makeBattleOneBattles()
-        self.barrier = self.beginBarrier('Introduction', self.involvedToons, 45, self.doneIntroduction)
+        #self.makeBattleOneBattles()
+        self.barrier = self.beginBarrier('Introduction', self.involvedToons, 52, self.doneIntroduction)
         return
+
+    def doneIntroduction(self, avIds):
+        self.b_setState('BattleTwo')
 
     def makeBattleOneBattles(self):
         if not self.battleOneBattlesMade:

@@ -165,7 +165,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         planeNode.setCollideMask(ToontownGlobals.PieBitmask)
         self.geom.attachNewNode(planeNode)
         self.geom.reparentTo(render)
-        self.promotionMusic = base.loader.loadMusic('phase_7/audio/bgm/encntr_suit_winning_indoor.ogg')
+        self.promotionMusic = base.loader.loadMusic('phase_12/audio/bgm/BB_golf_front.ogg')
         self.betweenPhaseMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
         self.phaseTwoMusic = base.loader.loadMusic('phase_12/audio/bgm/BossBot_CEO_v1.ogg')
         self.battleOneMusic = base.loader.loadMusic('phase_12/audio/bgm/BB_general_suitWinning_encntr.ogg')
@@ -187,6 +187,26 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.geom.removeNode()
         del self.geom
         DistributedBossCog.DistributedBossCog.unloadEnvironment(self)
+
+    def __makeResistanceToon(self):
+        if self.resistanceToon:
+            return
+        npc = Toon.Toon()
+        npc.setName(TTLocalizer.BossbotResistanceToonName)
+        npc.setPickable(0)
+        npc.setPlayerType(NametagGroup.CCNonPlayer)
+        dna = ToonDNA.ToonDNA()
+        dna.newToonRandom(11237, 'm', 1)
+        dna.head = 'sls'
+        npc.setDNAString(dna.makeNetString())
+        npc.animFSM.request('neutral')
+        npc.loop('neutral')
+        self.resistanceToon = npc
+        self.resistanceToon.setPosHpr(*ToontownGlobals.BossbotRTIntroStartPosHpr)
+        state = random.getstate()
+        random.seed(self.doId)
+        self.resistanceToon.suitType = SuitDNA.getRandomSuitByDept('c')
+        random.setstate(state)
 
     def __makeResistanceToon(self):
         if self.resistanceToon:
@@ -237,8 +257,8 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def enterElevator(self):
         DistributedBossCog.DistributedBossCog.enterElevator(self)
         self.resistanceToon.removeActive()
-        self.__showResistanceToon(True)
-        self.resistanceToon.suit.loop('neutral')
+        self.__showResistanceToon(False)
+        self.resistanceToon.loop('neutral')
         base.camera.setPos(0, 21, 7)
         self.reparentTo(render)
         self.setPosHpr(*ToontownGlobals.BossbotBossBattleOnePosHpr)
@@ -247,7 +267,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def enterIntroduction(self):
         if not self.resistanceToonOnstage:
-            self.__showResistanceToon(True)
+            self.__showResistanceToon(False)
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
 
@@ -262,7 +282,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         elevCamPosHpr = ToontownGlobals.BossbotElevCamPosHpr
         closeUpRTCamPos = Point3(elevCamPosHpr[0], elevCamPosHpr[1], elevCamPosHpr[2])
         closeUpRTCamHpr = Point3(elevCamPosHpr[3], elevCamPosHpr[4], elevCamPosHpr[5])
-        closeUpRTCamPos.setY(closeUpRTCamPos.getY() + 20)
+        closeUpRTCamPos.setY(closeUpRTCamPos.getY() + 30)
         closeUpRTCamPos.setZ(closeUpRTCamPos.getZ() + -2)
         closeUpRTCamHpr = Point3(0, 5, 0)
         loseSuitCamPos = Point3(rToonStartPos)
@@ -271,12 +291,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         waiterCamPos = Point3(rToonStartPos)
         waiterCamPos += Point3(-5, -10, 5)
         waiterCamHpr = Point3(-30, 0, 0)
-        track = Sequence(Func(camera.reparentTo, render), Func(camera.setPosHpr, *elevCamPosHpr), Func(rToon.setChatAbsolute, TTL.BossbotRTWelcome, CFSpeech), LerpPosHprInterval(camera, 3, closeUpRTCamPos, closeUpRTCamHpr), Func(rToon.setChatAbsolute, TTL.BossbotRTRemoveSuit, CFSpeech), Wait(3), Func(self.clearChat), self.loseCogSuits(self.toonsA + self.toonsB, render, (loseSuitCamPos[0],
-         loseSuitCamPos[1],
-         loseSuitCamPos[2],
-         loseSuitCamHpr[0],
-         loseSuitCamHpr[1],
-         loseSuitCamHpr[2])), self.toonNormalEyes(self.involvedToons), Wait(2), Func(camera.setPosHpr, closeUpRTCamPos, closeUpRTCamHpr), Func(rToon.setChatAbsolute, TTL.BossbotRTFightWaiter, CFSpeech), Wait(1), LerpHprInterval(camera, 2, Point3(-15, 5, 0)), Sequence(Func(rToon.suit.loop, 'walk'), rToon.hprInterval(1, VBase3(270, 0, 0)), rToon.posInterval(2.5, rToonEndPos), Func(rToon.suit.loop, 'neutral')), Wait(3), Func(rToon.clearChat), Func(self.__hideResistanceToon))
+        track = Sequence(Func(camera.reparentTo, render), Func(camera.setPosHpr, *elevCamPosHpr), Func(rToon.setChatAbsolute, TTL.GigglesIntro, CFSpeech), Wait(5), Func(rToon.setChatAbsolute, TTL.GigglesIntro1, CFSpeech), Wait(5.5), Func(rToon.setChatAbsolute, TTL.GigglesIntro2, CFSpeech), Wait(5.5), Func(rToon.setChatAbsolute, TTL.GigglesIntro3, CFSpeech), Wait(5.5), Func(rToon.setChatAbsolute, TTL.GigglesIntroServing, CFSpeech), Wait(2.5), self.wearCogSuits(self.toonsA + self.toonsB, render, None, waiter=True), Func(rToon.setChatAbsolute, TTL.GigglesIntro4, CFSpeech), Wait(5.5), LerpHprInterval(self.banquetDoor, 2, Point3(120, 0, 0)), self.createWalkInInterval(), Wait(5), Func(self.setChatAbsolute, TTL.CEOIntro, CFSpeech), Wait(2), Func(self.banquetDoor.setH, 0))
         return track
 
     def enterFrolic(self):
