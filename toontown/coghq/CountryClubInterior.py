@@ -79,8 +79,7 @@ class CountryClubInterior(BattlePlace.BattlePlace):
     def load(self):
         self.parentFSM.getStateNamed('countryClubInterior').addChild(self.fsm)
         BattlePlace.BattlePlace.load(self)
-        self.countryMusic = base.loader.loadMusic(CountryClubSoundtracks[self.zoneId][0])
-        self.music = base.loader.loadMusic(self.countryMusic)
+        self.music = base.loader.loadMusic(CountryClubSoundtracks[self.zoneId][0])
         self.loader.setBattleMusic(CountryClubSoundtracks[self.zoneId][1])
 
     def unload(self):
