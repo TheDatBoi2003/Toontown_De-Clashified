@@ -67,6 +67,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.battleFourDuration = simbase.air.config.GetInt('battle-four-duration', 1800)
         self.overtimeOneStart = float(self.overtimeOneTime) / self.battleFourDuration
         self.moveAttackAllowed = True
+        self.exeCounter = 0
 
     def delete(self):
         self.notify.debug('DistributedBossbotBossAI.delete')
@@ -80,8 +81,13 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         #self.makeBattleOneBattles()
 
     def enterIntroduction(self):
-        self.arenaSide = None
-        #self.makeBattleOneBattles()
+        self.createFoodBelts()
+        self.createBanquetTables()
+        for belt in self.foodBelts:
+            belt.turnOn()
+
+        for table in self.tables:
+            table.turnOn()
         self.barrier = self.beginBarrier('Introduction', self.involvedToons, 52, self.doneIntroduction)
         return
 
@@ -90,7 +96,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
     def makeBattleOneBattles(self):
         if not self.battleOneBattlesMade:
-            self.postBattleState = 'PrepareBattleTwo'
+            self.postBattleState = 'PrepareBattleFour'
             self.initializeBattles(1, ToontownGlobals.BossbotBossBattleOnePosHpr)
             self.battleOneBattlesMade = True
 
@@ -256,14 +262,6 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.tables = []
 
     def enterBattleTwo(self):
-        self.resetBattles()
-        self.createFoodBelts()
-        self.createBanquetTables()
-        for belt in self.foodBelts:
-            belt.turnOn()
-
-        for table in self.tables:
-            table.turnOn()
 
         self.barrier = self.beginBarrier('BattleTwo', self.involvedToons,
                                          ToontownGlobals.BossbotBossServingDuration + 1, self.__doneBattleTwo)
@@ -347,23 +345,26 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def generateDinerSuits(self):
         diners = []
         for i in xrange(len(self.notDeadList)):
-            if simbase.config.GetBool('bossbot-boss-cheat', 0):
-                suit = self.__genSuitObject(self.zoneId, 'c', 2, 0)
-            else:
-                info = self.notDeadList[i]
-                suitType = info[2] - 4
-                suitLevel = info[2]
-                suit = self.__genSuitObject(self.zoneId, 'c', suitLevel, 1)
+            info = self.notDeadList[i]
+            suitType = info[2] - 4
+            suitLevel = info[2]
+            suit = self.__genSuitObject(self.zoneId, 'c', suitLevel, 1)
+            for table in self.tables:
+                executive = table.getExecutive(self.exeCounter)
+                if executive == 1:
+                    isEXE = 1
+                else:
+                    isEXE = 0
+            suit.b_setExecutive(isEXE)
             diners.append((suit, 100))
+            self.exeCounter += 1
 
         active = []
         for i in xrange(2):
-            if simbase.config.GetBool('bossbot-boss-cheat', 0):
-                suit = self.__genSuitObject(self.zoneId, 'c', 2, 0)
-            else:
-                suitType = 8
-                suitLevel = 12
-                suit = self.__genSuitObject(self.zoneId, 'c', suitLevel, 1)
+            suitType = 8
+            suitLevel = 18
+            suit.b_setExecutive(1)
+            suit = self.__genSuitObject(self.zoneId, 'c', suitLevel, 0)
             active.append(suit)
 
         return {'activeSuits': active,

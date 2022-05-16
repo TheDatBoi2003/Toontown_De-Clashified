@@ -15,9 +15,11 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
         self.index = index
         self.numDiners = numDiners
         self.numChairs = 8
+        self.explodeAmmount = 2
         self.dinerStatus = {}
         self.dinerInfo = {}
         for i in xrange(self.numDiners):
+            exe = random.choice([0, 1])
             self.dinerStatus[i] = self.INACTIVE
             diffSettings = ToontownGlobals.BossbotBossDifficultySettings[self.boss.battleDifficulty]
             hungryDuration = diffSettings[4]
@@ -25,11 +27,12 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
             hungryDuration += random.uniform(-5, 5)
             eatingDuration += random.uniform(-5, 5)
             level = 12
+            executive = exe
             if type(dinerLevel) == type(0):
                 level = dinerLevel
             else:
                 level = random.choice(dinerLevel)
-            self.dinerInfo[i] = (hungryDuration, eatingDuration, level)
+            self.dinerInfo[i] = (hungryDuration, eatingDuration, level, executive)
 
         self.transitionTasks = {}
         self.numFoodEaten = {}
@@ -56,16 +59,22 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
     def setDinerStatus(self, chairIndex, newStatus):
         self.dinerStatus[chairIndex] = newStatus
 
+    def getExecutive(self, chairIndex):
+        if chairIndex in self.dinerInfo:
+            return self.dinerInfo[chairIndex][3]
+
     def getDinerInfo(self):
         hungryDurations = []
         eatingDurations = []
         dinerLevels = []
+        executive = []
         for i in xrange(self.numDiners):
             hungryDurations.append(self.dinerInfo[i][0])
             eatingDurations.append(self.dinerInfo[i][1])
             dinerLevels.append(self.dinerInfo[i][2])
+            executive.append(self.dinerInfo[i][3])
 
-        return (hungryDurations, eatingDurations, dinerLevels)
+        return (hungryDurations, eatingDurations, dinerLevels, executive)
 
     def d_setDinerStatus(self, chairIndex, newStatus):
         self.sendUpdate('setDinerStatus', [chairIndex, newStatus])
@@ -119,7 +128,13 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
         if chairIndex in self.transitionTasks:
             self.removeTask(self.transitionTasks[chairIndex])
         self.incrementFoodEaten(chairIndex)
-        if self.numFoodEaten[chairIndex] >= ToontownGlobals.BossbotNumFoodToExplode:
+        #if the suit is an executive, then add +1 to self.explodeAmmount
+        executive = self.dinerInfo[chairIndex][3]
+        if executive:
+            self.explodeAmmount = 3
+        else:
+            self.explodeAmmount = 2
+        if self.numFoodEaten[chairIndex] >= self.explodeAmmount:
             self.b_setDinerStatus(chairIndex, self.DEAD)
             self.boss.incrementDinersExploded()
         else:
