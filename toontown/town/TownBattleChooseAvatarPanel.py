@@ -22,7 +22,7 @@ class TownBattleChooseAvatarPanel(StateData.StateData):
         self.frame = DirectFrame(relief=None, image=gui.find('**/BtlPick_TAB'), image_color=Vec4(1, 0.2, 0.2, 1))
         self.frame.hide()
         self.statusFrame = DirectFrame(parent=self.frame, relief=None, image=gui.find('**/ToonBtl_Status_BG'), image_color=Vec4(0.5, 0.9, 0.5, 1), pos=(0.611, 0, 0))
-        self.textFrame = DirectFrame(parent=self.frame, relief=None, image=gui.find('**/PckMn_Select_Tab'), image_color=Vec4(1, 1, 0, 1), text='', text_fg=Vec4(0, 0, 0, 1), text_pos=(0, -0.025, 0), text_scale=0.08, pos=(-0.013, 0, 0.013))
+        self.textFrame = DirectFrame(parent=self.frame, relief=None, image=None, image_color=Vec4(1, 1, 0, 1), text='', text_fg=Vec4(0, 0, 0, 1), text_pos=(0, -0.025, 0), text_scale=0.08, pos=(-0.013, 0, 0.013))
         if self.toon:
             self.textFrame['text'] = TTLocalizer.TownBattleChooseAvatarToonTitle
         else:

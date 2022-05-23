@@ -22,6 +22,7 @@ import MovieZap
 import toontown.battle.movies.PlayByPlayText
 import toontown.battle.movies.RewardPanel
 from toontown.battle.SuitBattleGlobals import *
+from toontown.battle.ToonBattleGlobals import *
 from libotp import *
 from toontown.battle.BattleBase import *
 from toontown.battle.movies import MovieSuitCheats
@@ -541,6 +542,13 @@ class Movie(DirectObject.DirectObject):
                 attackDict['track'] = track
                 attackDict['level'] = level
                 hps = toonAttack[TOON_HP_COL]
+                marketStatus=toon.getStatus(MARKETING_STATUS)
+                if marketStatus:
+                    marketStatusCap=marketStatus['dmgCap']
+                    if marketStatusCap:
+                        for hp in hps:
+                            if hp > marketStatusCap:
+                                hp = marketStatusCap
                 kbBonuses = toonAttack[TOON_KBBONUS_COL]
                 if track == NPCSOS:
                     attackDict['npcId'] = toonAttack[TOON_TGT_COL]

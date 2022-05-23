@@ -160,9 +160,6 @@ class ShtikerBook(DirectFrame, StateData.StateData):
         del self.pageSound
 
     def addPage(self, page, pageName = 'Page'):
-        if pageName not in self.pageOrder:
-            self.notify.error('Trying to add page %s in the ShtickerBook. Page not listed in the order.' % pageName)
-            return
         pageIndex = 0
         if len(self.pages):
             newIndex = len(self.pages)

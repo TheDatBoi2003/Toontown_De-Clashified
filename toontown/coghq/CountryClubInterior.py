@@ -21,7 +21,9 @@ CountryClubSoundtracks = {ToontownGlobals.BossbotCountryClubIntA: ['phase_12/aud
                    ToontownGlobals.BossbotCountryClubIntB: ['phase_12/audio/bgm/BB_golf_middle.ogg',
                                                      'phase_12/audio/bgm/BB_golf_middle_encntr.ogg'],
                    ToontownGlobals.BossbotCountryClubIntC: ['phase_12/audio/bgm/BB_golf_back.ogg',
-                                                     'phase_12/audio/bgm/BB_golf_back_encntr.ogg']}
+                                                     'phase_12/audio/bgm/BB_golf_back_encntr.ogg'],
+                   ToontownGlobals.BossbotCountryClubIntD: ['phase_12/audio/bgm/BB_office_stocks.ogg',
+                                                     'phase_12/audio/bgm/BB_office_stocks_encntr.ogg']}
 
 class CountryClubInterior(BattlePlace.BattlePlace):
     notify = DirectNotifyGlobal.directNotify.newCategory('CountryClubInterior')

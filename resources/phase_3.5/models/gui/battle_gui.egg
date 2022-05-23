@@ -1,0 +1,1538 @@
+<CoordinateSystem> { Z-up } 
+<Material> default.001 {
+  <Scalar> diffr { 1.000000 }
+  <Scalar> diffg { 1.000000 }
+  <Scalar> diffb { 1.000000 }
+  <Scalar> specr { 0.000000 }
+  <Scalar> specg { 0.000000 }
+  <Scalar> specb { 0.000000 }
+  <Scalar> shininess { 0.25 }
+  <Scalar> ambr { 1.000000 }
+  <Scalar> ambg { 1.000000 }
+  <Scalar> ambb { 1.000000 }
+  <Scalar> emitr { 0.000000 }
+  <Scalar> emitg { 0.000000 }
+  <Scalar> emitb { 0.000000 }
+}
+
+<Material> default {
+  <Scalar> diffr { 1.000000 }
+  <Scalar> diffg { 1.000000 }
+  <Scalar> diffb { 1.000000 }
+  <Scalar> specr { 0.000000 }
+  <Scalar> specg { 0.000000 }
+  <Scalar> specb { 0.000000 }
+  <Scalar> shininess { 0.25 }
+  <Scalar> ambr { 1.000000 }
+  <Scalar> ambg { 1.000000 }
+  <Scalar> ambb { 1.000000 }
+  <Scalar> emitr { 0.000000 }
+  <Scalar> emitg { 0.000000 }
+  <Scalar> emitb { 0.000000 }
+}
+
+<Material> default.002 {
+  <Scalar> diffr { 1.000000 }
+  <Scalar> diffg { 1.000000 }
+  <Scalar> diffb { 1.000000 }
+  <Scalar> specr { 0.000000 }
+  <Scalar> specg { 0.000000 }
+  <Scalar> specb { 0.000000 }
+  <Scalar> shininess { 0.25 }
+  <Scalar> ambr { 1.000000 }
+  <Scalar> ambg { 1.000000 }
+  <Scalar> ambb { 1.000000 }
+  <Scalar> emitr { 0.000000 }
+  <Scalar> emitg { 0.000000 }
+  <Scalar> emitb { 0.000000 }
+}
+
+<Material> default.005 {
+  <Scalar> diffr { 1.000000 }
+  <Scalar> diffg { 1.000000 }
+  <Scalar> diffb { 1.000000 }
+  <Scalar> specr { 0.000000 }
+  <Scalar> specg { 0.000000 }
+  <Scalar> specb { 0.000000 }
+  <Scalar> shininess { 0.25 }
+  <Scalar> ambr { 1.000000 }
+  <Scalar> ambg { 1.000000 }
+  <Scalar> ambb { 1.000000 }
+  <Scalar> emitr { 0.000000 }
+  <Scalar> emitg { 0.000000 }
+  <Scalar> emitb { 0.000000 }
+}
+
+<Material> default.004 {
+  <Scalar> diffr { 1.000000 }
+  <Scalar> diffg { 1.000000 }
+  <Scalar> diffb { 1.000000 }
+  <Scalar> specr { 0.000000 }
+  <Scalar> specg { 0.000000 }
+  <Scalar> specb { 0.000000 }
+  <Scalar> shininess { 0.25 }
+  <Scalar> ambr { 1.000000 }
+  <Scalar> ambg { 1.000000 }
+  <Scalar> ambb { 1.000000 }
+  <Scalar> emitr { 0.000000 }
+  <Scalar> emitg { 0.000000 }
+  <Scalar> emitb { 0.000000 }
+}
+
+<Material> default.003 {
+  <Scalar> diffr { 1.000000 }
+  <Scalar> diffg { 1.000000 }
+  <Scalar> diffb { 1.000000 }
+  <Scalar> specr { 0.000000 }
+  <Scalar> specg { 0.000000 }
+  <Scalar> specb { 0.000000 }
+  <Scalar> shininess { 0.25 }
+  <Scalar> ambr { 1.000000 }
+  <Scalar> ambg { 1.000000 }
+  <Scalar> ambb { 1.000000 }
+  <Scalar> emitr { 0.000000 }
+  <Scalar> emitg { 0.000000 }
+  <Scalar> emitb { 0.000000 }
+}
+
+<Texture> battle_gui_palette_4amla_1 {
+  "/c/DeclashedToontownGuyBracnh/Toontown_De-Clashified/resources/phase_3.5/maps/battle_gui_palette_4amla_1.jpg"
+  <Scalar> envtype { MODULATE }
+  <Scalar> minfilter { LINEAR_MIPMAP_LINEAR }
+  <Scalar> magfilter { LINEAR_MIPMAP_LINEAR }
+  <Scalar> wrap { REPEAT }
+}
+
+<Texture> battle_gui_palette_2tlla_1 {
+  "/c/DeclashedToontownGuyBracnh/Toontown_De-Clashified/resources/phase_3.5/maps/battle_gui_palette_2tlla_1.jpg"
+  <Scalar> envtype { MODULATE }
+  <Scalar> minfilter { LINEAR_MIPMAP_LINEAR }
+  <Scalar> magfilter { LINEAR_MIPMAP_LINEAR }
+  <Scalar> wrap { REPEAT }
+}
+
+<Texture> Texture.001 {
+  "/c/DeclashedToontownGuyBracnh/Toontown_De-Clashified/resources/phase_3.5/maps/NEWbattle_gui_palette_4alla_1.png"
+  <Scalar> envtype { MODULATE }
+  <Scalar> minfilter { LINEAR_MIPMAP_LINEAR }
+  <Scalar> magfilter { LINEAR_MIPMAP_LINEAR }
+  <Scalar> wrap { REPEAT }
+}
+
+<Texture> Texture {
+  "/c/DeclashedToontownGuyBracnh/Toontown_De-Clashified/resources/phase_3.5/maps/NEW_BATTLE_Menu.png"
+  <Scalar> envtype { MODULATE }
+  <Scalar> minfilter { LINEAR_MIPMAP_LINEAR }
+  <Scalar> magfilter { LINEAR_MIPMAP_LINEAR }
+  <Scalar> wrap { REPEAT }
+}
+
+<Texture> phase_3.5_palette_4alla_1 {
+  "/c/DeclashedToontownGuyBracnh/Toontown_De-Clashified/resources/phase_3.5/maps/phase_3.5_palette_4alla_1.jpg"
+  <Scalar> envtype { MODULATE }
+  <Scalar> minfilter { LINEAR_MIPMAP_LINEAR }
+  <Scalar> magfilter { LINEAR_MIPMAP_LINEAR }
+  <Scalar> wrap { REPEAT }
+}
+
+<Texture> battle_gui_palette_4alla_2 {
+  "/c/DeclashedToontownGuyBracnh/Toontown_De-Clashified/resources/phase_3.5/maps/battle_gui_palette_4alla_2.jpg"
+  <Scalar> envtype { MODULATE }
+  <Scalar> minfilter { LINEAR_MIPMAP_LINEAR }
+  <Scalar> magfilter { LINEAR_MIPMAP_LINEAR }
+  <Scalar> wrap { REPEAT }
+}
+
+  <Group> {
+    <Transform> {
+      <Matrix4> {
+        1.0 0.0 0.0 0.0 
+        0.0 1.0 0.0 0.0 
+        0.0 0.0 1.0 0.0 
+        0.0 0.0 0.0 1.0 
+      }
+    }
+    
+    <Group> tt_t_gui_gen_skipSectionRollOver {
+      <Transform> {
+        <Matrix4> {
+          1.0 0.0 0.0 0.0 
+          0.0 1.0 0.0 0.0 
+          0.0 0.0 1.0 0.0 
+          0.0 0.0 0.0 1.0 
+        }
+      }
+      
+      <Group> tt_t_gui_gen_skipSectionRollOver {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> tt_t_gui_gen_skipSectionRollOver {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> tt_t_gui_gen_skipSectionRollOver {
+          
+            <Vertex> 0 {-0.133333 0.000000 0.133333
+              <UV>  {
+                0.257813 0.992188 
+              }
+            }
+            <Vertex> 1 {-0.133333 0.000000 -0.133333
+              <UV>  {
+                0.257813 0.882813 
+              }
+            }
+            <Vertex> 2 {0.133333 0.000000 0.133333
+              <UV>  {
+                0.367188 0.992188 
+              }
+            }
+            <Vertex> 3 {0.133333 0.000000 0.133333
+              <UV>  {
+                0.367188 0.992188 
+              }
+            }
+            <Vertex> 4 {-0.133333 0.000000 -0.133333
+              <UV>  {
+                0.257813 0.882813 
+              }
+            }
+            <Vertex> 5 {0.133333 0.000000 -0.133333
+              <UV>  {
+                0.367188 0.882813 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { battle_gui_palette_4amla_1 }
+            <MRef> { default.005 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { tt_t_gui_gen_skipSectionRollOver }} 
+          }
+          <Polygon> {
+            <TRef> { battle_gui_palette_4amla_1 }
+            <MRef> { default.005 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { tt_t_gui_gen_skipSectionRollOver }} 
+          }
+        }
+      }
+      <Group> tt_t_gui_gen_skipSectionDisabled {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> tt_t_gui_gen_skipSectionDisabled {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> tt_t_gui_gen_skipSectionDisabled {
+          
+            <Vertex> 0 {-0.133333 0.000000 0.133333
+              <UV>  {
+                0.007812 0.992188 
+              }
+            }
+            <Vertex> 1 {-0.133333 0.000000 -0.133333
+              <UV>  {
+                0.007812 0.882813 
+              }
+            }
+            <Vertex> 2 {0.133333 0.000000 0.133333
+              <UV>  {
+                0.117188 0.992188 
+              }
+            }
+            <Vertex> 3 {0.133333 0.000000 0.133333
+              <UV>  {
+                0.117188 0.992188 
+              }
+            }
+            <Vertex> 4 {-0.133333 0.000000 -0.133333
+              <UV>  {
+                0.007812 0.882813 
+              }
+            }
+            <Vertex> 5 {0.133333 0.000000 -0.133333
+              <UV>  {
+                0.117188 0.882813 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { battle_gui_palette_4amla_1 }
+            <MRef> { default.005 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { tt_t_gui_gen_skipSectionDisabled }} 
+          }
+          <Polygon> {
+            <TRef> { battle_gui_palette_4amla_1 }
+            <MRef> { default.005 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { tt_t_gui_gen_skipSectionDisabled }} 
+          }
+        }
+      }
+      <Group> tt_t_gui_gen_skipSectionDown {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> tt_t_gui_gen_skipSectionDown {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> tt_t_gui_gen_skipSectionDown {
+          
+            <Vertex> 0 {-0.133333 0.000000 0.133333
+              <UV>  {
+                0.132813 0.992188 
+              }
+            }
+            <Vertex> 1 {-0.133333 0.000000 -0.133333
+              <UV>  {
+                0.132813 0.882813 
+              }
+            }
+            <Vertex> 2 {0.133333 0.000000 0.133333
+              <UV>  {
+                0.242188 0.992188 
+              }
+            }
+            <Vertex> 3 {0.133333 0.000000 0.133333
+              <UV>  {
+                0.242188 0.992188 
+              }
+            }
+            <Vertex> 4 {-0.133333 0.000000 -0.133333
+              <UV>  {
+                0.132813 0.882813 
+              }
+            }
+            <Vertex> 5 {0.133333 0.000000 -0.133333
+              <UV>  {
+                0.242188 0.882813 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { battle_gui_palette_4amla_1 }
+            <MRef> { default.005 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { tt_t_gui_gen_skipSectionDown }} 
+          }
+          <Polygon> {
+            <TRef> { battle_gui_palette_4amla_1 }
+            <MRef> { default.005 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { tt_t_gui_gen_skipSectionDown }} 
+          }
+        }
+      }
+      <Group> tt_t_gui_gen_skipSectionUp {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> tt_t_gui_gen_skipSectionUp {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> tt_t_gui_gen_skipSectionUp {
+          
+            <Vertex> 0 {-0.133333 0.000000 0.133333
+              <UV>  {
+                0.382813 0.992188 
+              }
+            }
+            <Vertex> 1 {-0.133333 0.000000 -0.133333
+              <UV>  {
+                0.382813 0.882813 
+              }
+            }
+            <Vertex> 2 {0.133333 0.000000 0.133333
+              <UV>  {
+                0.492188 0.992188 
+              }
+            }
+            <Vertex> 3 {0.133333 0.000000 0.133333
+              <UV>  {
+                0.492188 0.992188 
+              }
+            }
+            <Vertex> 4 {-0.133333 0.000000 -0.133333
+              <UV>  {
+                0.382813 0.882813 
+              }
+            }
+            <Vertex> 5 {0.133333 0.000000 -0.133333
+              <UV>  {
+                0.492188 0.882813 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { battle_gui_palette_4amla_1 }
+            <MRef> { default.005 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { tt_t_gui_gen_skipSectionUp }} 
+          }
+          <Polygon> {
+            <TRef> { battle_gui_palette_4amla_1 }
+            <MRef> { default.005 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { tt_t_gui_gen_skipSectionUp }} 
+          }
+        }
+      }
+      <Group> tt_t_gui_bat_pass {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> tt_t_gui_bat_pass {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> tt_t_gui_bat_pass {
+          
+            <Vertex> 0 {-0.266667 0.000000 0.266667
+              <UV>  {
+                0.507813 0.242188 
+              }
+            }
+            <Vertex> 1 {-0.266667 0.000000 -0.266667
+              <UV>  {
+                0.507813 0.007812 
+              }
+            }
+            <Vertex> 2 {0.266667 0.000000 0.266667
+              <UV>  {
+                0.742188 0.242188 
+              }
+            }
+            <Vertex> 3 {0.266667 0.000000 0.266667
+              <UV>  {
+                0.742188 0.242188 
+              }
+            }
+            <Vertex> 4 {-0.266667 0.000000 -0.266667
+              <UV>  {
+                0.507813 0.007812 
+              }
+            }
+            <Vertex> 5 {0.266667 0.000000 -0.266667
+              <UV>  {
+                0.742188 0.007812 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { tt_t_gui_bat_pass }} 
+          }
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { tt_t_gui_bat_pass }} 
+          }
+        }
+      }
+      <Group> yellowPanel {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> yellowPanel {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> yellowPanel {
+          
+            <Vertex> 0 {-0.231250 0.000000 0.243750
+              <UV>  {
+                0.007812 0.992187 
+              }
+            }
+            <Vertex> 1 {-0.231250 0.000000 -0.243750
+              <UV>  {
+                0.007812 0.550781 
+              }
+            }
+            <Vertex> 2 {0.231250 0.000000 0.243750
+              <UV>  {
+                0.425781 0.992187 
+              }
+            }
+            <Vertex> 3 {0.231250 0.000000 0.243750
+              <UV>  {
+                0.425781 0.992187 
+              }
+            }
+            <Vertex> 4 {-0.231250 0.000000 -0.243750
+              <UV>  {
+                0.007812 0.550781 
+              }
+            }
+            <Vertex> 5 {0.231250 0.000000 -0.243750
+              <UV>  {
+                0.425781 0.550781 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { phase_3.5_palette_4alla_1 }
+            <MRef> { default.004 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { yellowPanel }} 
+          }
+          <Polygon> {
+            <TRef> { phase_3.5_palette_4alla_1 }
+            <MRef> { default.004 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { yellowPanel }} 
+          }
+        }
+      }
+      <Group> BATTLE_Menu {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> BATTLE_Menu {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> BATTLE_Menu {
+          
+            <Vertex> 0 {-1.462500 0.000000 0.697917
+              <UV>  {
+                0.000000 1.000000 
+              }
+            }
+            <Vertex> 1 {-1.462500 0.000000 -0.697917
+              <UV>  {
+                0.000000 0.000000 
+              }
+            }
+            <Vertex> 2 {1.462500 0.000000 0.697917
+              <UV>  {
+                1.000000 1.000000 
+              }
+            }
+            <Vertex> 3 {1.462500 0.000000 0.697917
+              <UV>  {
+                1.000000 1.000000 
+              }
+            }
+            <Vertex> 4 {-1.462500 0.000000 -0.697917
+              <UV>  {
+                0.000000 0.000000 
+              }
+            }
+            <Vertex> 5 {1.462500 0.000000 -0.697917
+              <UV>  {
+                1.000000 0.000000 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { Texture }
+            <MRef> { default.003 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { BATTLE_Menu }} 
+          }
+          <Polygon> {
+            <TRef> { Texture }
+            <MRef> { default.003 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { BATTLE_Menu }} 
+          }
+        }
+      }
+      <Group> Waiting4Others {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> Waiting4Others {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> Waiting4Others {
+          
+            <Vertex> 0 {-0.875000 0.000000 0.291667
+              <UV>  {
+                0.007812 0.492188 
+              }
+            }
+            <Vertex> 1 {-0.875000 0.000000 -0.291667
+              <UV>  {
+                0.007812 0.007812 
+              }
+            }
+            <Vertex> 2 {0.875000 0.000000 0.291667
+              <UV>  {
+                0.492188 0.492188 
+              }
+            }
+            <Vertex> 3 {0.875000 0.000000 0.291667
+              <UV>  {
+                0.492188 0.492188 
+              }
+            }
+            <Vertex> 4 {-0.875000 0.000000 -0.291667
+              <UV>  {
+                0.007812 0.007812 
+              }
+            }
+            <Vertex> 5 {0.875000 0.000000 -0.291667
+              <UV>  {
+                0.492188 0.007812 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { Waiting4Others }} 
+          }
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { Waiting4Others }} 
+          }
+        }
+      }
+      <Group> ToonBtl_Status_IconUP {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> ToonBtl_Status_IconUP {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> ToonBtl_Status_IconUP {
+          
+            <Vertex> 0 {-0.029167 0.000000 0.043750
+              <UV>  {
+                0.015625 0.468750 
+              }
+            }
+            <Vertex> 1 {-0.029167 0.000000 -0.043750
+              <UV>  {
+                0.015625 0.203125 
+              }
+            }
+            <Vertex> 2 {0.029167 0.000000 0.043750
+              <UV>  {
+                0.125000 0.468750 
+              }
+            }
+            <Vertex> 3 {0.029167 0.000000 0.043750
+              <UV>  {
+                0.125000 0.468750 
+              }
+            }
+            <Vertex> 4 {-0.029167 0.000000 -0.043750
+              <UV>  {
+                0.015625 0.203125 
+              }
+            }
+            <Vertex> 5 {0.029167 0.000000 -0.043750
+              <UV>  {
+                0.125000 0.203125 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { battle_gui_palette_2tlla_1 }
+            <MRef> { default.002 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { ToonBtl_Status_IconUP }} 
+          }
+          <Polygon> {
+            <TRef> { battle_gui_palette_2tlla_1 }
+            <MRef> { default.002 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { ToonBtl_Status_IconUP }} 
+          }
+        }
+      }
+      <Group> ToonBtl_Status_IconSEL {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> ToonBtl_Status_IconSEL {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> ToonBtl_Status_IconSEL {
+          
+            <Vertex> 0 {-0.029167 0.000000 0.043750
+              <UV>  {
+                0.882813 0.410156 
+              }
+            }
+            <Vertex> 1 {-0.029167 0.000000 -0.043750
+              <UV>  {
+                0.882813 0.343750 
+              }
+            }
+            <Vertex> 2 {0.029167 0.000000 0.043750
+              <UV>  {
+                0.937500 0.410156 
+              }
+            }
+            <Vertex> 3 {0.029167 0.000000 0.043750
+              <UV>  {
+                0.937500 0.410156 
+              }
+            }
+            <Vertex> 4 {-0.029167 0.000000 -0.043750
+              <UV>  {
+                0.882813 0.343750 
+              }
+            }
+            <Vertex> 5 {0.029167 0.000000 -0.043750
+              <UV>  {
+                0.937500 0.343750 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { ToonBtl_Status_IconSEL }} 
+          }
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { ToonBtl_Status_IconSEL }} 
+          }
+        }
+      }
+      <Group> ToonBtl_Status_IconRLVR {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> ToonBtl_Status_IconRLVR {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> ToonBtl_Status_IconRLVR {
+          
+            <Vertex> 0 {-0.029167 0.000000 0.043750
+              <UV>  {
+                0.882813 0.492187 
+              }
+            }
+            <Vertex> 1 {-0.029167 0.000000 -0.043750
+              <UV>  {
+                0.882813 0.425781 
+              }
+            }
+            <Vertex> 2 {0.029167 0.000000 0.043750
+              <UV>  {
+                0.937500 0.492187 
+              }
+            }
+            <Vertex> 3 {0.029167 0.000000 0.043750
+              <UV>  {
+                0.937500 0.492187 
+              }
+            }
+            <Vertex> 4 {-0.029167 0.000000 -0.043750
+              <UV>  {
+                0.882813 0.425781 
+              }
+            }
+            <Vertex> 5 {0.029167 0.000000 -0.043750
+              <UV>  {
+                0.937500 0.425781 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { ToonBtl_Status_IconRLVR }} 
+          }
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { ToonBtl_Status_IconRLVR }} 
+          }
+        }
+      }
+      <Group> ToonBtl_Status_BG {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> ToonBtl_Status_BG.001 {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> ToonBtl_Status_BG.001 {
+          
+            <Vertex> 0 {-0.214583 0.000000 0.135417
+              <UV>  {
+                0.507813 0.492188 
+              }
+            }
+            <Vertex> 1 {-0.214583 0.000000 -0.135417
+              <UV>  {
+                0.507813 0.257813 
+              }
+            }
+            <Vertex> 2 {0.214583 0.000000 0.135417
+              <UV>  {
+                0.867188 0.492188 
+              }
+            }
+            <Vertex> 3 {0.214583 0.000000 0.135417
+              <UV>  {
+                0.867188 0.492188 
+              }
+            }
+            <Vertex> 4 {-0.214583 0.000000 -0.135417
+              <UV>  {
+                0.507813 0.257813 
+              }
+            }
+            <Vertex> 5 {0.214583 0.000000 -0.135417
+              <UV>  {
+                0.867188 0.257813 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { ToonBtl_Status_BG.001 }} 
+          }
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { ToonBtl_Status_BG.001 }} 
+          }
+        }
+      }
+      <Group> Untitled.010 {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+      }
+      <Group> PckMn_BackBtn_Rlvr {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> PckMn_BackBtn_Rlvr {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> PckMn_BackBtn_Rlvr {
+          
+            <Vertex> 0 {-0.150000 0.000000 0.108333
+              <UV>  {
+                0.570313 0.984375 
+              }
+            }
+            <Vertex> 1 {-0.150000 0.000000 -0.108333
+              <UV>  {
+                0.570313 0.609375 
+              }
+            }
+            <Vertex> 2 {0.150000 0.000000 0.108333
+              <UV>  {
+                0.835938 0.984375 
+              }
+            }
+            <Vertex> 3 {0.150000 0.000000 0.108333
+              <UV>  {
+                0.835938 0.984375 
+              }
+            }
+            <Vertex> 4 {-0.150000 0.000000 -0.108333
+              <UV>  {
+                0.570313 0.609375 
+              }
+            }
+            <Vertex> 5 {0.150000 0.000000 -0.108333
+              <UV>  {
+                0.835938 0.609375 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { battle_gui_palette_4alla_2 }
+            <MRef> { default.001 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { PckMn_BackBtn_Rlvr }} 
+          }
+          <Polygon> {
+            <TRef> { battle_gui_palette_4alla_2 }
+            <MRef> { default.001 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { PckMn_BackBtn_Rlvr }} 
+          }
+        }
+      }
+      <Group> PckMn_BackBtn_Dn {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> PckMn_BackBtn_Dn {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> PckMn_BackBtn_Dn {
+          
+            <Vertex> 0 {-0.150000 0.000000 0.108333
+              <UV>  {
+                0.289063 0.984375 
+              }
+            }
+            <Vertex> 1 {-0.150000 0.000000 -0.108333
+              <UV>  {
+                0.289063 0.609375 
+              }
+            }
+            <Vertex> 2 {0.150000 0.000000 0.108333
+              <UV>  {
+                0.554688 0.984375 
+              }
+            }
+            <Vertex> 3 {0.150000 0.000000 0.108333
+              <UV>  {
+                0.554688 0.984375 
+              }
+            }
+            <Vertex> 4 {-0.150000 0.000000 -0.108333
+              <UV>  {
+                0.289063 0.609375 
+              }
+            }
+            <Vertex> 5 {0.150000 0.000000 -0.108333
+              <UV>  {
+                0.554688 0.609375 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { battle_gui_palette_4alla_2 }
+            <MRef> { default.001 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { PckMn_BackBtn_Dn }} 
+          }
+          <Polygon> {
+            <TRef> { battle_gui_palette_4alla_2 }
+            <MRef> { default.001 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { PckMn_BackBtn_Dn }} 
+          }
+        }
+      }
+      <Group> PckMn_BackBtn {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> PckMn_BackBtn {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> PckMn_BackBtn {
+          
+            <Vertex> 0 {-0.150000 0.000000 0.108333
+              <UV>  {
+                0.007812 0.984375 
+              }
+            }
+            <Vertex> 1 {-0.150000 0.000000 -0.108333
+              <UV>  {
+                0.007812 0.609375 
+              }
+            }
+            <Vertex> 2 {0.150000 0.000000 0.108333
+              <UV>  {
+                0.273438 0.984375 
+              }
+            }
+            <Vertex> 3 {0.150000 0.000000 0.108333
+              <UV>  {
+                0.273438 0.984375 
+              }
+            }
+            <Vertex> 4 {-0.150000 0.000000 -0.108333
+              <UV>  {
+                0.007812 0.609375 
+              }
+            }
+            <Vertex> 5 {0.150000 0.000000 -0.108333
+              <UV>  {
+                0.273438 0.609375 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { battle_gui_palette_4alla_2 }
+            <MRef> { default.001 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { PckMn_BackBtn }} 
+          }
+          <Polygon> {
+            <TRef> { battle_gui_palette_4alla_2 }
+            <MRef> { default.001 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { PckMn_BackBtn }} 
+          }
+        }
+      }
+      <Group> PckMn_Arrow_Up {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> PckMn_Arrow_Up {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> PckMn_Arrow_Up {
+          
+            <Vertex> 0 {-0.120833 0.000000 0.060417
+              <UV>  {
+                0.007812 0.578126 
+              }
+            }
+            <Vertex> 1 {-0.120833 0.000000 -0.060417
+              <UV>  {
+                0.007812 0.382813 
+              }
+            }
+            <Vertex> 2 {0.120833 0.000000 0.060417
+              <UV>  {
+                0.218751 0.578126 
+              }
+            }
+            <Vertex> 3 {0.120833 0.000000 0.060417
+              <UV>  {
+                0.218751 0.578126 
+              }
+            }
+            <Vertex> 4 {-0.120833 0.000000 -0.060417
+              <UV>  {
+                0.007812 0.382813 
+              }
+            }
+            <Vertex> 5 {0.120833 0.000000 -0.060417
+              <UV>  {
+                0.218751 0.382813 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { battle_gui_palette_4alla_2 }
+            <MRef> { default.001 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { PckMn_Arrow_Up }} 
+          }
+          <Polygon> {
+            <TRef> { battle_gui_palette_4alla_2 }
+            <MRef> { default.001 }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { PckMn_Arrow_Up }} 
+          }
+        }
+      }
+      <Group> PckMn_Arrow_Rlvr {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> PckMn_Arrow_Rlvr {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> PckMn_Arrow_Rlvr {
+          
+            <Vertex> 0 {-0.120833 0.000000 0.060417
+              <UV>  {
+                0.757813 0.128906 
+              }
+            }
+            <Vertex> 1 {-0.120833 0.000000 -0.060417
+              <UV>  {
+                0.757813 0.031250 
+              }
+            }
+            <Vertex> 2 {0.120833 0.000000 0.060417
+              <UV>  {
+                0.968751 0.128906 
+              }
+            }
+            <Vertex> 3 {0.120833 0.000000 0.060417
+              <UV>  {
+                0.968751 0.128906 
+              }
+            }
+            <Vertex> 4 {-0.120833 0.000000 -0.060417
+              <UV>  {
+                0.757813 0.031250 
+              }
+            }
+            <Vertex> 5 {0.120833 0.000000 -0.060417
+              <UV>  {
+                0.968751 0.031250 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { PckMn_Arrow_Rlvr }} 
+          }
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { PckMn_Arrow_Rlvr }} 
+          }
+        }
+      }
+      <Group> PckMn_Arrow_Dn {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> PckMn_Arrow_Dn {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> PckMn_Arrow_Dn {
+          
+            <Vertex> 0 {-0.120833 0.000000 0.060417
+              <UV>  {
+                0.757813 0.242187 
+              }
+            }
+            <Vertex> 1 {-0.120833 0.000000 -0.060417
+              <UV>  {
+                0.757813 0.144531 
+              }
+            }
+            <Vertex> 2 {0.120833 0.000000 0.060417
+              <UV>  {
+                0.968751 0.242187 
+              }
+            }
+            <Vertex> 3 {0.120833 0.000000 0.060417
+              <UV>  {
+                0.968751 0.242187 
+              }
+            }
+            <Vertex> 4 {-0.120833 0.000000 -0.060417
+              <UV>  {
+                0.757813 0.144531 
+              }
+            }
+            <Vertex> 5 {0.120833 0.000000 -0.060417
+              <UV>  {
+                0.968751 0.144531 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { PckMn_Arrow_Dn }} 
+          }
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { PckMn_Arrow_Dn }} 
+          }
+        }
+      }
+      <Group> BtlPick_TAB {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> BtlPick_TAB {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> BtlPick_TAB {
+          
+            <Vertex> 0 {-0.875000 0.000000 0.275000
+              <UV>  {
+                0.007812 0.992188 
+              }
+            }
+            <Vertex> 1 {-0.875000 0.000000 -0.275000
+              <UV>  {
+                0.007812 0.507813 
+              }
+            }
+            <Vertex> 2 {0.875000 0.000000 0.275000
+              <UV>  {
+                0.992188 0.992188 
+              }
+            }
+            <Vertex> 3 {0.875000 0.000000 0.275000
+              <UV>  {
+                0.992188 0.992188 
+              }
+            }
+            <Vertex> 4 {-0.875000 0.000000 -0.275000
+              <UV>  {
+                0.007812 0.507813 
+              }
+            }
+            <Vertex> 5 {0.875000 0.000000 -0.275000
+              <UV>  {
+                0.992188 0.507813 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { BtlPick_TAB }} 
+          }
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { BtlPick_TAB }} 
+          }
+        }
+      }
+      <Group> ToonBtl_Status_BG {
+        <Transform> {
+          <Matrix4> {
+            1.0 0.0 0.0 0.0 
+            0.0 1.0 0.0 0.0 
+            0.0 0.0 1.0 0.0 
+            0.0 0.0 0.0 1.0 
+          }
+        }
+        
+        <Group> ToonBtl_Status_BG {
+          <Transform> {
+            <Matrix4> {
+              1.0 0.0 0.0 0.0 
+              0.0 1.0 0.0 0.0 
+              0.0 0.0 1.0 0.0 
+              0.0 0.0 0.0 1.0 
+            }
+          }
+          
+          <VertexPool> ToonBtl_Status_BG {
+          
+            <Vertex> 0 {-0.214583 0.000000 0.135417
+              <UV>  {
+                0.507813 0.492188 
+              }
+            }
+            <Vertex> 1 {-0.214583 0.000000 -0.135417
+              <UV>  {
+                0.507813 0.257813 
+              }
+            }
+            <Vertex> 2 {0.214583 0.000000 0.135417
+              <UV>  {
+                0.867188 0.492188 
+              }
+            }
+            <Vertex> 3 {0.214583 0.000000 0.135417
+              <UV>  {
+                0.867188 0.492188 
+              }
+            }
+            <Vertex> 4 {-0.214583 0.000000 -0.135417
+              <UV>  {
+                0.507813 0.257813 
+              }
+            }
+            <Vertex> 5 {0.214583 0.000000 -0.135417
+              <UV>  {
+                0.867188 0.257813 
+              }
+            }}
+          
+          
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 0 1 2 <Ref> { ToonBtl_Status_BG }} 
+          }
+          <Polygon> {
+            <TRef> { Texture.001 }
+            <MRef> { default }
+            <Normal> {0.000000 -1.000000 0.000000}
+            <VertexRef> { 3 4 5 <Ref> { ToonBtl_Status_BG }} 
+          }
+        }
+      }
+    }
+  }

@@ -6,7 +6,8 @@ from direct.showbase import DirectObject
 import random
 CountryClubId2Layouts = {ToontownGlobals.BossbotCountryClubIntA: (0, 1, 2),
  ToontownGlobals.BossbotCountryClubIntB: (3, 4, 5),
- ToontownGlobals.BossbotCountryClubIntC: (6, 7, 8)}
+ ToontownGlobals.BossbotCountryClubIntC: (6, 7, 8),
+ ToontownGlobals.BossbotCountryClubIntD: (9, 10, 11)}
 
 class CountryClubManagerAI(DirectObject.DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('CountryClubManagerAI')

@@ -26,6 +26,8 @@ from toontown.shtiker import FishPage
 from toontown.shtiker import NPCFriendPage
 from toontown.shtiker import EventsPage
 from toontown.shtiker import TIPPage
+from toontown.achievements import AchievementGui
+from toontown.shtiker import AchievementsPage
 from toontown.quest import Quests
 from toontown.quest import QuestParser
 from toontown.toonbase.ToontownGlobals import *
@@ -126,6 +128,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.__gardeningGui = None
             self.__gardeningGuiFake = None
             self.__shovelButton = None
+            self.achievementGui=AchievementGui.AchievementGui()
             self.shovelRelatedDoId = 0
             self.shovelAbility = ''
             self.plantToWater = 0
@@ -350,6 +353,10 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.wordPage.load()
         self.book.addPage(self.wordPage, pageName=TTLocalizer.SpellbookPageTitle)
         self.book.setPage(self.mapPage, enterPage=False)
+        self.achievementsPage=AchievementsPage.AchievementsPage()
+        self.achievementsPage.setAvatar(self)
+        self.achievementsPage.load()
+        self.book.addPage(self.achievementsPage, pageName="Achievements")
         self.laffMeter = LaffMeter.LaffMeter(self.style, self.hp, self.maxHp)
         self.laffMeter.setAvatar(self)
         self.laffMeter.setScale(0.075)
@@ -1844,6 +1851,14 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
     def stopQuestMap(self):
         if self.questMap:
             self.questMap.stop()
+
+    def setAchievements(self, achievements):
+        for achievementId in achievements:
+            if not achievementId in self.achievements:
+                self.achievementGui.earnAchievement(achievementId)
+
+
+        DistributedToon.DistributedToon.setAchievements(self, achievements)
 
     def _startZombieCheck(self):
         pass

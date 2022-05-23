@@ -1,6 +1,7 @@
 from otp.otpbase.PythonUtil import lerp
 from toontown.battle.BattleBase import *
 from toontown.battle.SuitBattleGlobals import *
+from toontown.battle.ToonBattleGlobals import *
 from toontown.pets import PetTricks
 from toontown.toonbase.ToontownBattleGlobals import *
 
@@ -24,7 +25,10 @@ SpecialCalcDir = 'toontown.battle.calc.special'
 SpecialCalculators = {'foreman': 'ForemanCalculatorAI'}
 
 notify = DirectNotifyGlobal.directNotify.newCategory('BattleCalculatorGlobals')
-PropAndPrestigeStack = simbase.config.GetBool('prop-and-organic-bonus-stack', 0)
+try:
+    PropAndPrestigeStack = simbase.config.GetBool('prop-and-organic-bonus-stack', 0)
+except:
+    PropAndPrestigeStack=base.config.GetBool('prop-and-organic-bonus-stack', 0)
 
 
 def createToonTargetList(battle, attackIndex):
@@ -94,7 +98,14 @@ def receiveDamageCalc(atkLevel, atkTrack, target, toon):
 
 
 def doDamageCalc(atkLevel, atkTrack, toon):
-    damage = getAvPropDamage(atkTrack, atkLevel, toon.experience.getExp(atkTrack))
+    marketStatus=toon.getStatus(MARKETING_STATUS)
+    damage=getAvPropDamage(atkTrack, atkLevel, toon.experience.getExp(atkTrack))
+    if marketStatus:
+        marketStatusCap=marketStatus['dmgCap']
+
+        if marketStatusCap:
+            if damage > marketStatusCap:
+                damage = marketStatusCap
     return damage
 
 

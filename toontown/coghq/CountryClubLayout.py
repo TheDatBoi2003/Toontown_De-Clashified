@@ -24,7 +24,8 @@ def printAllBossbotInfo():
 
 def iterateBossbotCountryClubs(func):
     from toontown.toonbase import ToontownGlobals
-    for countryClubId in [ToontownGlobals.BossbotCountryClubIntA, ToontownGlobals.BossbotCountryClubIntB, ToontownGlobals.BossbotCountryClubIntC]:
+    for countryClubId in [ToontownGlobals.BossbotCountryClubIntA, ToontownGlobals.BossbotCountryClubIntB, ToontownGlobals.BossbotCountryClubIntC,
+                          ToontownGlobals.BossbotCountryClubIntD]:
         for floorNum in xrange(ToontownGlobals.CountryClubNumFloors[countryClubId]):
             func(CountryClubLayout(countryClubId, floorNum))
 
@@ -117,6 +118,24 @@ ClubLayout9_2 = [(0, 32, 39, 4, 39, 17),
  (0, 32, 7, 39, 7, 17),
  (0, 32, 7, 39, 39, 17),
  (0, 32, 7, 39, 32, 18)]
+ClubLayout12_0 = [(40, 42, 42, 42, 41),
+ (0, 22, 5, 5, 29, 17),
+ (0, 22, 29, 6, 17),
+ (0, 22, 5, 29, 17),
+ (0, 22, 29, 6, 17),
+ (0, 22, 5, 29, 29, 18)]
+ClubLayout12_1 = [(40, 42, 42, 42, 41),
+ (0, 22, 5, 5, 29, 17),
+ (0, 22, 29, 6, 17),
+ (0, 22, 5, 29, 17),
+ (0, 22, 29, 6, 17),
+ (0, 22, 5, 29, 29, 18)]
+ClubLayout12_2 = [(40, 42, 42, 42, 41),
+ (0, 22, 5, 5, 29, 17),
+ (0, 22, 29, 6, 17),
+ (0, 22, 5, 29, 17),
+ (0, 22, 29, 6, 17),
+ (0, 22, 5, 29, 29, 18)]
 countryClubLayouts = [ClubLayout3_0,
  ClubLayout3_1,
  ClubLayout3_2,
@@ -125,7 +144,10 @@ countryClubLayouts = [ClubLayout3_0,
  ClubLayout6_2,
  ClubLayout9_0,
  ClubLayout9_1,
- ClubLayout9_2]
+ ClubLayout9_2,
+ ClubLayout12_0,
+ ClubLayout12_1,
+ ClubLayout12_2]
 testLayout = [ClubLayout3_0,
  ClubLayout3_0,
  ClubLayout3_0,
@@ -134,7 +156,10 @@ testLayout = [ClubLayout3_0,
  ClubLayout6_0,
  ClubLayout9_0,
  ClubLayout9_0,
- ClubLayout9_0]
+ ClubLayout9_0,
+ ClubLayout12_0,
+ ClubLayout12_1,
+ ClubLayout12_2]
 countryClubLayouts = testLayout
 
 class CountryClubLayout:
@@ -150,7 +175,10 @@ class CountryClubLayout:
         self.numHallways = self.numRooms - 1 + 1
         self.roomIds = countryClubLayouts[layoutIndex][floorNum]
         hallwayRng = self.getRng()
-        connectorRoomNames = CountryClubRoomSpecs.BossbotCountryClubConnectorRooms
+        if self.countryClubId == ToontownGlobals.BossbotCountryClubIntD:
+            connectorRoomNames=CountryClubRoomSpecs.StockOfficeConnectorRooms
+        else:
+            connectorRoomNames = CountryClubRoomSpecs.BossbotCountryClubConnectorRooms
         for i in xrange(self.numHallways):
             self.hallways.append(hallwayRng.choice(connectorRoomNames))
 

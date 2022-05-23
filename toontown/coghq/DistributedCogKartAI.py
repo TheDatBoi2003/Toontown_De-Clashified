@@ -23,6 +23,8 @@ class DistributedCogKartAI(DistributedElevatorExtAI.DistributedElevatorExtAI):
             self.countryClubId = ToontownGlobals.BossbotCountryClubIntB
         elif self.courseIndex == 2:
             self.countryClubId = ToontownGlobals.BossbotCountryClubIntC
+        elif self.courseIndex == 3:
+            self.countryClubId = ToontownGlobals.BossbotCountryClubIntD
         else:
             self.countryClubId = 12500
 

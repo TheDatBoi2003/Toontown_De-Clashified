@@ -33,6 +33,7 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
         self.suitsB = []
         self.activeSuitsB = []
         self.reserveSuits = []
+        self.begunSolo=False
         self.barrier = None
         self.keyStates = ['BattleOne', 'BattleTwo', 'BattleThree', 'Victory']
         self.bossDamage = 0
@@ -275,6 +276,8 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
     def enterWaitForToons(self):
         self.acceptNewToons()
         self.barrier = self.beginBarrier('WaitForToons', self.involvedToons, 5, self.__doneWaitForToons)
+        if len(self.involvedToons[:]) == 1:
+            self.begunSolo = True
 
     def __doneWaitForToons(self, toons):
         self.b_setState('Elevator')

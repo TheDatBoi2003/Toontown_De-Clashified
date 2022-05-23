@@ -1,6 +1,6 @@
 import random
 import math
-from panda3d.core import Point3
+from panda3d.core import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import FSM
 from direct.interval.IntervalGlobal import LerpPosInterval
@@ -9,7 +9,7 @@ from toontown.coghq import DistributedBanquetTableAI
 from toontown.coghq import DistributedGolfSpotAI
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
-from toontown.suit import DistributedBossCogAI
+from toontown.suit import DistributedBossCogAI, DistributedCEOGoonAI
 from toontown.suit import DistributedSuitAI
 from toontown.suit import SuitDNA
 from toontown.building import SuitBuildingGlobals
@@ -17,6 +17,9 @@ from toontown.battle import DistributedBattleWaitersAI
 from toontown.battle import DistributedBattleDinersAI
 from toontown.battle import BattleExperienceAI
 from direct.distributed.ClockDelta import globalClockDelta
+from toontown.suit.BossbotGlobals import *
+
+
 
 
 class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM):
@@ -53,11 +56,14 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.speedRecoverRate = ToontownGlobals.BossbotSpeedRecoverRate
         self.speedRecoverStartTime = 0
         self.battleFourTimeStarted = 0
+        self.scene=NodePath('scene')
+        self.reparentTo(self.scene)
         self.numDinersExploded = 0
         self.numMoveAttacks = 0
         self.numGolfAttacks = 0
         self.numGearAttacks = 0
         self.numGolfAreaAttacks = 0
+        self.goons = []
         self.numToonupGranted = 0
         self.totalLaffHealed = 0
         self.toonupsGranted = []
@@ -68,6 +74,11 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.overtimeOneStart = float(self.overtimeOneTime) / self.battleFourDuration
         self.moveAttackAllowed = True
         self.exeCounter = 0
+        cn=CollisionNode('walls')
+        cs=CollisionSphere(0, 0, 0, 13)
+        cn.addSolid(cs)
+        cs=CollisionInvSphere(0, 0, 0, 42)
+        cn.addSolid(cs)
 
     def delete(self):
         self.notify.debug('DistributedBossbotBossAI.delete')
@@ -78,6 +89,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
     def enterElevator(self):
         DistributedBossCogAI.DistributedBossCogAI.enterElevator(self)
+        self.createEasyModeBarrels()
         #self.makeBattleOneBattles()
 
     def enterIntroduction(self):
@@ -348,14 +360,17 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             info = self.notDeadList[i]
             suitType = info[2] - 4
             suitLevel = info[2]
-            suit = self.__genSuitObject(self.zoneId, 'c', suitLevel, 1)
+            suit = self.__genSuitObject(self.zoneId, 'c', suitLevel, 0)
             for table in self.tables:
                 executive = table.getExecutive(self.exeCounter)
+                print(executive)
                 if executive == 1:
                     isEXE = 1
                 else:
                     isEXE = 0
             suit.b_setExecutive(isEXE)
+            if isEXE:
+                suit.b_setHP(suit.getMaxHP() + (20 * self.battleTier))
             diners.append((suit, 100))
             self.exeCounter += 1
 
@@ -363,8 +378,8 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         for i in xrange(2):
             suitType = 8
             suitLevel = 18
-            suit.b_setExecutive(1)
             suit = self.__genSuitObject(self.zoneId, 'c', suitLevel, 0)
+            suit.b_setExecutive(1)
             active.append(suit)
 
         return {'activeSuits': active,
@@ -410,10 +425,20 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def exitPrepareBattleFour(self):
         self.ignoreBarrier(self.barrier)
 
+    def makeCogGoonBattle(self):
+        goon=DistributedCEOGoonAI.DistributedCEOGoonAI(self.air, self)
+        goon.generateWithRequired(self.zoneId)
+        self.goons.append(goon)
+        goon.STUN_TIME=6
+        goon.b_setupGoon(velocity=5, hFov=70, attackRadius=20, strength=30, scale=4)
+        goon.request('CogGoon')
+        return
+
     def enterBattleFour(self):
         self.battleFourTimeStarted = globalClock.getFrameTime()
         self.numToonsAtStart = len(self.involvedToons)
         self.resetBattles()
+        self.makeCogGoonBattle()
         self.setupBattleFourObjects()
         self.battleFourStart = globalClock.getFrameTime()
         self.waitForNextAttack(5)
@@ -499,6 +524,22 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
     def getBossDamage(self):
         return self.bossDamage
+
+    def createEasyModeBarrels(self):
+        self.barrels = []
+        for entId, entDef in BarrelDefs.iteritems():
+            barrelType = entDef['type']
+            barrel = barrelType(self.air, entId)
+            setBarrelAttr(barrel, entId)
+            barrel.generateWithRequired(self.zoneId)
+            self.barrels.append(barrel)
+
+    def destroyEasyModeBarrels(self):
+        if hasattr(self, 'barrels') and self.barrels:
+            for barrel in self.barrels:
+                barrel.requestDelete()
+
+            self.barrels = []
 
     def b_setBossDamage(self, bossDamage, recoverRate, recoverStartTime):
         self.d_setBossDamage(bossDamage, recoverRate, recoverStartTime)

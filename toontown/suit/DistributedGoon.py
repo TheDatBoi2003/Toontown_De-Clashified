@@ -31,6 +31,7 @@ class DistributedGoon(DistributedCrushableEntity.DistributedCrushableEntity, Goo
         self.walkTrack = None
         self.pauseTime = 0
         self.paused = 0
+        self.secGoon = False
         self.path = None
         self.dir = GOON_FORWARD
         self.animMultiplier = 1.0
@@ -46,7 +47,10 @@ class DistributedGoon(DistributedCrushableEntity.DistributedCrushableEntity, Goo
         if hasattr(self, 'goonType'):
             self.initGoon(self.goonType)
         else:
-            self.initGoon('pg')
+            if self.secGoon:
+                self.initGoon('sg')
+            else:
+                self.initGoon('pg')
         self.scaleRadar()
         self.colorHat()
         if self.level:

@@ -47,6 +47,7 @@ from toontown.parties.PartyReplyInfo import PartyReplyInfoBase
 from toontown.parties.SimpleMailBase import SimpleMailBase
 from toontown.parties import PartyGlobals
 from toontown.friends import FriendHandle
+from toontown.battle import ToonBattleGlobals
 import time
 import operator
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, SoundInterval
@@ -98,6 +99,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.disguisePage = None
         self.sosPage = None
         self.gardenPage = None
+        self.achievements=[]
         self.cogTypes = [0,
                          0,
                          0,
@@ -196,6 +198,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.immortalMode = False
         self.unlimitedGags = False
         self.instaKill = False
+        self.stats=[0] * ToontownGlobals.TOTAL_STATS
         self.accept('f10', self.openTeleportGUI)
         return
 
@@ -363,6 +366,22 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.setSCSinging(msgIndex)
         self.d_setSCSinging(msgIndex)
         return None
+
+    def getStats(self):
+        return self.stats
+
+    def getStat(self, stat):
+        return self.stats[stat]
+
+    def fixStats(self, stats):
+        badStatLen=len(stats)
+        for i in xrange(ToontownGlobals.TOTAL_STATS - badStatLen):
+            stats.append(0)
+        return stats
+
+    def setAchievements(self, achievements):
+        self.achievements = achievements
+        messenger.send(localAvatar.uniqueName('achievementsChange'))
 
     def d_setSCSinging(self, msgIndex):
         messenger.send('wakeup')
@@ -968,7 +987,10 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             if CogDisguiseGlobals.isPaidSuitComplete(self, parts, index):
                 cogIndex = self.cogTypes[index] + SuitDNA.suitsPerDept * index
                 cog = SuitDNA.suitHeadTypes[cogIndex]
-                self.putOnSuit(cog)
+                if self.cogTypes[0] == 8:
+                    self.putOnSuit('tbc', exe=True)
+                else:
+                    self.putOnSuit(cog)
             else:
                 self.putOnSuit(index, rental=True)
 

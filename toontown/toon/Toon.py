@@ -20,7 +20,7 @@ from toontown.effects import Wake
 from otp.avatar import Emote
 import Motion
 from toontown.hood import ZoneUtil
-from toontown.battle import SuitBattleGlobals
+from toontown.battle import SuitBattleGlobals, ToonBattleGlobals
 from toontown.battle.movies import MovieThrow, BattleProps, MovieUtil
 from otp.otpbase import OTPGlobals
 from toontown.effects import DustCloud
@@ -508,6 +508,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.pieScale = 1.0
         self.hatNodes = []
         self.glassesNodes = []
+        self.statuses = {}
         self.backpackNodes = []
         self.hat = (0, 0, 0)
         self.glasses = (0, 0, 0)
@@ -649,6 +650,24 @@ class Toon(Avatar.Avatar, ToonHead):
             self.swapToonLegs(newDNA.legs)
         self.swapToonColor(newDNA)
         self.__swapToonClothes(newDNA)
+
+    def addStatus(self, statusString):
+        status=ToonBattleGlobals.getStatusFromString(statusString)
+        if not status['name'] in self.statuses.keys():
+            self.notify.info("Toons's status updated: " + status['name'])
+            self.statuses[status['name']]=status
+
+    def getStatus(self, name):
+        if name in self.statuses.keys():
+            return self.statuses[name]
+        else:
+            return None
+
+    def removeStatus(self, name):
+        if name in self.statuses.keys():
+            lostStatus=copy.deepcopy(self.statuses.pop(name, None))
+            messenger.send('toon-lost-status', [self, lostStatus])
+            return lostStatus
 
     def setDNAString(self, dnaString):
         newDNA = ToonDNA.ToonDNA()
@@ -2803,7 +2822,7 @@ class Toon(Avatar.Avatar, ToonHead):
             return Sequence(Func(self.nametag3d.show), self.__doToonGhostColorScale(None, lerpTime, keepDefault=1))
         return Sequence()
 
-    def putOnSuit(self, suitType, setDisplayName=True, rental=False):
+    def putOnSuit(self, suitType, setDisplayName=True, rental=False, exe=False):
         if self.isDisguised:
             self.takeOffSuit()
         if launcher and not launcher.getPhaseComplete(5):
@@ -2836,6 +2855,8 @@ class Toon(Avatar.Avatar, ToonHead):
         suitGeom.reparentTo(self)
         if rental == True:
             suit.makeRentalSuit(SuitDNA.suitDepts[deptIndex])
+        if exe:
+            suit.makeExecutive(modelRoot=suitGeom)
         self.suit = suit
         self.suitGeom = suitGeom
         self.setHeight(suit.getHeight())
@@ -2867,10 +2888,14 @@ class Toon(Avatar.Avatar, ToonHead):
                 name = self.getName()
             suitDept = SuitDNA.suitDepts.index(SuitDNA.getSuitDept(suitType))
             suitName = SuitBattleGlobals.SuitAttributes[suitType]['name']
+            if exe:
+                exeTitle = '.exe'
+            else:
+                exeTitle = ''
             self.nametag.setDisplayName(TTLocalizer.SuitBaseNameWithLevel % {'name': name,
                                                                              'dept': suitName,
                                                                              'level': self.cogLevels[suitDept] + 1,
-                                                                             'exe': '',
+                                                                             'exe': exeTitle,
                                                                              'revives': ''})
             self.nametag.setNameWordwrap(9.0)
 

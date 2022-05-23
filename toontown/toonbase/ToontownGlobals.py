@@ -189,6 +189,7 @@ BossbotLobby = 10100
 BossbotCountryClubIntA = 10500
 BossbotCountryClubIntB = 10600
 BossbotCountryClubIntC = 10700
+BossbotCountryClubIntD = 10800
 SellbotHQ = 11000
 SellbotLobby = 11100
 SellbotFactoryExt = 11200
@@ -275,13 +276,16 @@ BossbotCountryClubCaddieLevel = 14
 BossbotCountryClubBossLevel = 18
 CountryClubNumRooms = {BossbotCountryClubIntA: (4,),
                        BossbotCountryClubIntB: 3 * (8,) + 6 * (9,) + 6 * (10,) + 5 * (11,),
-                       BossbotCountryClubIntC: 4 * (10,) + 10 * (11,) + 6 * (12,)}
+                       BossbotCountryClubIntC: 4 * (10,) + 10 * (11,) + 6 * (12,),
+                       BossbotCountryClubIntD: 4 * (10,) + 10 * (11,) + 6 * (12,)}
 CountryClubNumBattles = {BossbotCountryClubIntA: 3,
                          BossbotCountryClubIntB: 2,
-                         BossbotCountryClubIntC: 3}
+                         BossbotCountryClubIntC: 3,
+                         BossbotCountryClubIntD: 3}
 CountryClubCogBuckRewards = {BossbotCountryClubIntA: 8,
                              BossbotCountryClubIntB: 14,
-                             BossbotCountryClubIntC: 20}
+                             BossbotCountryClubIntC: 20,
+                             BossbotCountryClubIntD: 20}
 LawOfficeCogLevel = 10
 LawOfficeSkelecogLevel = 12
 LawOfficeBossLevel = 16
@@ -313,7 +317,8 @@ facilityIdToType = {MockupFactoryId: FT_FullSuit,
                     LawbotOfficeInt: FT_FullSuit,
                     BossbotCountryClubIntA: FT_Leg,
                     BossbotCountryClubIntB: FT_Arm,
-                    BossbotCountryClubIntC: FT_Torso}
+                    BossbotCountryClubIntC: FT_Torso,
+                    BossbotCountryClubIntD: FT_FullSuit}
 StreetNames = TTLocalizer.GlobalStreetNames
 StreetBranchZones = StreetNames.keys()
 Hoods = (DonaldsDock,
@@ -988,6 +993,37 @@ TOT_REWARD_END_OFFSET_AMOUNT = 0
 LawbotBossMaxDamage = 2700
 LawbotBossWinningTilt = 40
 LawbotBossInitialDamage = 1350
+# Toon Stats
+TOTAL_STATS = 28
+
+STATS_COGS = 0
+STATS_BLDGS = 1
+STATS_ELITES = 2
+STATS_FRIENDS = 3
+STATS_CURR_FRIENDS = 4
+STATS_TASKS = 5
+STATS_VP = 6
+STATS_CFO = 7
+STATS_CJ = 8
+STATS_CEO = 9
+STATS_CM = 10
+STATS_SAD = 11
+STATS_CATALOG = 12
+STATS_FISH = 13
+STATS_TROLLEY = 14
+STATS_GAGS = 15
+STATS_TREASURES = 16
+STATS_JB_SPENT = 17
+STATS_JB_EARNED = 18
+STATS_SOS = 19
+STATS_UNITES = 20
+STATS_SUMMONS = 21
+STATS_FIRES = 22
+STATS_FACTORIES = 23
+STATS_MINTS = 24
+STATS_STAGES = 25
+STATS_CLUBS = 26
+STATS_BOARD_OFFICES = 27
 LawbotBossBattleOnePosHpr = (-2.798,
                              -60,
                              0,

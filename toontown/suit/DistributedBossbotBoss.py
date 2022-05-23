@@ -1,6 +1,8 @@
 import math
 import random
-from panda3d.core import VBase3, CollisionPlane, CollisionNode, CollisionSphere, CollisionTube, NodePath, Plane, Vec3, Vec2, Point3, BitMask32, CollisionHandlerEvent, TextureStage, VBase4, BoundingSphere
+from panda3d.core import *
+from panda3d.physics import *
+from panda3d.direct import *
 from libotp import NametagGroup, CFSpeech
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, LerpHprInterval, Parallel, LerpPosInterval, \
     ActorInterval, ParallelEndTogether, LerpScaleInterval, LerpPosHprInterval, SoundInterval
@@ -22,6 +24,7 @@ from toontown.coghq import CogDisguiseGlobals
 from toontown.suit import Suit
 from toontown.suit import SuitDNA
 from toontown.effects import DustCloud
+from toontown.suit.BossbotGlobals import *
 OneBossCog = None
 TTL = TTLocalizer
 
@@ -59,6 +62,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.moveTrack = None
         self.lastZapLocalTime = 0
         self.numAttacks = 0
+        self.goons = []
         return
 
     def announceGenerate(self):
@@ -163,7 +167,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         planeNode = CollisionNode('dropPlane')
         planeNode.addSolid(plane)
         planeNode.setCollideMask(ToontownGlobals.PieBitmask)
-        self.geom.attachNewNode(planeNode)
+
         self.geom.reparentTo(render)
         self.promotionMusic = base.loader.loadMusic('phase_12/audio/bgm/BB_golf_front.ogg')
         self.betweenPhaseMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
@@ -227,6 +231,39 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         random.seed(self.doId)
         self.resistanceToon.suitType = SuitDNA.getRandomSuitByDept('c')
         random.setstate(state)
+
+    def __showEasyBarrels(self):
+        barrelNodes = hidden.findAllMatches('**/Distributed*Barrel-*')
+        if not barrelNodes or barrelNodes.isEmpty():
+            return
+        if render.find('barrelsRootNode'):
+            self.notify.warning('__showEasyBarrels(): barrelsRootNode already exists')
+            return
+        self.barrelsRootNode = render.attachNewNode('barrelsRootNode')
+        self.barrelsRootNode.setPos(*BarrelsStartPos)
+        if self.arenaSide == 0:
+            self.barrelsRootNode.setHpr(180, 0, 0)
+        else:
+            self.barrelsRootNode.setHpr(0, 0, 0)
+        for i, barrelNode in enumerate(barrelNodes):
+            barrel = base.cr.doId2do.get(int(barrelNode.getNetTag('doId')))
+            setBarrelAttr(barrel, barrel.entId)
+            if hasattr(barrel, 'applyLabel'):
+                barrel.applyLabel()
+            barrel.setPosHpr(barrel.pos, barrel.hpr)
+            barrel.reparentTo(self.barrelsRootNode)
+
+        intervalName = 'MakeBarrelsAppear'
+        seq = Sequence(LerpPosInterval(self.barrelsRootNode, 0.5, Vec3(*BarrelsFinalPos),
+                                       blendType='easeInOut'), name=intervalName)
+        seq.start()
+        self.storeInterval(seq, intervalName)
+
+    def __hideEasyBarrels(self):
+        if hasattr(self, 'barrelsRootNode'):
+            self.barrelsRootNode.removeNode()
+            intervalName = 'MakeBarrelsAppear'
+            self.clearInterval(intervalName)
 
     def __cleanupResistanceToon(self):
         self.__hideResistanceToon()
@@ -496,6 +533,40 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             else:
                 self.notify.warning("don't know what to do with anim=%s" % curAnim)
 
+    def replaceCollisionPolysWithPlanes(self, model):
+        newCollisionNode = CollisionNode('collisions')
+        newCollideMask = BitMask32(0)
+        planes = []
+        collList = model.findAllMatches('**/+CollisionNode')
+        if not collList:
+            collList = [model]
+        for cnp in collList:
+            cn = cnp.node()
+            if not isinstance(cn, CollisionNode):
+                self.notify.warning('Not a collision node: %s' % repr(cnp))
+                break
+            newCollideMask = newCollideMask | cn.getIntoCollideMask()
+            for i in xrange(cn.getNumSolids()):
+                solid = cn.getSolid(i)
+                if isinstance(solid, CollisionPolygon):
+                    plane = Plane(solid.getPlane())
+                    planes.append(plane)
+                else:
+                    self.notify.warning('Unexpected collision solid: %s' % repr(solid))
+                    newCollisionNode.addSolid(plane)
+
+        newCollisionNode.setIntoCollideMask(newCollideMask)
+        threshold = 0.1
+        planes.sort(lambda p1, p2: p1.compareTo(p2, threshold))
+        lastPlane = None
+        for plane in planes:
+            if lastPlane is None or plane.compareTo(lastPlane, threshold) != 0:
+                cp = CollisionPlane(plane)
+                newCollisionNode.addSolid(cp)
+                lastPlane = plane
+
+        return NodePath(newCollisionNode)
+
     def removeFoodFromToon(self, avId):
         self.toonFoodStatus[avId] = None
         av = base.cr.doId2do.get(avId)
@@ -539,6 +610,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         table.serveFood(food, chairIndex)
 
     def enterPrepareBattleThree(self):
+        self.__showEasyBarrels()
         self.calcNotDeadList()
         self.battleANode.setPosHpr(*ToontownGlobals.DinerBattleAPosHpr)
         self.battleBNode.setPosHpr(*ToontownGlobals.DinerBattleBPosHpr)
@@ -640,7 +712,7 @@ class DistributedBossbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def makePrepareBattleFourMovie(self):
         rToon = self.resistanceToon
-        offsetZ = rToon.suit.getHeight() / 2.0
+        offsetZ = 5
         track = Sequence(
             Func(self.__showResistanceToon, True),
             Func(rToon.setPos, Point3(0, -5, 0)),

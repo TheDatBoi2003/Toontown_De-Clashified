@@ -229,7 +229,7 @@ class DistributedSecurityCamera(BasicEntities.DistributedNodePathEntity):
 
     def loadModel(self):
         self.rotateNode = self.attachNewNode('rotate')
-        self.model = loader.loadModel(self.laserFieldModels[self.modelPath])
+        self.model = loader.loadModel('phase_9/models/cogHQ/square_stomper')
         self.model.reparentTo(self.rotateNode)
         self.model.setPos(0, 1, 0)
         self.taskName = 'securityCameraupdate %s' % self.doId

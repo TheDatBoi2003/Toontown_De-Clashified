@@ -60,6 +60,7 @@ from toontown.toonbase import ToontownGlobals, TTLocalizer
 from toontown.tutorial.TutorialManagerAI import TutorialManagerAI
 from toontown.uberdog.DistributedInGameNewsMgrAI import DistributedInGameNewsMgrAI
 from toontown.uberdog.DistributedPartyManagerAI import DistributedPartyManagerAI
+from toontown.ai.AchievementsManagerAI import AchievementsManagerAI
 
 
 class ToontownAIRepository(ToontownInternalRepository):
@@ -195,6 +196,8 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         # Create our promotion manager...
         self.promotionMgr = PromotionManagerAI(self)
+
+        self.achievementsManager=AchievementsManagerAI(self)
 
         # Create our Cog suit manager...
         self.cogSuitMgr = CogSuitManagerAI(self)

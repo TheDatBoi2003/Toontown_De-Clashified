@@ -48,17 +48,20 @@ class DistributedSecurityCameraAI(DistributedEntityAI.DistributedEntityAI, NodeP
         isThereAnyToons = False
         if hasattr(self, 'level'):
             toonInRange = 0
-            for avId in self.level.presentAvIds:
-                if avId in self.air.doId2do:
-                    av = self.air.doId2do[avId]
-                    isThereAnyToons = True
-                    distance = self.getDistance(av)
+            try:
+                for avId in self.level.presentAvIds:
+                    if avId in self.air.doId2do:
+                        av = self.air.doId2do[avId]
+                        isThereAnyToons = True
+                        distance = self.getDistance(av)
 
-            if isThereAnyToons:
-                randTime = float(random.randint(1, 6)) * 0.5
-                taskMgr.doMethodLater(randTime, self.__detect, self.detectName)
-                randTarget = random.randint(0, 100)
-                self.sendUpdate('setTarget', [randTarget])
+                if isThereAnyToons:
+                    randTime = float(random.randint(1, 6)) * 0.5
+                    taskMgr.doMethodLater(randTime, self.__detect, self.detectName)
+                    randTarget = random.randint(0, 100)
+                    self.sendUpdate('setTarget', [randTarget])
+            except:
+                pass
         return Task.done
 
     def hit(self, hitX, hitY):

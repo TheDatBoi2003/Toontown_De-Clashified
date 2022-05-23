@@ -6,6 +6,7 @@ import ToonDNA
 from toontown.suit import SuitDNA
 import InventoryBase
 import Experience
+from toontown.achievements import Achievements, AchievementsGlobals
 from otp.avatar import DistributedAvatarAI
 from otp.avatar import DistributedPlayerAI
 from direct.distributed import DistributedSmoothNodeAI
@@ -45,6 +46,7 @@ from toontown.toonbase import ToontownAccessAI
 from toontown.toonbase import TTLocalizer
 from toontown.catalog import CatalogAccessoryItem
 from toontown.minigame import MinigameCreatorAI
+from toontown.battle import ToonBattleGlobals
 import ModuleListAI
 if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
@@ -123,6 +125,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.fishingRod = 0
         self.fishingTrophies = []
         self.trackArray = []
+        self.achievements=[]
         self.emoteAccess = [0,
          0,
          0,
@@ -210,6 +213,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.unlimitedGags = False
         self.instaKill = False
         self.alwaysHitSuits = False
+        self.statuses = {}
         return
 
     def generate(self):
@@ -406,6 +410,111 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
              textureIdx,
              colorIdx))
             return 0
+
+    def setAchievements(self, achievements):
+        for i in xrange(len(achievements)):
+            if not achievements[i] in xrange(len(Achievements.AchievementsDict)):
+                print 'Unknown AchievementId %s'%(achievements[i])
+                del achievements[i]
+
+        self.achievements = achievements
+
+    def d_setAchievements(self, achievements):
+        for i in xrange(len(achievements)):
+            if not achievements[i] in xrange(len(Achievements.AchievementsDict)):
+                print 'Unknown AchievementId %s'%(achievements[i])
+                del achievements[i]
+
+        self.sendUpdate('setAchievements', args=[achievements])
+
+    def b_setAchievements(self, achievements):
+        self.setAchievements(achievements)
+        self.d_setAchievements(achievements)
+
+    def getAchievements(self):
+        return self.achievements
+
+    def addAchievement(self, achievementId):
+        if achievementId in xrange(len(Achievements.AchievementsDict)):
+            if not achievementId in self.achievements:
+                achievements = self.achievements
+                achievements.append(achievementId)
+
+                self.b_setAchievements(achievements)
+
+    def hasAchievement(self, achievementId):
+        if achievementId in self.achievements:
+            return 1
+
+        return 0
+
+    def setStats(self, stats):
+        if len(stats) != ToontownGlobals.TOTAL_STATS:
+            stats=self.fixStats(stats)
+        self.stats=stats
+
+    def getStats(self):
+        return self.stats
+
+    def addStat(self, stat, amount=1):
+        if amount <= 0:
+            return
+
+        self.stats[stat]+=amount
+        self.d_setStats(self.stats)
+
+    def setStat(self, stat, amount=1):
+        if amount <= 0:
+            return
+
+        self.stats[stat]=amount
+        self.b_setStats(self.stats)
+
+    def getStat(self, stat):
+        return self.stats[stat]
+
+    def fixStats(self, stats):
+        badStatLen=len(stats)
+        for i in xrange(ToontownGlobals.TOTAL_STATS - badStatLen):
+            stats.append(0)
+        return stats
+
+    def b_setStats(self, stats):
+        stats[ToontownGlobals.STATS_CURR_FRIENDS] = len(self.friendsList)
+        self.d_setStats(stats)
+        self.setStats(stats)
+
+    def d_setStats(self, stats):
+        if len(stats) != ToontownGlobals.TOTAL_STATS:
+            stats = self.fixStats(stats)
+        self.sendUpdate('setStats', [stats])
+
+    def setStats(self, stats):
+        if len(stats) != ToontownGlobals.TOTAL_STATS:
+            stats = self.fixStats(stats)
+        self.stats = stats
+
+    def getStats(self):
+        return self.stats
+
+    def getStatus(self, name):
+        if name in self.statuses.keys():
+            return self.statuses[name]
+        else:
+            return None
+
+    def addStatus(self, status):
+        if not status['name'] in self.statuses.keys():
+            self.notify.info("Toon's status updated: " + status['name'])
+            self.statuses[status['name']] = status
+
+    def b_addStatus(self, status):
+        self.addStatus(status)
+        self.d_addStatus(status)
+
+    def d_addStatus(self, status):
+        statusString = ToonBattleGlobals.makeStatusString(status)
+        self.sendUpdate('addStatus', [statusString])
 
     def b_setHat(self, idx, textureIdx, colorIdx):
         self.d_setHat(idx, textureIdx, colorIdx)

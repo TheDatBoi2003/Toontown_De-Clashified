@@ -112,6 +112,7 @@ GlobalStreetNames = {20000: ('to', 'on', 'Tutorial Terrace'),
                      10500: ('to the', 'in the', 'The Front Three'),
                      10600: ('to the', 'in the', 'The Middle Six'),
                      10700: ('to the', 'in the', 'The Back Nine'),
+                     10800: ('to the', 'in the', 'The Stock Office'),
                      11000: ('to the', 'in the', 'Sellbot HQ Courtyard'),
                      11100: ('to the', 'in the', 'Sellbot HQ Lobby'),
                      11200: ('to the', 'in the', 'Sellbot Factory'),
@@ -5275,9 +5276,18 @@ InventoryTrapDetailData = 'Normal/Exe: %(damage)d|%(damageExe)d\n%(healthy)s\n%(
 InventoryLureDetailData = 'Accuracy: %(accuracy)s\nKnockback: %(bonus)s%%\n%(singleOrGroup)s'
 InventoryZapDetailData = 'Accuracy: %(accuracy)s\nDamage: %(damage)d\nSoaked: %(jump1)d, %(jump2)d, %(jump3)d'
 InventoryDetailData = 'Accuracy: %(accuracy)s\n%(damageString)s: %(damage)d%(bonus)s\n%(singleOrGroup)s'
+InventoryDetailDataExtra = 'Accuracy: %(accuracy)s\n%(damageString)s: %(damage)d%(bonus)s\n%(singleOrGroup)s\n%(extra)s'
 InventoryTrackExp = '%(curExp)s / %(nextExp)s'
 InventoryMaxOut = 'MAXED OUT!'
+InventoryHealString = 'Toon-up'
+InventoryDamageString = 'Damage'
+InventoryLureString = 'Rounds active'
+InventorySquirtRoundsString = 'Rounds soaked: %s'
 InventoryMax = 'Maxed'
+TrapExtraText = '+10% chance to save gag'
+SoundExtraText = '(+Varies)'
+HealExtraText = '%(heal)s self'
+ZapExtraText = 'Fry Chance: %s'
 InventoryAffectsOneCog = 'Affects: One ' + Cog
 InventoryAffectsOneToon = 'Affects: One Toon'
 InventoryAffectsAllToons = 'Affects: All Toons'
@@ -5289,6 +5299,8 @@ InventoryRun = 'RUN'
 InventorySOS = 'SOS'
 InventoryPass = 'PASS'
 InventoryFire = 'FIRE'
+InventoryLevelsShow = 'SHOW LEVELS'
+InventoryLevelsHide = 'HIDE LEVELS'
 InventoryClickToAttack = 'Click a\ngag to\nattack'
 InventoryDamageBonus = ' (+%s)'
 NPCForceAcknowledgeMessage = "You must ride the trolley before leaving. You can find the trolley next to the Gag Shop."
@@ -5516,6 +5528,14 @@ BattleGlobalAvTrackAccStrings = ('Perfect',
                                  'Medium',
                                  'Low',
                                  'Very Low')
+BattleGlobalAvTrackAccStringsNEW = ('Medium',
+ 'Perfect',
+ 'Low',
+ 'High',
+ 'Medium',
+ 'High',
+ 'Very Low',
+ 'Low')
 BattleGlobalLureAccLow = 'Low'
 BattleGlobalLureAccMedium = 'Medium'
 AttackMissed = 'MISSED'
@@ -6075,6 +6095,243 @@ CagedToonDrop = ["The cage is being lowered, keep it up!",
                  'Great work!',
                  'Just a few more to go!',
                  "Okay, let's finish this!"]
+AchievementsPageTitle = 'Achievements'
+AchievePageTitle = 'Achievements\n(Coming Soon)'
+# Stats Page
+StatsPageTitle = "Toon Stats"
+
+StatsList = [
+"Cogs defeated: %s",
+"Buildings Saved: %s",
+"Elite Cogs defeated: %s",
+"Friends made: %s",
+"Current friends: %s",
+"Tasks completed: %s",
+"VPs defeated: %s",
+"CFOs defeated: %s",
+"CJs defeated: %s",
+"CEOs defeated: %s",
+"??? defeated: %s",
+"Times went sad: %s",
+"Items purchased: %s",
+"Fish caught: %s",
+"Trolley games played: %s",
+"Gags used: %s",
+"Treasures collected: %s",
+"Jellybeans spent: %s",
+"Jellybeans earned: %s",
+"SOS Cards used: %s",
+"Unites used: %s",
+"Summons used: %s",
+"Fires used: %s",
+"Factories defeated: %s",
+"Mints defeated: %s",
+"District Attorney Offices defeated: %s",
+"Cog Golf Courses defeated: %s",
+"??? defeated: %s"
+]
+
+EarnedAchievement = 'You earned an achievement!'
+
+LockedAchievement = 'ACHIEVEMENT LOCKED'
+
+AchievementCategories = [
+ "Friends",
+ "Catalog",
+ "Trolley",
+ "Cogs",
+ "Gags",
+ "Fishing",
+ "Visit",
+ "Special"]
+Achievements = [
+ "You've Got a Friend In Me!",
+ "I'm In a Clique!",
+ "Popular Toon in Town!",
+ "Shipping and Handling is Free!",
+ "Impulse Buyer!",
+ "Regular Customer!",
+ "Clarabelle's on Speed-dial!",
+ "Choo Choo!",
+ "That's-a Spicy Meatball!",
+ "Counter-offer!",
+ "Closed Lost!",
+ "Breaking the Bank!",
+ "Robbing the Bank!",
+ "First Case!",
+ "The Prosecution does not Rest!",
+ "Demoted!",
+ "Corporate Restructuring!",
+ "Take a seat.",
+ "All in favor?",
+ "Closed Win!",
+ "Buying the Bank!",
+ "Per Curiam!",
+ "You're the Boss!",
+ "Motion Carried!",
+ "It Tickles!",
+ "You'll Slip and Slide on This!",
+ "Attractive Personality!",
+ "Professional Noisemaker!",
+ "Shock and Awe!",
+ "Heads up!",
+ "How Did Island Here?",
+ "Do You See What I Ski?",
+ "Stay Composed!",
+ "Don't be Such a Pansy!",
+ "Make Like a Tree and Leaf!",
+ "Grand Prix-ce of Cake!",
+ "Counting Sheep!",
+ "Welcome to the Club!",
+ "The Sales Floor!",
+ "Not the Mint I was Talking About!",
+ "Justice Second!",
+ "Board Yet?",
+ "First Encounter!",
+ "Ten Tin Suits!",
+ "I'm 40% Corporate!",
+ "Saving the Streets!",
+ "Corporate Conundrum!",
+ "Toontastic Takeover!",
+ "Cog-Crusher!",
+ "You Can Make a Fishstick With That!",
+ "The Reel Deal!",
+ "Not Bad, Cod Do Better!",
+ "You're Krilling it!",
+ "Sole of a Fisherman!",
+ "Stand-up Comedian!",
+ "You Just Activated my Trap Card!",
+ "VERY Attractive Personality!",
+ "Shrill of the Fight!",
+ "You Underestimate My Flour!",
+ "Go With the Flow!",
+ "1.21 Gigawatts!",
+ "I Missed the Minor Chord!",
+ "Never gets old!",
+ "Where Have you Bean All my Life?",
+ "Viva la Resistance!",
+ "Fun for Everyone!",
+ "Minigame Mania!",
+ "Frequent Rider!",
+ "Solo Salesman!",
+ "I Knead that Dough!",
+ "Ace Attorney!",
+ "Good Fore-Sight!",
+ "Board of Director!",
+ "Appraised!",
+ "Depreciation!",
+ "Evicted!",
+ "Forclosure!",
+ "Deed to the City!",
+ "Shutting down the Factory!",
+ "Plant Shutdown!",
+ "Seizing the Means of Production!",
+ "Loose Change!",
+ "Making it Rain!",
+ "Making it Pour!",
+ "Corporate Espionage!",
+ "Extradition!",
+ "Legal Breakdown!",
+ "Round of Putt-Putt!",
+ "Country Club Regular!",
+ "Tiger Woods!",
+ "Board?",
+ "I'd Like to Make a Proposal!",
+ "Motion Acknowledged!"
+]
+AchievementsDesc = ("Make a friend",
+ "Make 10 friends",
+ "Make 50 friends",
+ "Purchase an item from the cattlelog",
+ "Purchase 10 items from the cattlelog",
+ "Purchase 50 items from the cattlelog",
+ "Purchase 100 items from the cattlelog",
+ "Ride the trolley",
+ "Visit Loopy's Balls",
+ "Defeat the VP",
+ "Defeat 10 VPs",
+ "Defeat the CFO",
+ "Defeat 10 CFOs",
+ "Defeat the CJ",
+ "Defeat 10 CJs",
+ "Defeat the CEO",
+ "Defeat 10 CEOs",
+ "Defeat the Chairman",
+ "Defeat 10 Chairmen",
+ "Reach level 50 Sellbot Suit",
+ "Reach level 50 Cashbot Suit",
+ "Reach level 50 Lawbot Suit",
+ "Reach level 50 Bossbot Suit",
+ "Reach level 50 Boardbot Suit",
+ "Unlock the TOON-UP gag track.",
+ "Unlock the TRAP gag track.",
+ "Unlock the LURE gag track.",
+ "Unlock the SOUND gag track.",
+ "Unlock the ZAP gag track.",
+ "Unlock the DROP gag track.",
+ "Visit Donald's Dock.",
+ "Visit The Brrrrgh.",
+ "Visit Minnie's Melodyland.",
+ "Visit Daisy Gardens.",
+ "Visit Acorn Acres.",
+ "Visit Goofy Speedway.",
+ "Visit Donald's Dreamland.",
+ "Visit Bossbot HQ.",
+ "Visit Sellbot HQ.",
+ "Visit Cashbot HQ.",
+ "Visit Lawbot HQ.",
+ "Visit Boardbot HQ.",
+ "Destroy 1 cog.",
+ "Destroy 10 cogs.",
+ "Destroy 100 cogs.",
+ "Destroy 1,000 cogs.",
+ "Destroy 10,000 cogs.",
+ "Destroy 100,000 cogs.",
+ "Destroy 1,000,000 cogs.",
+ "Catch 1 fish.",
+ "Catch 10 fish.",
+ "Catch 100 fish.",
+ "Catch 1,000 fish.",
+ "Catch 10,000 fish.",
+ "Max the TOON-UP gag track.",
+ "Max the TRAP gag track.",
+ "Max the LURE gag track.",
+ "Max the SOUND gag track.",
+ "Max the THROW gag track.",
+ "Max the SQUIRT gag track.",
+ "Max the ZAP gag track.",
+ "Max the DROP gag track.",
+ "Humor Sofie Squirt with a stale joke.",
+ "Buy a doodle.",
+ "Join the Resistance.",
+ "Ride the trolley 10 times.",
+ "Ride the trolley 50 times.",
+ "Ride the trolley 100 times.",
+ "Solo the VP.",
+ "Solo the CFO.",
+ "Solo the CJ.",
+ "Solo the CEO.",
+ "Solo the Chairman.",
+ "Reclaim a Cog building.",
+ "Reclaim 10 Cog buildings.",
+ "Reclaim 50 Cog buildings.",
+ "Reclaim 100 Cog buildings.",
+ "Reclaim 250 Cog buildings.",
+ "Defeat a Factory.",
+ "Defeat 10 Factories.",
+ "Defeat 50 Factories.",
+ "Defeat a Mint.",
+ "Defeat 10 Mints.",
+ "Defeat 50 Mints.",
+ "Defeat a District Attorney's Office.",
+ "Defeat 10 District Attorney's Offices.",
+ "Defeat 50 District Attorney's Offices.",
+ "Defeat a Cog Golf Course.",
+ "Defeat 10 Cog Golf Courses.",
+ "Defeat 50 Cog Golf Courses.",
+ "Defeat a Board Office.",
+ "Defeat 10 Board Offices.",
+ "Defeat 50 Board Offices.")
 DinerToonName = "Salt 'n Pupper"
 RescueToonName = 'Byers B. Ware'
 CagedToonName = 'Rain'
@@ -6105,6 +6362,9 @@ GigglesIntro3 = "How you may ask? Fruit Pie Shakes!"
 GigglesIntroServing = "I will be serving the Shakes while giggles here finds a way to take down the C.E.O!"
 GigglesIntro4 = "Now toons, lets get out there and give them a meal they won't stop laughing about!"
 CEOIntro = "Finaly, What took you so long? Now get Serving!"
+CEOFindsToons1 = "I knew it! these waiters are those silly toons!"
+CEOFindsToons2 = "I've had enough of you toons destroying my banquet, GET THEM!!"
+
 BossBattleNeedMoreGags = "You've run out of throw gags!"
 BossBattleHowToGetSlices = 'Run into the cooler to collect some slices.'
 BossBattleHowToThrow = 'Press %s/%s to throw!'
@@ -10029,6 +10289,7 @@ ElevatorBossBotBoss = 'C.E.O Battle'
 ElevatorBossBotCourse0 = 'The Front Three'
 ElevatorBossBotCourse1 = 'The Middle Six'
 ElevatorBossBotCourse2 = 'The Back Nine'
+ElevatorBossBotCourse3 = 'The Stock Office'
 ElevatorCashBotBoss = 'C.F.O Battle'
 ElevatorCashBotMint0 = 'Coin Mint'
 ElevatorCashBotMint1 = 'Dollar Mint'

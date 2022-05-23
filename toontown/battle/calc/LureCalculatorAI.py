@@ -3,6 +3,7 @@ from direct.showbase.MessengerGlobal import messenger
 
 from toontown.battle.calc.BattleCalculatorGlobals import *
 from toontown.toonbase.ToontownBattleGlobals import AvProps
+from toontown.battle.ToonBattleGlobals import *
 
 
 class LureCalculatorAI(DirectObject):
@@ -76,8 +77,16 @@ class LureCalculatorAI(DirectObject):
                 self.addLureStatus(target, atkLevel)
             else:
                 self.addLureStatus(target, atkLevel, toonId)
+                toon=simbase.air.doId2do.get(toonId)
+                self.addLureStatusTest(toon, atkLevel, toonId)
             targetLured = 1
         return targetLured, validTarget
+
+    def addLureStatusTest(self, toon, atkLevel, toonId=-1):
+        lureStatus = genToonStatus(TEST_STATUS)
+        lureStatus['levels'] = 1
+        toon.b_addStatus(lureStatus)
+        self.notify.debug('Toon %s now has a %s status effect!.' % (toon.doId, lureStatus['levels']))
 
     def addLureStatus(self, suit, atkLevel, toonId=-1):
         lureStatus = genSuitStatus(LURED_STATUS)

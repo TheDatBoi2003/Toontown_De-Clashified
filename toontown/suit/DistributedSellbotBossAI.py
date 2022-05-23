@@ -10,6 +10,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toon import InventoryBase
 from toontown.toonbase import TTLocalizer
 from toontown.battle import BattleBase
+from toontown.battle import ToonBattleGlobals
 from toontown.toon import NPCToons
 from toontown.suit.SellbotBossGlobals import *
 import SuitDNA, random
@@ -307,11 +308,22 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.postBattleState = 'PrepareBattleThree'
         self.initializeBattles(2, SellbotBossBattleTwoPosHpr)
 
+    def addRoundTwoStatus(self, toon):
+        marketStatus = ToonBattleGlobals.genToonStatus('marketingPolicy')
+        marketStatus['dmgCap'] = 70
+        marketStatus['comboCap'] = 1
+        toon.b_addStatus(marketStatus)
+        self.notify.debug('Toon %s now has a %s damage down status effect!.' % (toon.doId, marketStatus['dmgCap']))
+
     def enterBattleTwo(self):
         if self.battleA:
             self.battleA.startBattle(self.toonsA, self.suitsA)
         if self.battleB:
             self.battleB.startBattle(self.toonsB, self.suitsB)
+
+        for toonId in self.involvedToons:
+            toon=simbase.air.doId2do.get(toonId)
+            self.addRoundTwoStatus(toon)
 
     def exitBattleTwo(self):
         self.resetBattles()
@@ -412,6 +424,11 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
                     self.sendUpdateToAvatarId(toonId, 'toonPromoted', [1])
                 else:
                     self.sendUpdateToAvatarId(toonId, 'toonPromoted', [0])
+            if len(self.involvedToons[:]) == 1 and self.begunSolo:
+                isSolo = 1
+            else:
+                isSolo = 0
+            self.air.achievementsManager.vp(toonId, solo = isSolo)
 
     def __genRewardIds(self):
         self.npcFriendIds = [None] * (self.battleTier + 2)

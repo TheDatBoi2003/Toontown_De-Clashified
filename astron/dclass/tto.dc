@@ -987,12 +987,15 @@ dclass DistributedToon : DistributedPlayer {
   setMaxCarry(uint8 = 20) required ownrecv db;
   setTrackAccess(uint16[] = [0, 0, 0, 0, 0, 0, 0, 0]) required broadcast ownrecv db;
   setFrameTrack(uint32, int8 = -1) ownrecv;
+  setAchievements(uint16[] = []) required broadcast ownrecv db;
+  setStats(uint32[] = [0*28]) required ownrecv db;
   setRefundPoints(uint8 = 0) required ownrecv db;
   setTrackPrestige(uint8[] = [0, 0, 0, 0, 0, 0, 0, 0]) required broadcast ownrecv db;
   setInventory(blob = [0 * 7, 0 * 7, 0 * 7, 0 * 7, 1, 0 * 6, 1, 0 * 6, 0 * 7, 0 * 7]) required ownrecv db;
   setTrainingFrames(int8[] = [-1, -1, -1, -1, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2]) required ownrecv db;
   applyTrackChoice(uint8, uint8) airecv clsend;
   applyRefund(uint8) airecv clsend;
+  addStatus(blob) broadcast ram;
   setMaxNPCFriends(uint16 = 16) required ownrecv db;
   setNPCFriendsDict(Friend[] = []) required ownrecv db;
   setDefaultShard(uint32 = 0) required ownrecv db;
@@ -1424,6 +1427,8 @@ dclass DistributedCashbotBossSafe : DistributedCashbotBossObject {
   requestInitial() airecv clsend;
 };
 
+from toontown.suit import DistributedCEOGoon/AI
+
 dclass DistributedCashbotBossGoon : DistributedCashbotBossObject {
   requestBattle(int16/10) airecv clsend;
   requestStunned(int16/10) airecv clsend;
@@ -1435,6 +1440,9 @@ dclass DistributedCashbotBossGoon : DistributedCashbotBossObject {
   setupGoon : setVelocity, setHFov, setAttackRadius, setStrength, setGoonScale;
   setTarget(int16/10, int16/10, uint16%360/100, int16) broadcast ram;
   destroyGoon() broadcast clsend airecv;
+};
+
+dclass DistributedCEOGoon : DistributedCashbotBossGoon {
 };
 
 struct ToonAttack {
