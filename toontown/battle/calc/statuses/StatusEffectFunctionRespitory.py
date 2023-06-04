@@ -1,5 +1,5 @@
 from StatusGlobal import *
-from BattleCalculatorGlobals import *
+from toontown.battle.calc.BattleCalculatorGlobals import *
 
 def getFunctionFromRespitory(av, statusBaser, statusValue):
     if statusBaser == DAMAGE_UP:

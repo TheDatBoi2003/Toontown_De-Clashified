@@ -4,7 +4,7 @@ from toontown.battle.calc.BattleCalculatorGlobals import *
 from toontown.toonbase.ToontownBattleGlobals import RAILROAD_LEVEL_INDEX
 
 
-class TrapCalculatorAI(DirectObject):
+class TrapListenerAI(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('TrapCalculatorAI')
 
     def __init__(self, battle, statusCalculator):

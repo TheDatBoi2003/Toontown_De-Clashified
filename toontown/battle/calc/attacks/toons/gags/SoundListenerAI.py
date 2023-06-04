@@ -6,7 +6,7 @@ from direct.showbase.MessengerGlobal import messenger
 from toontown.battle.calc.BattleCalculatorGlobals import *
 
 
-class SoundCalculatorAI(DirectObject):
+class SoundListenerAI(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('SoundCalculatorAI')
 
     def __init__(self, battle):

@@ -6,7 +6,7 @@ from toontown.toonbase.ToontownBattleGlobals import *
 
 MAX_JUMPS = len(AvZapJumps[0])
 
-class ZapCalculatorAI(DirectObject):
+class ZapListenerAI(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('SquirtCalculatorAI')
 
     def __init__(self, battle, squirtCalculator):

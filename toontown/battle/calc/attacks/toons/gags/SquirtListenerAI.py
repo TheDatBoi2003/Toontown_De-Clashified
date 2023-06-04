@@ -4,7 +4,7 @@ from StatusCalculatorAI import *
 from toontown.battle.calc.BattleCalculatorGlobals import *
 
 
-class SquirtCalculatorAI(DirectObject):
+class SquirtListenerAI(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('SquirtCalculatorAI')
 
     def __init__(self, battle, statusCalculator):

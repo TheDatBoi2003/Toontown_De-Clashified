@@ -5,7 +5,7 @@ from toontown.battle.calc.BattleCalculatorGlobals import *
 from toontown.toonbase.ToontownBattleGlobals import AvProps
 
 
-class LureCalculatorAI(DirectObject):
+class LureListenerAI(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('LureCalculatorAI')
 
     def __init__(self, battle, statusCalculator, trapCalculator):

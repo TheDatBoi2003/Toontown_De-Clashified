@@ -2,12 +2,12 @@ from direct.showbase.DirectObject import DirectObject
 from direct.showbase.MessengerGlobal import messenger
 
 from toontown.battle.calc.BattleCalculatorGlobals import *
-from toontown.battle.calc.StatusRepository import *
-from toontown.battle.calc.StatusGlobal import *
+from toontown.battle.calc.statuses.StatusRepository import *
+from toontown.battle.calc.statuses.StatusGlobal import *
 
 NextMarks = [0.1, 0.15, 0.18, 0.2]
 
-class ThrowCalculatorAI(DirectObject):
+class ThrowListenerAI(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('ThrowCalculatorAI')
 
     def __init__(self, battle, statusCalculator):

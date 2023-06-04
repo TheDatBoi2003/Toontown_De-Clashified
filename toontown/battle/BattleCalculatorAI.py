@@ -4,16 +4,16 @@ import toontown.battle.SuitBattleGlobals
 from DistributedBattleAI import *
 from toontown.battle import BattleExperienceAI
 from toontown.battle.calc import BattleCalculatorGlobals as BCG
-from toontown.battle.calc.DropCalculatorAI import *
-from toontown.battle.calc.HealCalculatorAI import *
-from toontown.battle.calc.LureCalculatorAI import *
-from toontown.battle.calc.SoundCalculatorAI import *
-from toontown.battle.calc.SquirtCalculatorAI import *
+from toontown.battle.calc.attacks.toons.gags.DropListenerAI import *
+from toontown.battle.calc.attacks.toons.gags.HealListenerAI import *
+from toontown.battle.calc.attacks.toons.gags.LureListenerAI import *
+from toontown.battle.calc.attacks.toons.gags.SoundListenerAI import *
+from toontown.battle.calc.attacks.toons.gags.SquirtListenerAI import *
 from toontown.battle.calc import SuitCalculatorAI as DefaultSuitCalculatorAI
 from toontown.battle.calc.SuitCalculatorAI import *
-from toontown.battle.calc.ThrowCalculatorAI import *
-from toontown.battle.calc.TrapCalculatorAI import *
-from toontown.battle.calc.ZapCalculatorAI import *
+from toontown.battle.calc.attacks.toons.gags.ThrowListenerAI import *
+from toontown.battle.calc.attacks.toons.gags.TrapListenerAI import *
+from toontown.battle.calc.attacks.toons.gags.ZapListenerAI import *
 from toontown.toonbase.ToontownBattleGlobals import RAILROAD_LEVEL_INDEX
 
 
@@ -34,14 +34,14 @@ class BattleCalculatorAI(DirectObject):
         DirectObject.__init__(self)
         self.battle = battle
         self.statusCalculator = StatusCalculatorAI(self.battle)
-        self.healCalculator = HealCalculatorAI(self.battle, self.statusCalculator)
-        self.trapCalculator = TrapCalculatorAI(self.battle, self.statusCalculator)
-        self.lureCalculator = LureCalculatorAI(self.battle, self.statusCalculator, self.trapCalculator)
-        self.soundCalculator = SoundCalculatorAI(self.battle)
-        self.squirtCalculator = SquirtCalculatorAI(self.battle, self.statusCalculator)
-        self.zapCalculator = ZapCalculatorAI(self.battle, self.squirtCalculator)
-        self.throwCalculator = ThrowCalculatorAI(self.battle, self.statusCalculator)
-        self.dropCalculator = DropCalculatorAI(self.battle)
+        self.healCalculator = HealListenerAI(self.battle, self.statusCalculator)
+        self.trapCalculator = TrapListenerAI(self.battle, self.statusCalculator)
+        self.lureCalculator = LureListenerAI(self.battle, self.statusCalculator, self.trapCalculator)
+        self.soundCalculator = SoundListenerAI(self.battle)
+        self.squirtCalculator = SquirtListenerAI(self.battle, self.statusCalculator)
+        self.zapCalculator = ZapListenerAI(self.battle, self.squirtCalculator)
+        self.throwCalculator = ThrowListenerAI(self.battle, self.statusCalculator)
+        self.dropCalculator = DropListenerAI(self.battle)
         self.trackCalculators = {HEAL: self.healCalculator,
                                  TRAP: self.trapCalculator,
                                  LURE: self.lureCalculator,

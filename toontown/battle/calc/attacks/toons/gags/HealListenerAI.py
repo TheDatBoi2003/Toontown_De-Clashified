@@ -6,7 +6,7 @@ from direct.showbase.MessengerGlobal import messenger
 from toontown.battle.calc.BattleCalculatorGlobals import *
 
 
-class HealCalculatorAI(DirectObject):
+class HealListenerAI(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('HealCalculatorAI')
     notify.setDebug(True)
 

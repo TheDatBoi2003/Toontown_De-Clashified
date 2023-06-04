@@ -3,7 +3,7 @@ from direct.showbase.DirectObject import DirectObject
 from toontown.battle.calc.BattleCalculatorGlobals import *
 
 
-class DropCalculatorAI(DirectObject):
+class DropListenerAI(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DropCalculatorAI')
 
     def __init__(self, battle):
