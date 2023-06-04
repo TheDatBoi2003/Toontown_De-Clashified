@@ -4,7 +4,7 @@ import SuitPlannerBase, SuitBase, SuitDNA
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import SuitBattleGlobals
 
-from toontown.battle.calc import StatusEffectManagerAI
+from toontown.battle.calc.statuses import StatusEffectManagerAI
 
 
 class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.SuitBase):

@@ -3,20 +3,33 @@ from toontown.battle.movies.BattleProps import *
 from toontown.battle.movies.BattleSounds import *
 from toontown.battle.BattleBase import *
 from direct.directnotify import DirectNotifyGlobal
-import MovieCamera
 import random
-import MovieUtil
+import toontown.battle.movies.MovieUtil
 import toontown.battle.movies.BattleParticles
 from libotp import CFSpeech, CFTimeout
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase.ToontownBattleGlobals import AvPropDamage
 from toontown.toon import NPCToons
-import MovieNPCSOS
+import toontown.battle.movies.MovieNPCSOS
 from toontown.effects import Splash
-from attacks.ToonUpGags import *
+from ToonUpGags import *
 
 notify = DirectNotifyGlobal.directNotify.newCategory('ToonUpMovieFunctionality')
 toonHealJokes = TTLocalizer.ToonHealJokes
+
+soundFiles = (
+    'AA_heal_tickle.ogg',
+    'AA_heal_telljoke.ogg',
+    'AA_heal_smooch.ogg',
+    'AA_heal_happydance.ogg',
+    'AA_heal_pixiedust.ogg',
+    'AA_heal_juggle.ogg',
+    'AA_heal_pixiedust.ogg',
+    'AA_heal_High_Dive.ogg')
+healPos = Point3(0, 0, 0)
+healHpr = Vec3(180.0, 0, 0)
+
+runHealTime = 1.0
 
 def runToHealSpot(heal):
     toon = heal['toon']

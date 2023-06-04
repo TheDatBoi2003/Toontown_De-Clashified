@@ -3,30 +3,17 @@ from toontown.battle.movies.BattleProps import *
 from toontown.battle.movies.BattleSounds import *
 from toontown.battle.BattleBase import *
 from direct.directnotify import DirectNotifyGlobal
-import MovieCamera
+import toontown.battle.movies.MovieCamera
 import random
-import MovieUtil
+import toontown.battle.movies.MovieUtil
 import toontown.battle.movies.BattleParticles
 from libotp import CFSpeech, CFTimeout
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase.ToontownBattleGlobals import AvPropDamage
 from toontown.toon import NPCToons
-import MovieNPCSOS
+import toontown.battle.movies.MovieNPCSOS
 from toontown.effects import Splash
-from toontown.battle.movies.attacks.ToonUpMovieFunctionality import *
-
-soundFiles = (
-    'AA_heal_tickle.ogg',
-    'AA_heal_telljoke.ogg',
-    'AA_heal_smooch.ogg',
-    'AA_heal_happydance.ogg',
-    'AA_heal_pixiedust.ogg',
-    'AA_heal_juggle.ogg',
-    'AA_heal_pixiedust.ogg',
-    'AA_heal_High_Dive.ogg')
-healPos = Point3(0, 0, 0)
-healHpr = Vec3(180.0, 0, 0)
-runHealTime = 1.0
+from ToonUpMovieFunctionality import *
 
 notify = DirectNotifyGlobal.directNotify.newCategory('ToonUpGags')
 
@@ -39,7 +26,7 @@ def Feather(heal):
     level = heal['level']
     track = Sequence(runToHealSpot(heal))
     feather1 = globalPropPool.getProp('feather')
-    feather2 = MovieUtil.copyProp(feather1)
+    feather2 = toontown.battle.movies.MovieUtil.copyProp(feather1)
     feathers = [feather1, feather2]
     hands = toon.getRightHands()
 
@@ -62,22 +49,22 @@ def Feather(heal):
     tFeatherScaleUp = 0.5
     dFeatherScaleUp = 0.5
     dFeatherScaleDown = 0.5
-    featherTrack = Parallel(MovieUtil.getActorIntervals(feathers, 'feather'),
+    featherTrack = Parallel(toontown.battle.movies.MovieUtil.getActorIntervals(feathers, 'feather'),
                             Sequence(Wait(tFeatherScaleUp),
-                                     Func(MovieUtil.showProps, feathers, hands),
+                                     Func(toontown.battle.movies.MovieUtil.showProps, feathers, hands),
                                      Func(scaleFeathers, feathers),
-                                     MovieUtil.getScaleIntervals(feathers, dFeatherScaleUp,
-                                                                 MovieUtil.PNT3_NEARZERO, feathers[0].getScale)),
+                                     toontown.battle.movies.MovieUtil.getScaleIntervals(feathers, dFeatherScaleUp,
+                                                                 toontown.battle.movies.MovieUtil.PNT3_NEARZERO, feathers[0].getScale)),
                             Sequence(Wait(toon.getDuration('tickle') - dFeatherScaleDown),
-                                     MovieUtil.getScaleIntervals(feathers, dFeatherScaleDown, None,
-                                                                 MovieUtil.PNT3_NEARZERO)))
+                                     toontown.battle.movies.MovieUtil.getScaleIntervals(feathers, dFeatherScaleDown, None,
+                                                                 toontown.battle.movies.MovieUtil.PNT3_NEARZERO)))
     tHeal = 3.0
     mtrack = Parallel(featherTrack, ActorInterval(toon, 'tickle'),
                       getSoundTrack(level, 1, node=toon),
                       Sequence(Wait(tHeal), Func(healToon, targetToon, hp, ineffective),
                                ActorInterval(targetToon, 'cringe', startTime=20.0 / targetToon.getFrameRate('cringe'))))
     track.append(mtrack)
-    track.append(Func(MovieUtil.removeProps, feathers))
+    track.append(Func(toontown.battle.movies.MovieUtil.removeProps, feathers))
     track.append(returnToBase(heal))
     track.append(Func(targetToon.clearChat))
     return track
@@ -96,7 +83,7 @@ def Megaphone(heal):
     level = heal['level']
     jokeIndex = heal['hpBonus'][0] % len(toonHealJokes)
     if npcId != 0:
-        track = Sequence(MovieNPCSOS.teleportIn(heal, toon))
+        track = Sequence(toontown.battle.movies.MovieNPCSOS.teleportIn(heal, toon))
     else:
         track = Sequence(runToHealSpot(heal))
     tracks = Parallel()
@@ -109,18 +96,18 @@ def Megaphone(heal):
     tRunBack = tSpeakPunchline + dPunchLine
     tDoSoundAnimation = tSpeakPunchline - float(fSpeakPunchline) / toon.getFrameRate('sound')
     megaphone = globalPropPool.getProp('megaphone')
-    megaphone2 = MovieUtil.copyProp(megaphone)
+    megaphone2 = toontown.battle.movies.MovieUtil.copyProp(megaphone)
     megaphones = [megaphone, megaphone2]
     hands = toon.getRightHands()
     dMegaphoneScale = 0.5
     tracks.append(Sequence(Wait(tDoSoundAnimation),
-                           Func(MovieUtil.showProps, megaphones, hands),
-                           MovieUtil.getScaleIntervals(megaphones, dMegaphoneScale, MovieUtil.PNT3_NEARZERO,
-                                                       MovieUtil.PNT3_ONE),
+                           Func(toontown.battle.movies.MovieUtil.showProps, megaphones, hands),
+                           toontown.battle.movies.MovieUtil.getScaleIntervals(megaphones, dMegaphoneScale, toontown.battle.movies.MovieUtil.PNT3_NEARZERO,
+                                                       toontown.battle.movies.MovieUtil.PNT3_ONE),
                            Wait(toon.getDuration('sound') - 2.0 * dMegaphoneScale),
-                           MovieUtil.getScaleIntervals(megaphones, dMegaphoneScale, MovieUtil.PNT3_ONE,
-                                                       MovieUtil.PNT3_NEARZERO),
-                           Func(MovieUtil.removeProps, megaphones)))
+                           toontown.battle.movies.MovieUtil.getScaleIntervals(megaphones, dMegaphoneScale, toontown.battle.movies.MovieUtil.PNT3_ONE,
+                                                       toontown.battle.movies.MovieUtil.PNT3_NEARZERO),
+                           Func(toontown.battle.movies.MovieUtil.removeProps, megaphones)))
     tracks.append(Sequence(Wait(tDoSoundAnimation), ActorInterval(toon, 'sound')))
     soundTrack = getSoundTrack(level, 2.0, node=toon)
     tracks.append(soundTrack)
@@ -140,7 +127,7 @@ def Megaphone(heal):
 
     tracks.append(reactTrack)
     if npcId != 0:
-        track.append(Sequence(Wait(tRunBack), Func(toon.clearChat), *MovieNPCSOS.teleportOut(heal, toon)))
+        track.append(Sequence(Wait(tRunBack), Func(toon.clearChat), *toontown.battle.movies.MovieNPCSOS.teleportOut(heal, toon)))
     else:
         tracks.append(Sequence(Wait(tRunBack), Func(toon.clearChat), *returnToBase(heal)))
     track.append(tracks)
@@ -155,16 +142,16 @@ def Lipstick(heal):
     ineffective = heal['sidestep']
     track = Sequence(runToHealSpot(heal))
     lipstick = globalPropPool.getProp('lipstick')
-    lipstick2 = MovieUtil.copyProp(lipstick)
+    lipstick2 = toontown.battle.movies.MovieUtil.copyProp(lipstick)
     lipsticks = [lipstick, lipstick2]
     rightHands = toon.getRightHands()
     dScale = 0.5
     lipstickTrack = Sequence(
-        Func(MovieUtil.showProps, lipsticks, rightHands, Point3(-0.27, -0.24, -0.95), Point3(-118, -10.6, -25.9)),
-        MovieUtil.getScaleIntervals(lipsticks, dScale, MovieUtil.PNT3_NEARZERO, MovieUtil.PNT3_ONE),
+        Func(toontown.battle.movies.MovieUtil.showProps, lipsticks, rightHands, Point3(-0.27, -0.24, -0.95), Point3(-118, -10.6, -25.9)),
+        toontown.battle.movies.MovieUtil.getScaleIntervals(lipsticks, dScale, toontown.battle.movies.MovieUtil.PNT3_NEARZERO, toontown.battle.movies.MovieUtil.PNT3_ONE),
         Wait(toon.getDuration('smooch') - 2.0 * dScale),
-        MovieUtil.getScaleIntervals(lipsticks, dScale, MovieUtil.PNT3_ONE, MovieUtil.PNT3_NEARZERO),
-        Func(MovieUtil.removeProps, lipsticks))
+        toontown.battle.movies.MovieUtil.getScaleIntervals(lipsticks, dScale, toontown.battle.movies.MovieUtil.PNT3_ONE, toontown.battle.movies.MovieUtil.PNT3_NEARZERO),
+        Func(toontown.battle.movies.MovieUtil.removeProps, lipsticks))
     lips = globalPropPool.getProp('lips')
     dScale = 0.5
     tLips = 2.5
@@ -177,12 +164,12 @@ def Lipstick(heal):
         hand = toon.getRightHands()[0]
         return hand.getPos(render)
 
-    lipsTrack = Sequence(Wait(tLips), Func(MovieUtil.showProp, lips, render, getLipPos),
+    lipsTrack = Sequence(Wait(tLips), Func(toontown.battle.movies.MovieUtil.showProp, lips, render, getLipPos),
                          Func(lips.setBillboardPointWorld),
-                         LerpScaleInterval(lips, dScale, Point3(3, 3, 3), startScale=MovieUtil.PNT3_NEARZERO),
+                         LerpScaleInterval(lips, dScale, Point3(3, 3, 3), startScale=toontown.battle.movies.MovieUtil.PNT3_NEARZERO),
                          Wait(tThrow - tLips - dScale), LerpPosInterval(lips, dThrow, Point3(
             targetToon.getPos() + Point3(0, 0, targetToon.getHeight()))), Func(
-            MovieUtil.removeProp, lips))
+            toontown.battle.movies.MovieUtil.removeProp, lips))
     delay = tThrow + dThrow
     mtrack = Parallel(lipstickTrack, lipsTrack, getSoundTrack(level, 2, node=toon),
                       Sequence(ActorInterval(toon, 'smooch'), *returnToBase(heal)),
@@ -205,7 +192,7 @@ def BambooCane(heal):
     ineffective = heal['sidestep']
     level = heal['level']
     if npcId != 0:
-        track = Sequence(MovieNPCSOS.teleportIn(heal, toon))
+        track = Sequence(toontown.battle.movies.MovieNPCSOS.teleportIn(heal, toon))
     else:
         track = Sequence(runToHealSpot(heal))
     delay = 3.0
@@ -221,28 +208,28 @@ def BambooCane(heal):
         targetTrack.append(reactIval)
 
     hat = globalPropPool.getProp('hat')
-    hat2 = MovieUtil.copyProp(hat)
+    hat2 = toontown.battle.movies.MovieUtil.copyProp(hat)
     hats = [hat, hat2]
     cane = globalPropPool.getProp('cane')
-    cane2 = MovieUtil.copyProp(cane)
+    cane2 = toontown.battle.movies.MovieUtil.copyProp(cane)
     canes = [cane, cane2]
     leftHands = toon.getLeftHands()
     rightHands = toon.getRightHands()
     dScale = 0.5
-    propTrack = Sequence(Func(MovieUtil.showProps, hats, rightHands, Point3(0.23, 0.09, 0.69), Point3(180, 0, 0)), Func(
-        MovieUtil.showProps, canes, leftHands, Point3(-0.28, 0.0, 0.14), Point3(0.0, 0.0, -150.0)),
-                         MovieUtil.getScaleIntervals(hats + canes, dScale, MovieUtil.PNT3_NEARZERO, MovieUtil.PNT3_ONE),
+    propTrack = Sequence(Func(toontown.battle.movies.MovieUtil.showProps, hats, rightHands, Point3(0.23, 0.09, 0.69), Point3(180, 0, 0)), Func(
+        toontown.battle.movies.MovieUtil.showProps, canes, leftHands, Point3(-0.28, 0.0, 0.14), Point3(0.0, 0.0, -150.0)),
+                         toontown.battle.movies.MovieUtil.getScaleIntervals(hats + canes, dScale, toontown.battle.movies.MovieUtil.PNT3_NEARZERO, toontown.battle.movies.MovieUtil.PNT3_ONE),
                          Wait(toon.getDuration('happy-dance') - 2.0 * dScale),
-                         MovieUtil.getScaleIntervals(hats + canes, dScale, MovieUtil.PNT3_ONE, MovieUtil.PNT3_NEARZERO),
+                         toontown.battle.movies.MovieUtil.getScaleIntervals(hats + canes, dScale, toontown.battle.movies.MovieUtil.PNT3_ONE, toontown.battle.movies.MovieUtil.PNT3_NEARZERO),
                          Func(
-                             MovieUtil.removeProps, hats + canes))
+                             toontown.battle.movies.MovieUtil.removeProps, hats + canes))
     mtrack = Parallel(propTrack, ActorInterval(toon, 'happy-dance'),
                       getSoundTrack(level, 0.2, duration=6.4, node=toon), targetTrack)
     track.append(Func(toon.loop, 'neutral'))
     track.append(Wait(0.1))
     track.append(mtrack)
     if npcId != 0:
-        track.append(MovieNPCSOS.teleportOut(heal, toon))
+        track.append(toontown.battle.movies.MovieNPCSOS.teleportOut(heal, toon))
     else:
         track.append(returnToBase(heal))
     for target in targets:
@@ -301,7 +288,7 @@ def JugglingCubes(heal):
     ineffective = heal['sidestep']
     level = heal['level']
     if npcId != 0:
-        track = Sequence(MovieNPCSOS.teleportIn(heal, toon))
+        track = Sequence(toontown.battle.movies.MovieNPCSOS.teleportIn(heal, toon))
     else:
         track = Sequence(runToHealSpot(heal))
     delay = 4.0
@@ -317,17 +304,17 @@ def JugglingCubes(heal):
         targetTrack.append(reactIval)
 
     cube = globalPropPool.getProp('cubes')
-    cube2 = MovieUtil.copyProp(cube)
+    cube2 = toontown.battle.movies.MovieUtil.copyProp(cube)
     cubes = [cube, cube2]
     hips = [toon.getLOD(toon.getLODNames()[0]).find('**/joint_hips'),
             toon.getLOD(toon.getLODNames()[1]).find('**/joint_hips')]
-    cubeTrack = Sequence(Func(MovieUtil.showProps, cubes, hips), MovieUtil.getActorIntervals(cubes, 'cubes'), Func(
-        MovieUtil.removeProps, cubes))
+    cubeTrack = Sequence(Func(toontown.battle.movies.MovieUtil.showProps, cubes, hips), toontown.battle.movies.MovieUtil.getActorIntervals(cubes, 'cubes'), Func(
+        toontown.battle.movies.MovieUtil.removeProps, cubes))
     mtrack = Parallel(cubeTrack, getSoundTrack(level, 0.7, duration=7.7, node=toon), ActorInterval(toon, 'juggle'),
                       targetTrack)
     track.append(mtrack)
     if npcId != 0:
-        track.append(MovieNPCSOS.teleportOut(heal, toon))
+        track.append(toontown.battle.movies.MovieNPCSOS.teleportOut(heal, toon))
     else:
         track.append(returnToBase(heal))
     for target in targets:
@@ -351,7 +338,7 @@ def HighDive(heal):
     ineffective = heal['sidestep']
     level = heal['level']
     if npcId != 0:
-        track = Sequence(MovieNPCSOS.teleportIn(heal, toon))
+        track = Sequence(toontown.battle.movies.MovieNPCSOS.teleportIn(heal, toon))
     else:
         track = Sequence(runToHealSpot(heal))
     delay = 7.0
@@ -407,15 +394,15 @@ def HighDive(heal):
     placeNode.setHpr(toon.getHpr(render))
     toonscale = toonNode.getScale()
     toonFacing = toon.getHpr()
-    propTrack = Sequence(Func(MovieUtil.showProp, glass, render, glassPos),
-                         Func(MovieUtil.showProp, ladder, render, ladderPos),
+    propTrack = Sequence(Func(toontown.battle.movies.MovieUtil.showProp, glass, render, glassPos),
+                         Func(toontown.battle.movies.MovieUtil.showProp, ladder, render, ladderPos),
                          Func(toonsLook, toonsInBattle, placeNode, Point3(0, 0, 0)), Func(placeNode.setPos, lookBase),
-                         LerpScaleInterval(ladder, ladderGrowTime, scaleUpPoint, startScale=MovieUtil.PNT3_NEARZERO),
-                         Func(placeNode.setPos, lookTop), Wait(2.1), MovieCamera.toonGroupHighShot(None, 0), Wait(2.1),
-                         Func(placeNode.setPos, LookGlass), Wait(0.4), MovieCamera.allGroupLowShot(None, 0), Wait(1.8),
-                         LerpScaleInterval(ladder, ladderGrowTime, MovieUtil.PNT3_NEARZERO, startScale=scaleUpPoint),
+                         LerpScaleInterval(ladder, ladderGrowTime, scaleUpPoint, startScale=toontown.battle.movies.MovieUtil.PNT3_NEARZERO),
+                         Func(placeNode.setPos, lookTop), Wait(2.1), toontown.battle.movies.MovieCamera.toonGroupHighShot(None, 0), Wait(2.1),
+                         Func(placeNode.setPos, LookGlass), Wait(0.4), toontown.battle.movies.MovieCamera.allGroupLowShot(None, 0), Wait(1.8),
+                         LerpScaleInterval(ladder, ladderGrowTime, toontown.battle.movies.MovieUtil.PNT3_NEARZERO, startScale=scaleUpPoint),
                          Func(
-                             MovieUtil.removeProps, diveProps))
+                             toontown.battle.movies.MovieUtil.removeProps, diveProps))
     mtrack = Parallel(propTrack, getSoundTrack(level, 0.6, duration=9.0, node=toon), Sequence(Parallel(
         Sequence(ActorInterval(toon, 'walk', loop=0, duration=walkToLadderTime),
                  ActorInterval(toon, 'neutral', loop=0, duration=0.1)),
@@ -436,7 +423,7 @@ def HighDive(heal):
         Func(stopLook, toonsInBattle))), targetTrack)
     track.append(mtrack)
     if npcId != 0:
-        track.append(MovieNPCSOS.teleportOut(heal, toon))
+        track.append(toontown.battle.movies.MovieNPCSOS.teleportOut(heal, toon))
     else:
         track.append(returnToBase(heal))
     for target in targets:

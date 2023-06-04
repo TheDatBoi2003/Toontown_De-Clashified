@@ -1,6 +1,6 @@
 from direct.showbase.MessengerGlobal import messenger
 
-from StatusCalculatorAI import *
+from toontown.battle.calc.StatusCalculatorAI import *
 from toontown.battle.calc.BattleCalculatorGlobals import *
 
 
