@@ -121,7 +121,7 @@ class SuitCalculatorAI(DirectObject):
                 result = int(atkInfo['hp'] +
                              math.ceil(atkInfo['hp'] * SuitBattleGlobals.EXE_DMG_MOD * self.suit.isExecutive))
             targetIndex = self.battle.activeToons.index(toonId)
-            attack[SUIT_HP_COL][targetIndex] = result
+            attack[SUIT_HP_COL][targetIndex] = result + self.suit.damageBonus
 
     def __calcSuitAtkType(self):
         attacks = SuitBattleGlobals.SuitAttributes[self.suit.dna.name]['attacks']

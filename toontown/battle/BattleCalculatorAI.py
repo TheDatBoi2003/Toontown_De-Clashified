@@ -130,8 +130,11 @@ class BattleCalculatorAI(DirectObject):
 
         self.__calculateToonAttacks()
         messenger.send('post-toon')
+        for suit in self.battle.activeSuits:
+            suit.statusEffectManager.calculateStatusEffects()
         self.__calculateSuitAttacks()
-        messenger.send('post-suit')
+        for suit in self.battle.activeSuits:
+            suit.statusEffectPostManager.calculateStatusEffects()
         messenger.send('round-over')
         return
 

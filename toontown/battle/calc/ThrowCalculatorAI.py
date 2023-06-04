@@ -2,6 +2,8 @@ from direct.showbase.DirectObject import DirectObject
 from direct.showbase.MessengerGlobal import messenger
 
 from toontown.battle.calc.BattleCalculatorGlobals import *
+from toontown.battle.calc.StatusRepository import *
+from toontown.battle.calc.StatusGlobal import *
 
 NextMarks = [0.1, 0.15, 0.18, 0.2]
 
@@ -17,7 +19,7 @@ class ThrowCalculatorAI(DirectObject):
 
     def cleanup(self):
         self.ignoreAll()
-
+    
     def calcAttackResults(self, attack, toonId):
         atkTrack, atkLevel, atkHp = getActualTrackLevelHp(attack)
         targetList = createToonTargetList(self.battle, toonId)
@@ -33,6 +35,10 @@ class ThrowCalculatorAI(DirectObject):
 
             attackDamage = receiveDamageCalc(atkLevel, atkTrack, target, toon)
 
+            #addStatusEffectResponder(self, statusBaser, statusName, statusValue, statusRounds, statusInfinite, statusExtraArgs):
+            
+            target.statusEffectManager.addStatusEffectResponderFromDict(statusRespitory[WORKERS_MANAGEMENT])
+            
             targetsHit += target.getHP() > 0
 
             self.notify.debug('%d targets %s, result: %d' % (toonId, target, attackDamage))

@@ -4,6 +4,8 @@ import SuitPlannerBase, SuitBase, SuitDNA
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import SuitBattleGlobals
 
+from toontown.battle.calc import StatusEffectManagerAI
+
 
 class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.SuitBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSuitBaseAI')
@@ -21,6 +23,9 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         self.maxSkeleRevives = 0
         self.reviveFlag = 0
         self.buildingHeight = None
+        self.statusEffectManager = StatusEffectManagerAI.StatusEffectManagerAI(self)
+        self.statusEffectPostManager = StatusEffectManagerAI.StatusEffectManagerAI(self)
+        self.damageBonus = 0
         return
 
     def generate(self):
